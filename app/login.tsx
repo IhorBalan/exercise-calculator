@@ -1,14 +1,50 @@
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Pressable, Text, View } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useAuth } from '@/modules/auth/context/auth-context';
+
 export default function LoginScreen() {
-  const handleGoogleLogin = () => {
-    console.log('Google login pressed');
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      // Mock login - replace with actual Google OAuth implementation
+      const mockUser = {
+        id: '1',
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        image: 'https://via.placeholder.com/150',
+      };
+      const mockToken = 'mock-google-token-123';
+      await login(mockUser, mockToken);
+    } catch (error) {
+      console.error('Google login error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleAppleLogin = () => {
-    console.log('Apple login pressed');
+  const handleAppleLogin = async () => {
+    try {
+      setIsLoading(true);
+      // Mock login - replace with actual Apple OAuth implementation
+      const mockUser = {
+        id: '2',
+        name: 'Jane Doe',
+        email: 'jane.doe@example.com',
+        image: 'https://via.placeholder.com/150',
+      };
+      const mockToken = 'mock-apple-token-456';
+      await login(mockUser, mockToken);
+    } catch (error) {
+      console.error('Apple login error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -37,23 +73,37 @@ export default function LoginScreen() {
         {/* Google Login Button */}
         <Pressable
           onPress={handleGoogleLogin}
-          className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80"
+          disabled={isLoading}
+          className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
         >
-          <AntDesign name="google" size={16} color="#4285F4" />
-          <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-            Continue with Google
-          </Text>
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#4285F4" />
+          ) : (
+            <>
+              <AntDesign name="google" size={16} color="#4285F4" />
+              <Text className="text-neutral-950 text-sm font-medium tracking-tight">
+                Continue with Google
+              </Text>
+            </>
+          )}
         </Pressable>
 
         {/* Apple Login Button */}
         <Pressable
           onPress={handleAppleLogin}
-          className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80"
+          disabled={isLoading}
+          className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
         >
-          <AntDesign name="apple" size={16} color="#000000" />
-          <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-            Continue with Apple
-          </Text>
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#000000" />
+          ) : (
+            <>
+              <AntDesign name="apple" size={16} color="#000000" />
+              <Text className="text-neutral-950 text-sm font-medium tracking-tight">
+                Continue with Apple
+              </Text>
+            </>
+          )}
         </Pressable>
       </View>
 

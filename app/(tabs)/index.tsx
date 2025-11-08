@@ -1,5 +1,10 @@
+import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/muscle-group-list-container';
+import { TotalVolumeCard } from '@/modules/user/components/total-volume-card';
+import { WeeklyActivityCard } from '@/modules/user/components/weekly-activity-card';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -7,10 +12,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/muscle-group-list-container';
-import { TotalVolumeCard } from '@/modules/user/components/total-volume-card';
-import { WeeklyActivityCard } from '@/modules/user/components/weekly-activity-card';
 // Sample data for the week
 const weeklyData = [
   { day: 'Mon', value: 65, percentage: 0.65 },
@@ -90,12 +91,14 @@ export default function HomeScreen() {
       </ScrollView>
 
       {/* Floating Action Button */}
-      {/* <Pressable
-        onPress={() => router.push('/add-workout')}
-        className="absolute bottom-10 right-4 w-16 h-16 bg-blue-500 rounded-full shadow-xl items-center justify-center active:opacity-80"
-      >
-        <Ionicons name="add" size={24} color="white" />
-      </Pressable> */}
+      <Animated.View style={contentAnimatedStyle}>
+        <Pressable
+          onPress={() => router.push('/add-workout')}
+          className="absolute bottom-10 right-4 w-16 h-16 bg-blue-500 rounded-full shadow-xl items-center justify-center active:opacity-80"
+        >
+          <Ionicons name="add" size={24} color="white" />
+        </Pressable>
+      </Animated.View>
     </SafeAreaView>
   );
 }

@@ -1,6 +1,9 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { useAuth } from '@/modules/auth/context/auth-context';
 
 // Stats data
 const personalStats = [
@@ -23,6 +26,30 @@ const settingsOptions = [
 ];
 
 export default function ProfileScreen() {
+  const { user, logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleSignOut = async () => {
+    try {
+      setIsLoggingOut(true);
+      await logout();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (!user?.name) return 'U';
+    const names = user.name.split(' ');
+    if (names.length >= 2) {
+      return `${names[0][0]}${names[1][0]}`.toUpperCase();
+    }
+    return user.name[0].toUpperCase();
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
@@ -40,13 +67,21 @@ export default function ProfileScreen() {
           <View className="flex-row items-center gap-4 mb-12">
             {/* Avatar */}
             <View className="w-20 h-20 bg-blue-500 rounded-full border-4 border-blue-100 items-center justify-center">
-              <Text className="text-white text-2xl font-normal">JD</Text>
+              {user?.image ? (
+                <Text className="text-white text-2xl font-normal">IMG</Text>
+              ) : (
+                <Text className="text-white text-2xl font-normal">{getUserInitials()}</Text>
+              )}
             </View>
 
             {/* Name and Email */}
             <View className="flex-1 gap-1">
-              <Text className="text-slate-900 text-lg font-medium tracking-tight">John Doe</Text>
-              <Text className="text-slate-500 text-base tracking-tight">john.doe@email.com</Text>
+              <Text className="text-slate-900 text-lg font-medium tracking-tight">
+                {user?.name || 'User'}
+              </Text>
+              <Text className="text-slate-500 text-base tracking-tight">
+                {user?.email || 'No email'}
+              </Text>
             </View>
           </View>
 
@@ -111,9 +146,15 @@ export default function ProfileScreen() {
 
         {/* Sign Out Button */}
         <View className="px-4 mt-6 mb-6">
-          <Pressable className="bg-white border border-red-100 rounded-2xl h-14 flex-row items-center justify-center gap-2 active:opacity-80">
+          <Pressable
+            onPress={handleSignOut}
+            disabled={isLoggingOut}
+            className="bg-white border border-red-100 rounded-2xl h-14 flex-row items-center justify-center gap-2 active:opacity-80 disabled:opacity-50"
+          >
             <Ionicons name="log-out-outline" size={16} color="#e7000b" />
-            <Text className="text-red-600 text-sm font-medium tracking-tight">Sign Out</Text>
+            <Text className="text-red-600 text-sm font-medium tracking-tight">
+              {isLoggingOut ? 'Signing out...' : 'Sign Out'}
+            </Text>
           </Pressable>
         </View>
       </ScrollView>
