@@ -20,7 +20,7 @@ export function WorkoutHistoryContainer({
     <View className={className}>
       <View className="flex-row items-center gap-2 mb-4">
         <Ionicons name="time-outline" size={20} color="#d946ef" />
-        <Text className="text-slate-900 text-base tracking-tight">Workout History</Text>
+        <Text className="text-slate-900 text-base tracking-tight">Training History</Text>
       </View>
 
       {isLoading ? (

@@ -7,8 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/components/button';
 import { VolumeChart } from '@/modules/muscle-group/components/volume-chart';
 import { PersonalRecordsContainer } from '@/modules/muscle-group/containers/personal-records-container';
-import { AddWorkoutModal } from '@/modules/training/containers/add-workout-modal';
-import { WorkoutHistoryContainer } from '@/modules/training/containers/workout-history-container';
+import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
+import { WorkoutHistoryContainer } from '@/modules/training/containers/training-history-container';
 
 export default function MuscleDetailsScreen() {
   const params = useLocalSearchParams();

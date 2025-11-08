@@ -6,8 +6,9 @@ import { BottomModal } from '@/components/bottom-modal';
 import { Button } from '@/components/button';
 import { Dropdown, type DropdownOption } from '@/components/dropdown';
 import { Input } from '@/components/input';
+import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
 
-const muscleGroups = ['Chest', 'Back', 'Shoulders', 'Legs', 'Arms', 'Core'];
+// const muscleGroups = ['Chest', 'Back', 'Shoulders', 'Legs', 'Arms', 'Core'];
 
 const exercisesByMuscle: Record<string, string[]> = {
   Chest: ['Bench Press', 'Incline Press', 'Dumbbell Fly'],
@@ -24,17 +25,19 @@ export interface AddWorkoutModalProps {
 }
 
 export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
+  const { data: muscleGroupList } = useMuscleGroupListQuery();
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>('');
   const [selectedExercise, setSelectedExercise] = useState<string>('');
-  const [weight, setWeight] = useState('50');
-  const [reps, setReps] = useState(12);
-  const [sets, setSets] = useState(5);
+  const [weight, setWeight] = useState('0');
+  const [reps, setReps] = useState(0);
+  const [sets, setSets] = useState(0);
 
   // Convert muscle groups to dropdown options
-  const muscleGroupOptions: DropdownOption[] = muscleGroups.map(group => ({
-    label: group,
-    value: group,
-  }));
+  const muscleGroupOptions: DropdownOption[] =
+    muscleGroupList?.map(group => ({
+      label: group.name,
+      value: group.id,
+    })) || [];
 
   // Get exercise options based on selected muscle group
   const exerciseOptions: DropdownOption[] = selectedMuscleGroup
@@ -43,6 +46,14 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
         value: exercise,
       })) || []
     : [];
+
+  const resetForm = () => {
+    setSelectedMuscleGroup('');
+    setSelectedExercise('');
+    setWeight('0');
+    setReps(0);
+    setSets(0);
+  };
 
   const handleSave = () => {
     // Handle save logic here
@@ -54,21 +65,13 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
       sets,
     });
     // Reset form
-    setSelectedMuscleGroup('');
-    setSelectedExercise('');
-    setWeight('50');
-    setReps(12);
-    setSets(5);
+    resetForm();
     onClose();
   };
 
   const handleClose = () => {
     // Reset form on close
-    setSelectedMuscleGroup('');
-    setSelectedExercise('');
-    setWeight('50');
-    setReps(12);
-    setSets(5);
+    resetForm();
     onClose();
   };
 
@@ -78,8 +81,8 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
     <BottomModal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Log Workout"
-      snapPoints={['70%', '90%']}
+      title="New Training"
+      snapPoints={['80%', '90%']}
     >
       <View className="gap-6">
         <Dropdown
@@ -164,7 +167,7 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
           onPress={handleSave}
           disabled={!canSave}
         >
-          Save Workout
+          Save Training
         </Button>
       </View>
     </BottomModal>

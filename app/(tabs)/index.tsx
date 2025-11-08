@@ -12,7 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AddWorkoutModal } from '@/modules/training/containers/add-workout-modal';
+import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
 // Sample data for the week
 const weeklyData = [
   { day: 'Mon', value: 65, percentage: 0.65 },
