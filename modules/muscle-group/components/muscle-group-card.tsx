@@ -18,7 +18,7 @@ function formatGrowth(growth: number): string {
   return `${growth >= 0 ? '+' : ''}${percentage}%`;
 }
 
-export function MuscleGroupCard({ name, emoji, volume, growth, color }: MuscleGroupCardProps) {
+export function MuscleGroupCard({ name, emoji, volume, growth, color, id }: MuscleGroupCardProps) {
   return (
     <Pressable
       onPress={() =>
@@ -26,6 +26,7 @@ export function MuscleGroupCard({ name, emoji, volume, growth, color }: MuscleGr
           pathname: '/muscle-details',
           params: {
             name,
+            id,
             emoji,
             volume,
             growth,

@@ -1,5 +1,5 @@
 import type { WorkoutHistory } from '@/modules/muscle-group/components/workout-history-card';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 // Mock workout history data - would be fetched from API based on muscle group
 const mockWorkoutHistoryByMuscleGroup: Record<string, WorkoutHistory[]> = {
@@ -55,9 +55,22 @@ const fetchWorkoutHistory = async (muscleGroupId?: string): Promise<WorkoutHisto
 const WORKOUT_HISTORY_QUERY_KEY = 'WORKOUT_HISTORY';
 
 export function useWorkoutHistoryQuery(muscleGroupId?: string) {
+  console.log('useWorkoutHistoryQuery', muscleGroupId);
   return useQuery({
     queryKey: [WORKOUT_HISTORY_QUERY_KEY, muscleGroupId],
     queryFn: () => fetchWorkoutHistory(muscleGroupId),
     enabled: !!muscleGroupId, // Only fetch if muscleGroupId is provided
+    // Keep previous data while loading new data (for smooth transitions)
+    placeholderData: keepPreviousData,
+    // Keep data fresh for 5 minutes (matches global config)
+    staleTime: 1000 * 60 * 5,
+    // Keep unused data in cache for 24 hours (matches global config for persistence)
+    gcTime: 1000 * 60 * 60 * 24,
+    // Retry on failure (will use cached data if offline)
+    retry: 1,
+    // Use cached data when offline or on error
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
   });
 }

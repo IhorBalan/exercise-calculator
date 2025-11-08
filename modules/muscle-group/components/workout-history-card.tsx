@@ -20,7 +20,7 @@ export interface WorkoutHistoryCardProps {
 
 export function WorkoutHistoryCard({ workout }: WorkoutHistoryCardProps) {
   return (
-    <View className="bg-white p-5 rounded-3xl shadow-sm gap-10">
+    <View className="bg-white p-6 rounded-3xl shadow-sm gap-6">
       {/* Workout Header */}
       <View className="flex-row items-center justify-between">
         <Text className="text-slate-900 text-base tracking-tight">{workout.date}</Text>
@@ -34,7 +34,10 @@ export function WorkoutHistoryCard({ workout }: WorkoutHistoryCardProps) {
       {/* Exercise List */}
       <View className="gap-3">
         {workout.exercises.map((exercise, exerciseIndex) => (
-          <View key={exerciseIndex} className="bg-slate-50 p-3 rounded-2xl gap-2">
+          <View
+            key={exerciseIndex}
+            className="bg-slate-50 p-3 rounded-xl gap-2 border border-slate-100"
+          >
             <View className="flex-row items-start justify-between">
               <Text className="text-slate-900 text-base tracking-tight">{exercise.name}</Text>
               <Text className="text-slate-600 text-base tracking-tight">{exercise.volume}</Text>

@@ -15,7 +15,7 @@ export function WorkoutHistoryContainer({
   className = 'px-4 mb-24',
 }: WorkoutHistoryContainerProps) {
   const { data: workoutHistory = [], isLoading } = useWorkoutHistoryQuery(muscleGroupId);
-
+  console.log('workoutHistory', workoutHistory);
   return (
     <View className={className}>
       <View className="flex-row items-center gap-2 mb-4">
