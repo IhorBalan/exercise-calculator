@@ -13,7 +13,7 @@ export function TotalVolumeCard({
   comparisonText = 'vs last week',
 }: TotalVolumeCardProps) {
   return (
-    <View className="mx-4 p-6 bg-blue-500 rounded-3xl shadow-sm">
+    <View className="mx-4 p-6 bg-blue-500 rounded-3xl shadow-md">
       <View className="flex-row justify-between items-start">
         <View className="gap-2">
           <Text className="text-blue-100 text-base tracking-tight">Total Volume</Text>
