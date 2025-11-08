@@ -2,8 +2,7 @@ import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/musc
 import { TotalVolumeCard } from '@/modules/user/components/total-volume-card';
 import { WeeklyActivityCard } from '@/modules/user/components/weekly-activity-card';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -12,6 +11,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { AddWorkoutModal } from '@/modules/workout/containers/add-workout-modal';
 // Sample data for the week
 const weeklyData = [
   { day: 'Mon', value: 65, percentage: 0.65 },
@@ -24,6 +25,7 @@ const weeklyData = [
 ];
 
 export default function HomeScreen() {
+  const [isAddWorkoutOpen, setIsAddWorkoutOpen] = useState(false);
   const titleOpacity = useSharedValue(0);
   const titleTranslateY = useSharedValue(20);
   const subtitleOpacity = useSharedValue(0);
@@ -80,7 +82,7 @@ export default function HomeScreen() {
           </Animated.Text>
         </View>
 
-        <Animated.View style={contentAnimatedStyle}>
+        <Animated.View style={[contentAnimatedStyle, { paddingBottom: 30 }]}>
           <TotalVolumeCard volume="25.1k kg" growth="+7.3%" />
 
           <WeeklyActivityCard data={weeklyData} />
@@ -93,12 +95,15 @@ export default function HomeScreen() {
       {/* Floating Action Button */}
       <Animated.View style={contentAnimatedStyle}>
         <Pressable
-          onPress={() => router.push('/add-workout')}
+          onPress={() => setIsAddWorkoutOpen(true)}
           className="absolute bottom-10 right-4 w-16 h-16 bg-blue-500 rounded-full shadow-xl items-center justify-center active:opacity-80"
         >
           <Ionicons name="add" size={24} color="white" />
         </Pressable>
       </Animated.View>
+
+      {/* Add Workout Modal */}
+      <AddWorkoutModal isOpen={isAddWorkoutOpen} onClose={() => setIsAddWorkoutOpen(false)} />
     </SafeAreaView>
   );
 }

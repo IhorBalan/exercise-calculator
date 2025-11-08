@@ -13,7 +13,7 @@ export function MuscleGroupListContainer() {
       {isLoading ? (
         <Text className="text-slate-500 text-sm">Loading muscle groups...</Text>
       ) : (
-        <View className="gap-3">
+        <View className="gap-4">
           {muscleGroups.map(group => (
             <MuscleGroupCard key={group.id} {...group} />
           ))}

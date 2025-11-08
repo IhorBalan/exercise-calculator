@@ -12,7 +12,7 @@ export interface WeeklyActivityCardProps {
 
 export function WeeklyActivityCard({ data }: WeeklyActivityCardProps) {
   return (
-    <View className="mx-4 mt-4 p-6 bg-white rounded-3xl shadow-sm">
+    <View className="mx-4 mt-6 p-6 bg-white rounded-3xl shadow-sm">
       <Text className="text-slate-900 text-base font-medium tracking-tight mb-5">
         Weekly Activity
       </Text>

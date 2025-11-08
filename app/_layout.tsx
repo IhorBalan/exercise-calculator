@@ -1,9 +1,11 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import '../global.css';
@@ -33,10 +35,7 @@ function RootLayoutNav() {
     if (isLoading) return;
 
     const inAuthGroup = segments[0] === '(tabs)';
-    const inProtectedRoute =
-      segments[0] === 'add-workout' ||
-      segments[0] === 'rule-details' ||
-      segments[0] === 'muscle-details';
+    const inProtectedRoute = segments[0] === 'rule-details' || segments[0] === 'muscle-details';
 
     if (!isAuthenticated && (inAuthGroup || inProtectedRoute)) {
       // User is not authenticated but trying to access protected routes
@@ -65,14 +64,6 @@ function RootLayoutNav() {
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
-          name="add-workout"
-          options={{
-            presentation: 'transparentModal',
-            headerShown: false,
-            animation: 'fade',
-          }}
-        />
-        <Stack.Screen
           name="rule-details"
           options={{
             presentation: 'transparentModal',
@@ -89,12 +80,16 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <SafeAreaProvider>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <RootLayoutNav />
-        </AuthProvider>
-      </QueryClientProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <BottomSheetModalProvider>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <RootLayoutNav />
+            </AuthProvider>
+          </QueryClientProvider>
+        </BottomSheetModalProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
