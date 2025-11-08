@@ -1,0 +1,121 @@
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+
+// Stats data
+const personalStats = [
+  { icon: 'scale-outline', value: '75 kg', label: 'Weight' },
+  { icon: 'calendar-outline', value: '28', label: 'Age' },
+  { icon: 'time-outline', value: '12', label: 'Weeks' },
+];
+
+const trainingStats = [
+  { label: 'Total Workouts', value: '87', fullWidth: false },
+  { label: 'This Month', value: '16', fullWidth: false },
+  { label: 'Total Volume', value: '384k', subtitle: 'kg lifted', fullWidth: false },
+  { label: 'Avg/Week', value: '25.1k', subtitle: 'kg lifted', fullWidth: false },
+];
+
+const settingsOptions = [
+  { icon: 'person-outline', label: 'Edit Profile', color: 'bg-blue-50', iconColor: '#3b82f6' },
+  { icon: 'trophy-outline', label: 'Fitness Goals', color: 'bg-purple-50', iconColor: '#a855f7' },
+  { icon: 'settings-outline', label: 'Preferences', color: 'bg-slate-50', iconColor: '#64748b' },
+];
+
+export default function ProfileScreen() {
+  return (
+    <View className="flex-1 bg-blue-50">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View className="px-4 pt-8 pb-1 gap-1">
+          <Text className="text-slate-900 text-xl font-medium tracking-tight">Profile</Text>
+          <Text className="text-slate-600 text-base tracking-tight">
+            Manage your account and settings
+          </Text>
+        </View>
+
+        {/* Profile Card */}
+        <View className="mx-4 mt-3 p-6 bg-white rounded-3xl shadow-sm">
+          {/* User Info */}
+          <View className="flex-row items-center gap-4 mb-12">
+            {/* Avatar */}
+            <View className="w-20 h-20 bg-blue-500 rounded-full border-4 border-blue-100 items-center justify-center">
+              <Text className="text-white text-2xl font-normal">JD</Text>
+            </View>
+
+            {/* Name and Email */}
+            <View className="flex-1 gap-1">
+              <Text className="text-slate-900 text-lg font-medium tracking-tight">John Doe</Text>
+              <Text className="text-slate-500 text-base tracking-tight">john.doe@email.com</Text>
+            </View>
+          </View>
+
+          {/* Personal Stats */}
+          <View className="flex-row gap-3">
+            {personalStats.map((stat, index) => (
+              <View key={index} className="flex-1 bg-slate-50 p-3 rounded-2xl items-center gap-1">
+                <Ionicons name={stat.icon as any} size={20} color="#0f172b" />
+                <Text className="text-slate-900 text-base tracking-tight">{stat.value}</Text>
+                <Text className="text-slate-500 text-xs tracking-tight">{stat.label}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Training Stats Section */}
+        <View className="px-4 mt-6">
+          <Text className="text-slate-900 text-base tracking-tight mb-4">Training Stats</Text>
+
+          <View className="flex-row flex-wrap gap-3">
+            {trainingStats.map((stat, index) => (
+              <View
+                key={index}
+                className={`bg-white p-4 rounded-2xl shadow-sm ${
+                  stat.fullWidth ? 'w-full' : 'flex-1'
+                } ${index >= 2 ? 'min-h-[152px]' : 'min-h-[112px]'}`}
+                style={!stat.fullWidth ? { minWidth: 170 } : undefined}
+              >
+                <Text className="text-slate-600 text-sm tracking-tight mb-7">{stat.label}</Text>
+                <Text className="text-slate-900 text-2xl tracking-tight mb-1">{stat.value}</Text>
+                {stat.subtitle && (
+                  <Text className="text-slate-500 text-xs tracking-tight">{stat.subtitle}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Settings Section */}
+        <View className="px-4 mt-6">
+          <Text className="text-slate-900 text-base tracking-tight mb-4">Settings</Text>
+
+          <View className="gap-3">
+            {settingsOptions.map((option, index) => (
+              <Pressable
+                key={index}
+                className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between active:opacity-80"
+              >
+                <View className="flex-row items-center gap-3">
+                  <View
+                    className={`w-10 h-10 ${option.color} rounded-xl items-center justify-center`}
+                  >
+                    <Ionicons name={option.icon as any} size={20} color={option.iconColor} />
+                  </View>
+                  <Text className="text-slate-900 text-base tracking-tight">{option.label}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+              </Pressable>
+            ))}
+          </View>
+        </View>
+
+        {/* Sign Out Button */}
+        <View className="px-4 mt-6 mb-6">
+          <Pressable className="bg-white border border-red-100 rounded-2xl h-14 flex-row items-center justify-center gap-2 active:opacity-80">
+            <Ionicons name="log-out-outline" size={16} color="#e7000b" />
+            <Text className="text-red-600 text-sm font-medium tracking-tight">Sign Out</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
