@@ -1,5 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Stats data
 const personalStats = [
@@ -23,7 +24,7 @@ const settingsOptions = [
 
 export default function ProfileScreen() {
   return (
-    <View className="flex-1 bg-blue-50">
+    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-4 pt-8 pb-1 gap-1">
@@ -116,6 +117,6 @@ export default function ProfileScreen() {
           </Pressable>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

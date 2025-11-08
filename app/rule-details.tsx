@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const progressionPriorityOptions = [
   'Increase reps first',
@@ -44,7 +45,7 @@ export default function RuleDetailsModal() {
 
   return (
     <View className="flex-1 bg-black/50 justify-end">
-      <View className="bg-white rounded-t-3xl border-t border-black/10">
+      <SafeAreaView className="bg-white rounded-t-3xl border-t border-black/10" edges={['bottom']}>
         {/* Header */}
         <View className="flex-row items-center justify-center pt-6 pb-4 px-6 relative">
           <Text className="text-neutral-950 text-lg font-semibold tracking-tight">
@@ -227,7 +228,7 @@ export default function RuleDetailsModal() {
             </Pressable>
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     </View>
   );
 }

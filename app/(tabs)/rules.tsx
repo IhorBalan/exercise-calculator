@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Muscle group progression rules data
 const muscleGroupRules = [
@@ -73,7 +74,7 @@ export default function RulesScreen() {
   const [autoSuggest, setAutoSuggest] = useState(false);
 
   return (
-    <View className="flex-1 bg-blue-50">
+    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-4 pt-8 pb-1 gap-1">
@@ -226,6 +227,6 @@ export default function RulesScreen() {
         {/* Bottom spacing */}
         <View className="h-6" />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

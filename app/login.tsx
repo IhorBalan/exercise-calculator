@@ -1,5 +1,6 @@
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
   const handleGoogleLogin = () => {
@@ -11,7 +12,10 @@ export default function LoginScreen() {
   };
 
   return (
-    <View className="flex-1 items-center justify-center px-5 bg-blue-50">
+    <SafeAreaView
+      className="flex-1 items-center justify-center px-5 bg-blue-50"
+      edges={['top', 'bottom']}
+    >
       {/* Logo and Header Container */}
       <View className="items-center gap-6 mb-12">
         {/* App Icon Container */}
@@ -59,6 +63,6 @@ export default function LoginScreen() {
           By continuing, you agree to our Terms of Service and Privacy Policy
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

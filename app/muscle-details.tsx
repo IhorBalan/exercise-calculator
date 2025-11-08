@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Sample data - would be dynamic based on muscle group
 const personalRecords = [
@@ -54,7 +55,7 @@ export default function MuscleDetailsScreen() {
   const growth = (params.growth as string) || '+31.3%';
 
   return (
-    <View className="flex-1 bg-blue-50">
+    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-4 pt-8 pb-1 gap-1">
@@ -186,6 +187,6 @@ export default function MuscleDetailsScreen() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

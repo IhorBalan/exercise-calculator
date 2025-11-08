@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Sample exercise data organized by muscle group
 const exercises = [
@@ -141,7 +142,7 @@ const exercises = [
 
 export default function SearchScreen() {
   return (
-    <View className="flex-1 bg-blue-50">
+    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-4 pt-8 pb-1 gap-1">
@@ -197,6 +198,6 @@ export default function SearchScreen() {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
