@@ -145,7 +145,7 @@ export default function SearchScreen() {
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View className="px-4 pt-8 pb-1 gap-1">
+        <View className="px-4 pt-8 pb-6 gap-1">
           <Text className="text-slate-900 text-xl font-medium tracking-tight">
             Exercise Library
           </Text>
@@ -155,11 +155,11 @@ export default function SearchScreen() {
         </View>
 
         {/* Search Input */}
-        <View className="mx-4 mt-3">
-          <View className="bg-white rounded-2xl shadow-sm flex-row items-center px-4 h-14">
+        <View className="mx-4">
+          <View className="bg-white rounded-2xl gap-3 shadow-sm flex-row items-center px-4 h-14">
             <Ionicons name="search" size={20} color="#717182" />
             <TextInput
-              className="flex-1 ml-3 text-base text-slate-900"
+              className="flex-1 text-base leading-[16px] text-slate-900"
               placeholder="Search exercises..."
               placeholderTextColor="#717182"
             />
@@ -167,7 +167,7 @@ export default function SearchScreen() {
         </View>
 
         {/* Exercise List */}
-        <View className="px-4 mt-6 gap-3 pb-6">
+        <View className="px-4 mt-6 gap-4 pb-6">
           {exercises.map((exercise, index) => (
             <View key={index} className="bg-white p-4 rounded-2xl shadow-sm flex-row items-start">
               {/* Icon */}
