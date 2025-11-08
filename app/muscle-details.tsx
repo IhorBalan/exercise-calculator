@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Button } from '@/components/button';
 import { VolumeChart } from '@/modules/muscle-group/components/volume-chart';
 import { PersonalRecordsContainer } from '@/modules/muscle-group/containers/personal-records-container';
 import { AddWorkoutModal } from '@/modules/workout/containers/add-workout-modal';
@@ -56,12 +57,15 @@ export default function MuscleDetailsScreen() {
 
       {/* Fixed Bottom Button */}
       <View className="absolute bottom-0 left-0 right-0 px-4 pt-4 pb-10 bg-white shadow-sm border-t border-gray-100">
-        <Pressable
+        <Button
+          variant="primary"
+          size="md"
+          fullWidth
+          className="rounded-2xl"
           onPress={() => setIsAddWorkoutOpen(true)}
-          className="w-full bg-blue-500 rounded-2xl h-14 items-center justify-center active:opacity-80"
         >
-          <Text className="text-white text-base font-medium tracking-tight">Add Workout</Text>
-        </Pressable>
+          Add Workout
+        </Button>
       </View>
 
       {/* Add Workout Modal */}
