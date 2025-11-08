@@ -10,6 +10,7 @@ import 'react-native-reanimated';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import '../global.css';
 
+import { AddTrainingModalProvider } from '@/contexts/add-training-modal-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { setupOnlineManager, useAppFocusManager } from '@/lib/react-query-setup';
 import { AuthProvider, useAuth } from '@/modules/auth/context/auth-context';
@@ -85,7 +86,9 @@ export default function RootLayout() {
         <BottomSheetModalProvider>
           <QueryClientProvider client={queryClient}>
             <AuthProvider>
-              <RootLayoutNav />
+              <AddTrainingModalProvider>
+                <RootLayoutNav />
+              </AddTrainingModalProvider>
             </AuthProvider>
           </QueryClientProvider>
         </BottomSheetModalProvider>
