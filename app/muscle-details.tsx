@@ -3,6 +3,10 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { PersonalRecordCard } from '@/modules/muscle-group/components/personal-record-card';
+import { VolumeChart } from '@/modules/muscle-group/components/volume-chart';
+import { WorkoutHistoryCard } from '@/modules/muscle-group/components/workout-history-card';
+
 // Sample data - would be dynamic based on muscle group
 const personalRecords = [
   { exercise: 'Bench Press', date: 'Nov 5, 2025', weight: '100 kg', reps: '5 reps' },
@@ -79,44 +83,7 @@ export default function MuscleDetailsScreen() {
         </View>
 
         {/* Volume Chart Card */}
-        <View className="mx-4 mt-3 p-6 bg-white rounded-3xl shadow-sm">
-          {/* Current Volume Header */}
-          <View className="flex-row items-start justify-between mb-8">
-            <View className="gap-1">
-              <Text className="text-slate-600 text-base tracking-tight">Current Volume</Text>
-              <Text className="text-slate-900 text-lg font-medium tracking-tight">{volume}</Text>
-            </View>
-            <View className="bg-blue-100 px-4 py-2 rounded-2xl flex-row items-center gap-1">
-              <Ionicons name="trending-up" size={20} color="#3b82f6" />
-              <Text className="text-blue-500 text-base tracking-tight">{growth}</Text>
-            </View>
-          </View>
-
-          {/* Chart Placeholder - Simple visualization */}
-          <View className="gap-2">
-            <Text className="text-slate-500 text-sm tracking-tight">Last 5 weeks</Text>
-            <View className="h-48 mt-4">
-              {/* Simple bar representation */}
-              <View className="flex-1 flex-row items-end justify-between gap-2">
-                {chartData.map((item, index) => {
-                  const maxValue = Math.max(...chartData.map(d => d.value));
-                  const heightPercent = (item.value / maxValue) * 100;
-                  return (
-                    <View key={index} className="flex-1 items-center gap-2">
-                      <View className="flex-1 justify-end items-center w-full">
-                        <View
-                          className="w-full bg-blue-500 rounded-t-lg"
-                          style={{ height: `${heightPercent}%` }}
-                        />
-                      </View>
-                      <Text className="text-slate-400 text-xs">{item.week}</Text>
-                    </View>
-                  );
-                })}
-              </View>
-            </View>
-          </View>
-        </View>
+        <VolumeChart volume={volume} growth={growth} chartData={chartData} />
 
         {/* Personal Records Section */}
         <View className="px-4 mt-6">
@@ -127,19 +94,7 @@ export default function MuscleDetailsScreen() {
 
           <View className="gap-3">
             {personalRecords.map((record, index) => (
-              <View
-                key={index}
-                className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between"
-              >
-                <View className="flex-1 gap-1">
-                  <Text className="text-slate-900 text-base tracking-tight">{record.exercise}</Text>
-                  <Text className="text-slate-500 text-sm tracking-tight">{record.date}</Text>
-                </View>
-                <View className="items-end gap-0.5">
-                  <Text className="text-slate-900 text-base tracking-tight">{record.weight}</Text>
-                  <Text className="text-slate-500 text-sm tracking-tight">{record.reps}</Text>
-                </View>
-              </View>
+              <PersonalRecordCard key={index} record={record} />
             ))}
           </View>
         </View>
@@ -153,36 +108,7 @@ export default function MuscleDetailsScreen() {
 
           <View className="gap-4">
             {workoutHistory.map((workout, workoutIndex) => (
-              <View key={workoutIndex} className="bg-white p-5 rounded-3xl shadow-sm gap-10">
-                {/* Workout Header */}
-                <View className="flex-row items-center justify-between">
-                  <Text className="text-slate-900 text-base tracking-tight">{workout.date}</Text>
-                  <View className="bg-blue-100 px-2 py-1 rounded-lg">
-                    <Text className="text-blue-500 text-xs font-medium">
-                      {workout.exerciseCount} exercises
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Exercise List */}
-                <View className="gap-3">
-                  {workout.exercises.map((exercise, exerciseIndex) => (
-                    <View key={exerciseIndex} className="bg-slate-50 p-3 rounded-2xl gap-2">
-                      <View className="flex-row items-start justify-between">
-                        <Text className="text-slate-900 text-base tracking-tight">
-                          {exercise.name}
-                        </Text>
-                        <Text className="text-slate-600 text-base tracking-tight">
-                          {exercise.volume}
-                        </Text>
-                      </View>
-                      <Text className="text-slate-500 text-sm tracking-tight">
-                        {exercise.sets} sets • {exercise.reps} reps • {exercise.weight}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
+              <WorkoutHistoryCard key={workoutIndex} workout={workout} />
             ))}
           </View>
         </View>
