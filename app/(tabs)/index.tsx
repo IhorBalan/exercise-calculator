@@ -1,10 +1,16 @@
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useEffect } from 'react';
+import { ScrollView, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/muscle-group-list-container';
-
+import { TotalVolumeCard } from '@/modules/user/components/total-volume-card';
+import { WeeklyActivityCard } from '@/modules/user/components/weekly-activity-card';
 // Sample data for the week
 const weeklyData = [
   { day: 'Mon', value: 65, percentage: 0.65 },
@@ -17,70 +23,79 @@ const weeklyData = [
 ];
 
 export default function HomeScreen() {
+  const titleOpacity = useSharedValue(0);
+  const titleTranslateY = useSharedValue(20);
+  const subtitleOpacity = useSharedValue(0);
+  const subtitleTranslateY = useSharedValue(20);
+
+  // Content wrapper animation
+  const contentOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    // Animate "Welcome back!" text
+    titleOpacity.value = withTiming(1, { duration: 600 });
+    titleTranslateY.value = withTiming(0, { duration: 600 });
+
+    // Animate "Here's your progress this week" text with delay
+    subtitleOpacity.value = withDelay(200, withTiming(1, { duration: 600 }));
+    subtitleTranslateY.value = withDelay(200, withTiming(0, { duration: 600 }));
+
+    // Animate content sections after welcome text
+    // "Welcome back" takes 600ms, subtitle finishes at 800ms, so delay by 1000ms
+    contentOpacity.value = withDelay(1000, withTiming(1, { duration: 200 }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const titleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+    transform: [{ translateY: titleTranslateY.value }],
+  }));
+
+  const subtitleAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: subtitleOpacity.value,
+    transform: [{ translateY: subtitleTranslateY.value }],
+  }));
+
+  const contentAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: contentOpacity.value,
+  }));
+
   return (
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View className="px-4 pt-8 pb-1 gap-1">
-          <Text className="text-slate-900 text-xl font-medium tracking-tight">Welcome back!</Text>
-          <Text className="text-slate-600 text-base tracking-tight">
+        <View className="px-4 pt-8 pb-6 gap-1">
+          <Animated.Text
+            style={titleAnimatedStyle}
+            className="text-slate-900 text-xl font-medium tracking-tight"
+          >
+            Welcome back!
+          </Animated.Text>
+          <Animated.Text
+            style={subtitleAnimatedStyle}
+            className="text-slate-600 text-base tracking-tight"
+          >
             Here&apos;s your progress this week
-          </Text>
+          </Animated.Text>
         </View>
 
-        {/* Total Volume Card */}
-        <View className="mx-4 mt-3 p-6 bg-blue-500 rounded-3xl shadow-lg">
-          <View className="flex-row justify-between items-start">
-            <View className="gap-1">
-              <Text className="text-blue-100 text-base tracking-tight">Total Volume</Text>
-              <Text className="text-white text-2xl font-medium">25.1k kg</Text>
-            </View>
-            <View className="bg-white/20 px-3 py-1.5 rounded-2xl flex-row items-center gap-1">
-              <Ionicons name="trending-up" size={16} color="white" />
-              <Text className="text-white text-base tracking-tight">+7.3%</Text>
-            </View>
-          </View>
-          <Text className="text-blue-100 text-sm mt-5 tracking-tight">vs last week</Text>
-        </View>
+        <Animated.View style={contentAnimatedStyle}>
+          <TotalVolumeCard volume="25.1k kg" growth="+7.3%" />
 
-        {/* Weekly Activity Card */}
-        <View className="mx-4 mt-4 p-6 bg-white rounded-3xl shadow-sm">
-          <Text className="text-slate-900 text-lg font-medium tracking-tight mb-5">
-            Weekly Activity
-          </Text>
+          <WeeklyActivityCard data={weeklyData} />
 
-          {/* Bar Chart */}
-          <View className="flex-row items-end justify-between h-28 mb-3">
-            {weeklyData.map((item, index) => (
-              <View key={index} className="flex-1 items-center justify-end h-full gap-2">
-                <View className="flex-1 justify-end w-full items-center">
-                  {item.value > 0 && (
-                    <View
-                      className="w-8 bg-blue-500 rounded-t-lg"
-                      style={{ height: `${item.percentage * 100}%` }}
-                    />
-                  )}
-                </View>
-                <Text className="text-slate-400 text-xs">{item.day}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/* Muscle Groups Section */}
-        <MuscleGroupListContainer />
-
-        {/* Bottom spacing for FAB */}
-        <View className="h-24" />
+          {/* Muscle Groups Section */}
+          <MuscleGroupListContainer />
+        </Animated.View>
       </ScrollView>
 
       {/* Floating Action Button */}
-      <Pressable
+      {/* <Pressable
         onPress={() => router.push('/add-workout')}
-        className="absolute bottom-20 right-4 w-16 h-16 bg-blue-500 rounded-full shadow-xl items-center justify-center active:opacity-80"
+        className="absolute bottom-10 right-4 w-16 h-16 bg-blue-500 rounded-full shadow-xl items-center justify-center active:opacity-80"
       >
         <Ionicons name="add" size={24} color="white" />
-      </Pressable>
+      </Pressable> */}
     </SafeAreaView>
   );
 }

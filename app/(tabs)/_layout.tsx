@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 
+import { AnimatedTabBar } from '@/components/animated-tab-bar';
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
@@ -16,6 +17,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
       }}
+      tabBar={props => <AnimatedTabBar {...props} />}
     >
       <Tabs.Screen
         name="index"
