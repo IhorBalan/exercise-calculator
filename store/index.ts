@@ -55,6 +55,8 @@ const asyncStoragePersister: Persister = {
 };
 
 // Persist query client to AsyncStorage
+// Note: This is called at module initialization, but it's safe because
+// it only sets up the persistence mechanism, not accessing the provider context
 persistQueryClient({
   queryClient,
   persister: asyncStoragePersister,

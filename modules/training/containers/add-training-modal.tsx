@@ -25,7 +25,7 @@ export interface AddWorkoutModalProps {
 }
 
 export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
-  const { data: muscleGroupList } = useMuscleGroupListQuery();
+  const { data: muscleGroupList, isLoading: isLoadingMuscleGroups } = useMuscleGroupListQuery();
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>('');
   const [selectedExercise, setSelectedExercise] = useState<string>('');
   const [weight, setWeight] = useState('0');

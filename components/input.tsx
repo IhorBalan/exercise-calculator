@@ -26,23 +26,19 @@ export function Input({
       {label && (
         <Text className="text-neutral-950 text-sm font-medium tracking-tight">{label}</Text>
       )}
-      <View className="relative h-12 bg-gray-100 rounded-xl px-4 text-base text-neutral-950 tracking-tight flex-row items-center">
+      <View className="relative h-12 gap-3 bg-gray-100 rounded-xl px-4 text-base text-neutral-950 tracking-tight flex-row items-center">
         {leftElement && (
-          <View className="absolute left-3 top-0 bottom-0 justify-center z-10">{leftElement}</View>
+          <View className="left-3 top-0 bottom-0 justify-center z-10">{leftElement}</View>
         )}
         <TextInput
           placeholderTextColor="#717182"
           style={{
             flex: 1,
-            paddingLeft: leftElement ? 32 : 0,
-            paddingRight: rightElement ? 32 : 0,
           }}
           {...textInputProps}
         />
         {rightElement && (
-          <View className="absolute right-3 top-0 bottom-0 justify-center z-10">
-            {rightElement}
-          </View>
+          <View className="right-3 top-0 bottom-0 justify-center z-10">{rightElement}</View>
         )}
       </View>
       {error && <Text className="text-red-500 text-sm tracking-tight">{error}</Text>}

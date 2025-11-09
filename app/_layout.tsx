@@ -41,8 +41,8 @@ function RootLayoutNav() {
     if (!isAuthenticated && (inAuthGroup || inProtectedRoute)) {
       // User is not authenticated but trying to access protected routes
       router.replace('/login');
-    } else if (isAuthenticated && segments[0] === 'login') {
-      // User is authenticated but on login page
+    } else if (isAuthenticated && (segments[0] === 'login' || segments[0] === 'signup')) {
+      // User is authenticated but on login/signup page
       router.replace('/(tabs)');
     }
   }, [isAuthenticated, isLoading, segments, router]);
@@ -63,6 +63,7 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ contentStyle: { backgroundColor: '#F0F6FE' } }}>
         <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="rule-details"
@@ -83,15 +84,15 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <BottomSheetModalProvider>
-          <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <BottomSheetModalProvider>
             <AuthProvider>
               <AddTrainingModalProvider>
                 <RootLayoutNav />
               </AddTrainingModalProvider>
             </AuthProvider>
-          </QueryClientProvider>
-        </BottomSheetModalProvider>
+          </BottomSheetModalProvider>
+        </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -8,52 +8,14 @@ import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { useAuth } from '@/modules/auth/context/auth-context';
 
-export default function LoginScreen() {
-  const { login, signInWithEmailAndPassword } = useAuth();
+export default function SignUpScreen() {
+  const { createUserWithEmailAndPassword } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleGoogleLogin = async () => {
-    try {
-      setIsLoading(true);
-      // Mock login - replace with actual Google OAuth implementation
-      const mockUser = {
-        id: '1',
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        image: 'https://via.placeholder.com/150',
-      };
-      const mockToken = 'mock-google-token-123';
-      await login(mockUser, mockToken);
-    } catch (error) {
-      console.error('Google login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleAppleLogin = async () => {
-    try {
-      setIsLoading(true);
-      // Mock login - replace with actual Apple OAuth implementation
-      const mockUser = {
-        id: '2',
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        image: 'https://via.placeholder.com/150',
-      };
-      const mockToken = 'mock-apple-token-456';
-      await login(mockUser, mockToken);
-    } catch (error) {
-      console.error('Apple login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const validateEmail = (emailValue: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,7 +44,7 @@ export default function LoginScreen() {
     return true;
   };
 
-  const handleEmailLogin = async () => {
+  const handleSignUp = async () => {
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
 
@@ -94,15 +56,17 @@ export default function LoginScreen() {
       setIsLoading(true);
       setEmailError('');
       setPasswordError('');
-      await signInWithEmailAndPassword(email, password);
+      await createUserWithEmailAndPassword(email, password);
     } catch (error: any) {
-      console.error('Email login error:', error);
+      console.error('Sign up error:', error);
       // Set error message from Firebase
-      const errorMessage = error?.message || 'Invalid email or password';
-      if (errorMessage.includes('email')) {
+      const errorMessage = error?.message || 'Failed to create account. Please try again.';
+      if (errorMessage.includes('email') || errorMessage.includes('Email')) {
         setEmailError(errorMessage);
-      } else {
+      } else if (errorMessage.includes('password') || errorMessage.includes('Password')) {
         setPasswordError(errorMessage);
+      } else {
+        setEmailError(errorMessage);
       }
     } finally {
       setIsLoading(false);
@@ -127,7 +91,7 @@ export default function LoginScreen() {
 
           {/* Tagline */}
           <Text className="text-slate-600 text-base font-normal text-center tracking-tight">
-            Track your strength, celebrate your progress
+            Create your account to get started
           </Text>
         </View>
 
@@ -165,7 +129,7 @@ export default function LoginScreen() {
             placeholder="Enter your password"
             secureTextEntry={!showPassword}
             autoCapitalize="none"
-            autoComplete="password"
+            autoComplete="new-password"
             error={passwordError}
             leftElement={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
             rightElement={
@@ -181,14 +145,14 @@ export default function LoginScreen() {
           />
 
           <Button
-            onPress={handleEmailLogin}
+            onPress={handleSignUp}
             disabled={isLoading}
             fullWidth
             variant="primary"
             size="lg"
             className="mt-2"
           >
-            {isLoading ? <ActivityIndicator size="small" color="white" /> : 'Sign in with Email'}
+            {isLoading ? <ActivityIndicator size="small" color="white" /> : 'Create Account'}
           </Button>
         </View>
 
@@ -200,12 +164,11 @@ export default function LoginScreen() {
         </View>
 
         {/* OAuth Buttons Container */}
-        <View className="w-full max-w-[354px] gap-4 mb-12">
+        <View className="w-full max-w-[354px] gap-4 mb-6">
           {/* Google Login Button */}
           <Pressable
-            onPress={handleGoogleLogin}
-            disabled={isLoading}
             className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
+            disabled={isLoading}
           >
             {isLoading ? (
               <ActivityIndicator size="small" color="#4285F4" />
@@ -221,9 +184,8 @@ export default function LoginScreen() {
 
           {/* Apple Login Button */}
           <Pressable
-            onPress={handleAppleLogin}
-            disabled={isLoading}
             className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
+            disabled={isLoading}
           >
             {isLoading ? (
               <ActivityIndicator size="small" color="#000000" />
@@ -238,13 +200,13 @@ export default function LoginScreen() {
           </Pressable>
         </View>
 
-        {/* Sign Up Link */}
-        <View className="w-full max-w-[354px] mb-6">
+        {/* Sign In Link */}
+        <View className="w-full max-w-[354px] mb-8">
           <Text className="text-slate-500 text-sm font-normal text-center tracking-tight">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" asChild>
+            Already have an account?{' '}
+            <Link href="/login" asChild>
               <Pressable>
-                <Text className="text-cyan-500 font-medium">Sign up</Text>
+                <Text className="text-cyan-500 font-medium">Sign in</Text>
               </Pressable>
             </Link>
           </Text>
