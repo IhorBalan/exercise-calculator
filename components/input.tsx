@@ -30,7 +30,15 @@ export function Input({
         {leftElement && (
           <View className="absolute left-3 top-0 bottom-0 justify-center z-10">{leftElement}</View>
         )}
-        <TextInput placeholderTextColor="#717182" {...textInputProps} />
+        <TextInput
+          placeholderTextColor="#717182"
+          style={{
+            flex: 1,
+            paddingLeft: leftElement ? 32 : 0,
+            paddingRight: rightElement ? 32 : 0,
+          }}
+          {...textInputProps}
+        />
         {rightElement && (
           <View className="absolute right-3 top-0 bottom-0 justify-center z-10">
             {rightElement}

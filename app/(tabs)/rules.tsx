@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -79,7 +78,7 @@ export default function RulesScreen() {
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View className="px-4 pt-8 pb-1 gap-1">
+        <View className="px-4 pt-8 pb-6 gap-1">
           <Text className="text-slate-900 text-xl font-medium tracking-tight">
             Progression Rules
           </Text>
@@ -89,9 +88,9 @@ export default function RulesScreen() {
         </View>
 
         {/* Info Card */}
-        <View className="mx-4 mt-3 p-4 bg-blue-50 border border-blue-100 rounded-2xl flex-row gap-3">
-          <Ionicons name="information-circle" size={20} color="#1c398e" />
-          <Text className="flex-1 text-blue-900 text-sm leading-5 tracking-tight">
+        <View className="mx-4 p-4 bg-blue-100 border border-blue-100 rounded-2xl flex-row gap-3">
+          <Ionicons name="information-circle" size={20} color="#3b82f6" />
+          <Text className="flex-1 text-blue-600 text-sm leading-5 tracking-tight">
             Progressive overload is key to building strength. Set your weekly rep increases, weight
             thresholds, and progression priorities.
           </Text>
@@ -101,7 +100,7 @@ export default function RulesScreen() {
         <View className="px-4 mt-6">
           <Text className="text-slate-900 text-base tracking-tight mb-4">Muscle Group Rules</Text>
 
-          <View className="gap-3">
+          <View className="gap-4">
             {muscleGroupRules.map((group, index) => (
               <MuscleGroupRuleCard
                 key={index}
@@ -115,8 +114,8 @@ export default function RulesScreen() {
         </View>
 
         {/* Custom Rules Section */}
-        <View className="px-4 mt-6">
-          <View className="flex-row items-center justify-between mb-4">
+        <View className="px-4 mt-8">
+          <View className="flex-row items-center justify-between mb-6">
             <Text className="text-slate-900 text-base tracking-tight">Custom Rules</Text>
             <Pressable className="bg-blue-500 flex-row items-center gap-2 px-3 py-2 rounded-xl active:opacity-80">
               <Ionicons name="add" size={16} color="white" />
@@ -126,7 +125,7 @@ export default function RulesScreen() {
 
           <View className="gap-3">
             {/* Deload Week */}
-            <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-start justify-between">
+            <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between">
               <View className="flex-1 gap-1">
                 <Text className="text-slate-900 text-base tracking-tight">Deload Week</Text>
                 <Text className="text-slate-500 text-sm tracking-tight">
@@ -140,12 +139,11 @@ export default function RulesScreen() {
                   trackColor={{ false: '#cbd5e1', true: '#030213' }}
                   thumbColor="#ffffff"
                 />
-                <Ionicons name="settings-outline" size={16} color="#9ca3af" />
               </View>
             </View>
 
             {/* Rest Days */}
-            <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-start justify-between">
+            <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between">
               <View className="flex-1 gap-1">
                 <Text className="text-slate-900 text-base tracking-tight">Rest Days</Text>
                 <Text className="text-slate-500 text-sm tracking-tight">
@@ -159,12 +157,11 @@ export default function RulesScreen() {
                   trackColor={{ false: '#cbd5e1', true: '#030213' }}
                   thumbColor="#ffffff"
                 />
-                <Ionicons name="settings-outline" size={16} color="#9ca3af" />
               </View>
             </View>
 
             {/* Auto-suggest */}
-            <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-start justify-between">
+            <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between">
               <View className="flex-1 gap-1">
                 <Text className="text-slate-900 text-base tracking-tight">Auto-suggest</Text>
                 <Text className="text-slate-500 text-sm tracking-tight">
@@ -178,7 +175,6 @@ export default function RulesScreen() {
                   trackColor={{ false: '#cbd5e1', true: '#030213' }}
                   thumbColor="#ffffff"
                 />
-                <Ionicons name="settings-outline" size={16} color="#9ca3af" />
               </View>
             </View>
           </View>
