@@ -1,59 +1,19 @@
-import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
-import { useAuth } from '@/modules/auth/context/auth-context';
+import { AuthPageLayout } from '@/modules/auth/components/auth-page-layout';
+import { useSignInWithEmailAndPassword } from '@/modules/auth/hooks/use-sign-in-with-email-and-password';
 
 export default function LoginScreen() {
-  const { login, signInWithEmailAndPassword } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const signInWithEmailAndPasswordMutation = useSignInWithEmailAndPassword();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleGoogleLogin = async () => {
-    try {
-      setIsLoading(true);
-      // Mock login - replace with actual Google OAuth implementation
-      const mockUser = {
-        id: '1',
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        image: 'https://via.placeholder.com/150',
-      };
-      const mockToken = 'mock-google-token-123';
-      await login(mockUser, mockToken);
-    } catch (error) {
-      console.error('Google login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleAppleLogin = async () => {
-    try {
-      setIsLoading(true);
-      // Mock login - replace with actual Apple OAuth implementation
-      const mockUser = {
-        id: '2',
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        image: 'https://via.placeholder.com/150',
-      };
-      const mockToken = 'mock-apple-token-456';
-      await login(mockUser, mockToken);
-    } catch (error) {
-      console.error('Apple login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const validateEmail = (emailValue: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,7 +42,7 @@ export default function LoginScreen() {
     return true;
   };
 
-  const handleEmailLogin = async () => {
+  const handleEmailLogin = useCallback(() => {
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
 
@@ -90,173 +50,91 @@ export default function LoginScreen() {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      setEmailError('');
-      setPasswordError('');
-      await signInWithEmailAndPassword(email, password);
-    } catch (error: any) {
-      console.error('Email login error:', error);
-      // Set error message from Firebase
-      const errorMessage = error?.message || 'Invalid email or password';
-      if (errorMessage.includes('email')) {
-        setEmailError(errorMessage);
-      } else {
-        setPasswordError(errorMessage);
+    signInWithEmailAndPasswordMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          console.log('success');
+        },
+        onError: error => {
+          console.error('Email login error:', error);
+        },
       }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    );
+  }, [email, password, signInWithEmailAndPasswordMutation]);
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top', 'bottom']}>
-      <ScrollView
-        contentContainerClassName="flex-1 items-center justify-center px-5"
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* Logo and Header Container */}
-        <View className="items-center gap-6 mb-12">
-          {/* App Icon Container */}
-          <View className="w-20 h-20 bg-cyan-500 rounded-3xl shadow-lg items-center justify-center">
-            <MaterialCommunityIcons name="dumbbell" size={40} color="white" />
-          </View>
-
-          {/* App Name */}
-          <Text className="text-slate-900 text-base font-normal tracking-tight">LiftUp</Text>
-
-          {/* Tagline */}
-          <Text className="text-slate-600 text-base font-normal text-center tracking-tight">
-            Track your strength, celebrate your progress
-          </Text>
-        </View>
-
-        {/* Email/Password Form */}
-        <View className="w-full max-w-[354px] gap-4 mb-6">
-          <Input
-            label="Email"
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-              if (emailError) {
-                validateEmail(text);
-              }
-            }}
-            onBlur={() => validateEmail(email)}
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            error={emailError}
-            leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
-            containerClassName="mb-2"
-          />
-
-          <Input
-            label="Password"
-            value={password}
-            onChangeText={text => {
-              setPassword(text);
-              if (passwordError) {
-                validatePassword(text);
-              }
-            }}
-            onBlur={() => validatePassword(password)}
-            placeholder="Enter your password"
-            secureTextEntry={!showPassword}
-            autoCapitalize="none"
-            autoComplete="password"
-            error={passwordError}
-            leftElement={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
-            rightElement={
-              <Pressable onPress={() => setShowPassword(!showPassword)}>
-                <Ionicons
-                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={20}
-                  color="#9CA3AF"
-                />
-              </Pressable>
+    <AuthPageLayout
+      title="Log In"
+      description="Track your strength, celebrate your progress"
+      linkTo="signup"
+    >
+      {/* Email/Password Form */}
+      <View className="w-full max-w-[354px] gap-4 mb-6">
+        <Input
+          label="Email"
+          value={email}
+          onChangeText={text => {
+            setEmail(text);
+            if (emailError) {
+              validateEmail(text);
             }
-            containerClassName="mb-2"
-          />
+          }}
+          onBlur={() => validateEmail(email)}
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          variant="light"
+          error={emailError}
+          leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
+          containerClassName="mb-2"
+        />
 
-          <Button
-            onPress={handleEmailLogin}
-            disabled={isLoading}
-            fullWidth
-            variant="primary"
-            size="lg"
-            className="mt-2"
-          >
-            {isLoading ? <ActivityIndicator size="small" color="white" /> : 'Sign in with Email'}
-          </Button>
-        </View>
+        <Input
+          label="Password"
+          value={password}
+          onChangeText={text => {
+            setPassword(text);
+            if (passwordError) {
+              validatePassword(text);
+            }
+          }}
+          onBlur={() => validatePassword(password)}
+          placeholder="Enter your password"
+          secureTextEntry={!showPassword}
+          autoCapitalize="none"
+          autoComplete="password"
+          variant="light"
+          error={passwordError}
+          leftElement={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
+          rightElement={
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Ionicons
+                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                size={20}
+                color="#9CA3AF"
+              />
+            </Pressable>
+          }
+          containerClassName="mb-2"
+        />
 
-        {/* Divider */}
-        <View className="w-full max-w-[354px] flex-row items-center gap-4 mb-6">
-          <View className="flex-1 h-px bg-gray-200" />
-          <Text className="text-slate-500 text-sm font-normal">OR</Text>
-          <View className="flex-1 h-px bg-gray-200" />
-        </View>
-
-        {/* OAuth Buttons Container */}
-        <View className="w-full max-w-[354px] gap-4 mb-12">
-          {/* Google Login Button */}
-          <Pressable
-            onPress={handleGoogleLogin}
-            disabled={isLoading}
-            className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#4285F4" />
-            ) : (
-              <>
-                <AntDesign name="google" size={16} color="#4285F4" />
-                <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-                  Continue with Google
-                </Text>
-              </>
-            )}
-          </Pressable>
-
-          {/* Apple Login Button */}
-          <Pressable
-            onPress={handleAppleLogin}
-            disabled={isLoading}
-            className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#000000" />
-            ) : (
-              <>
-                <AntDesign name="apple" size={16} color="#000000" />
-                <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-                  Continue with Apple
-                </Text>
-              </>
-            )}
-          </Pressable>
-        </View>
-
-        {/* Sign Up Link */}
-        <View className="w-full max-w-[354px] mb-6">
-          <Text className="text-slate-500 text-sm font-normal text-center tracking-tight">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" asChild>
-              <Pressable>
-                <Text className="text-cyan-500 font-medium">Sign up</Text>
-              </Pressable>
-            </Link>
-          </Text>
-        </View>
-
-        {/* Terms and Privacy */}
-        <View className="w-full max-w-[320px] mb-8">
-          <Text className="text-slate-500 text-sm font-normal text-center leading-5 tracking-tight">
-            By continuing, you agree to our Terms of Service and Privacy Policy
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        <Button
+          onPress={handleEmailLogin}
+          disabled={signInWithEmailAndPasswordMutation.isPending}
+          fullWidth
+          variant="primary"
+          size="md"
+          className="mt-2"
+        >
+          {signInWithEmailAndPasswordMutation.isPending ? (
+            <ActivityIndicator size="small" color="white" />
+          ) : (
+            'Sign in with Email'
+          )}
+        </Button>
+      </View>
+    </AuthPageLayout>
   );
 }

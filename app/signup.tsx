@@ -1,11 +1,10 @@
-import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
+import { AuthPageLayout } from '@/modules/auth/components/auth-page-layout';
 import { useAuth } from '@/modules/auth/context/auth-context';
 
 export default function SignUpScreen() {
@@ -74,151 +73,69 @@ export default function SignUpScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top', 'bottom']}>
-      <ScrollView
-        contentContainerClassName="flex-1 items-center justify-center px-5"
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* Logo and Header Container */}
-        <View className="items-center gap-6 mb-12">
-          {/* App Icon Container */}
-          <View className="w-20 h-20 bg-cyan-500 rounded-3xl shadow-lg items-center justify-center">
-            <MaterialCommunityIcons name="dumbbell" size={40} color="white" />
-          </View>
-
-          {/* App Name */}
-          <Text className="text-slate-900 text-base font-normal tracking-tight">LiftUp</Text>
-
-          {/* Tagline */}
-          <Text className="text-slate-600 text-base font-normal text-center tracking-tight">
-            Create your account to get started
-          </Text>
-        </View>
-
-        {/* Email/Password Form */}
-        <View className="w-full max-w-[354px] gap-4 mb-6">
-          <Input
-            label="Email"
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-              if (emailError) {
-                validateEmail(text);
-              }
-            }}
-            onBlur={() => validateEmail(email)}
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            error={emailError}
-            leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
-            containerClassName="mb-2"
-          />
-
-          <Input
-            label="Password"
-            value={password}
-            onChangeText={text => {
-              setPassword(text);
-              if (passwordError) {
-                validatePassword(text);
-              }
-            }}
-            onBlur={() => validatePassword(password)}
-            placeholder="Enter your password"
-            secureTextEntry={!showPassword}
-            autoCapitalize="none"
-            autoComplete="new-password"
-            error={passwordError}
-            leftElement={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
-            rightElement={
-              <Pressable onPress={() => setShowPassword(!showPassword)}>
-                <Ionicons
-                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={20}
-                  color="#9CA3AF"
-                />
-              </Pressable>
+    <AuthPageLayout title="Sign Up" description="Create your account to get started" linkTo="login">
+      {/* Email/Password Form */}
+      <View className="w-full max-w-[354px] gap-4 mb-6">
+        <Input
+          label="Email"
+          value={email}
+          onChangeText={text => {
+            setEmail(text);
+            if (emailError) {
+              validateEmail(text);
             }
-            containerClassName="mb-2"
-          />
+          }}
+          onBlur={() => validateEmail(email)}
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          variant="light"
+          error={emailError}
+          leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
+          containerClassName="mb-2"
+        />
 
-          <Button
-            onPress={handleSignUp}
-            disabled={isLoading}
-            fullWidth
-            variant="primary"
-            size="lg"
-            className="mt-2"
-          >
-            {isLoading ? <ActivityIndicator size="small" color="white" /> : 'Create Account'}
-          </Button>
-        </View>
+        <Input
+          label="Password"
+          value={password}
+          onChangeText={text => {
+            setPassword(text);
+            if (passwordError) {
+              validatePassword(text);
+            }
+          }}
+          onBlur={() => validatePassword(password)}
+          placeholder="Enter your password"
+          secureTextEntry={!showPassword}
+          autoCapitalize="none"
+          autoComplete="new-password"
+          variant="light"
+          error={passwordError}
+          leftElement={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
+          rightElement={
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Ionicons
+                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                size={20}
+                color="#9CA3AF"
+              />
+            </Pressable>
+          }
+          containerClassName="mb-2"
+        />
 
-        {/* Divider */}
-        <View className="w-full max-w-[354px] flex-row items-center gap-4 mb-6">
-          <View className="flex-1 h-px bg-gray-200" />
-          <Text className="text-slate-500 text-sm font-normal">OR</Text>
-          <View className="flex-1 h-px bg-gray-200" />
-        </View>
-
-        {/* OAuth Buttons Container */}
-        <View className="w-full max-w-[354px] gap-4 mb-6">
-          {/* Google Login Button */}
-          <Pressable
-            className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#4285F4" />
-            ) : (
-              <>
-                <AntDesign name="google" size={16} color="#4285F4" />
-                <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-                  Continue with Google
-                </Text>
-              </>
-            )}
-          </Pressable>
-
-          {/* Apple Login Button */}
-          <Pressable
-            className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#000000" />
-            ) : (
-              <>
-                <AntDesign name="apple" size={16} color="#000000" />
-                <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-                  Continue with Apple
-                </Text>
-              </>
-            )}
-          </Pressable>
-        </View>
-
-        {/* Sign In Link */}
-        <View className="w-full max-w-[354px] mb-8">
-          <Text className="text-slate-500 text-sm font-normal text-center tracking-tight">
-            Already have an account?{' '}
-            <Link href="/login" asChild>
-              <Pressable>
-                <Text className="text-cyan-500 font-medium">Sign in</Text>
-              </Pressable>
-            </Link>
-          </Text>
-        </View>
-
-        {/* Terms and Privacy */}
-        <View className="w-full max-w-[320px] mb-8">
-          <Text className="text-slate-500 text-sm font-normal text-center leading-5 tracking-tight">
-            By continuing, you agree to our Terms of Service and Privacy Policy
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        <Button
+          onPress={handleSignUp}
+          disabled={isLoading}
+          fullWidth
+          variant="primary"
+          size="md"
+          className="mt-2"
+        >
+          {isLoading ? <ActivityIndicator size="small" color="white" /> : 'Create Account'}
+        </Button>
+      </View>
+    </AuthPageLayout>
   );
 }

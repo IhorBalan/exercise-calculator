@@ -9,6 +9,7 @@ export interface InputProps extends TextInputProps {
   rightElement?: ReactNode;
   className?: string;
   containerClassName?: string;
+  variant?: 'light' | 'default';
 }
 
 export function Input({
@@ -19,14 +20,21 @@ export function Input({
   rightElement,
   className = '',
   containerClassName = '',
+  variant = 'default',
   ...textInputProps
 }: InputProps) {
+  const isLight = variant === 'light';
+
   return (
     <View className={`gap-2 ${containerClassName}`}>
       {label && (
         <Text className="text-neutral-950 text-sm font-medium tracking-tight">{label}</Text>
       )}
-      <View className="relative h-12 gap-3 bg-gray-100 rounded-xl px-4 text-base text-neutral-950 tracking-tight flex-row items-center">
+      <View
+        className={`relative h-14 gap-3 rounded-2xl px-4 text-base text-neutral-950 tracking-tight flex-row items-center ${
+          isLight ? 'bg-white border border-gray-200' : 'bg-gray-100'
+        } ${error ? 'border-red-400' : ''}`}
+      >
         {leftElement && (
           <View className="left-3 top-0 bottom-0 justify-center z-10">{leftElement}</View>
         )}

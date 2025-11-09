@@ -3,19 +3,17 @@ import { router } from 'expo-router';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 import { getAuth } from '@/lib/firebase';
+import type { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword as firebaseSignIn,
   createUserWithEmailAndPassword as firebaseCreateUser,
   signOut as firebaseSignOut,
+  onAuthStateChanged,
 } from '@react-native-firebase/auth';
-import type { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  signInWithEmailAndPassword: (email: string, password: string) => Promise<void>;
   createUserWithEmailAndPassword: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   // Legacy methods for OAuth (Google, Apple)
@@ -58,32 +56,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return unsubscribe;
   }, []);
-
-  const signInWithEmailAndPassword = async (email: string, password: string) => {
-    try {
-      const auth = getAuth();
-      const userCredential = await firebaseSignIn(auth, email, password);
-      const mappedUser = mapFirebaseUserToUser(userCredential.user);
-      setUser(mappedUser);
-      router.replace('/(tabs)');
-    } catch (error: any) {
-      console.error('Firebase sign in error:', error);
-      // Map Firebase errors to user-friendly messages
-      let errorMessage = 'Failed to sign in. Please try again.';
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email.';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Incorrect password.';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Invalid email address.';
-      } else if (error.code === 'auth/user-disabled') {
-        errorMessage = 'This account has been disabled.';
-      } else if (error.code === 'auth/too-many-requests') {
-        errorMessage = 'Too many failed attempts. Please try again later.';
-      }
-      throw new Error(errorMessage);
-    }
-  };
 
   const createUserWithEmailAndPassword = async (email: string, password: string) => {
     try {
@@ -145,7 +117,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     isLoading,
     isAuthenticated: !!user,
-    signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
     login,
