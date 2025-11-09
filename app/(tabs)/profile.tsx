@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/modules/auth/context/auth-context';
+import { useUserQuery } from '@/modules/user/hooks/use-user-query';
 
 // Stats data
 const personalStats = [
@@ -27,6 +29,7 @@ const settingsOptions = [
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
+  const { data: userData } = useUserQuery();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleSignOut = async () => {
@@ -77,10 +80,10 @@ export default function ProfileScreen() {
             {/* Name and Email */}
             <View className="flex-1 gap-1">
               <Text className="text-slate-900 text-lg font-medium tracking-tight">
-                {user?.name || 'User'}
+                {userData?.displayName || 'User'}
               </Text>
               <Text className="text-slate-500 text-base tracking-tight">
-                {user?.email || 'No email'}
+                {userData?.email || 'No email'}
               </Text>
             </View>
           </View>
@@ -128,6 +131,11 @@ export default function ProfileScreen() {
             {settingsOptions.map((option, index) => (
               <Pressable
                 key={index}
+                onPress={() => {
+                  if (option.label === 'Edit Profile') {
+                    router.push('/edit-profile');
+                  }
+                }}
                 className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between active:opacity-80"
               >
                 <View className="flex-row items-center gap-3">
