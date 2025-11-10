@@ -1,4 +1,5 @@
 import { getAuth, getFirestore } from '@/lib/firebase';
+import { COLLECTIONS } from '@/modules/core/constants/api.constants';
 import { omitUndefinedValues } from '@/modules/core/utils/object.utils';
 import type { UserProfile } from '@/modules/user/types/user.types';
 
@@ -17,7 +18,7 @@ export const getUserProfile = async (): Promise<UserProfile | null> => {
   }
 
   const firestoreInstance = getFirestore();
-  const userDocRef = firestoreInstance.collection('users').doc(user.uid);
+  const userDocRef = firestoreInstance.collection(COLLECTIONS.USERS).doc(user.uid);
   const userDoc = await userDocRef.get();
 
   if (!userDoc.exists()) {
@@ -43,7 +44,7 @@ export const updateUserProfile = async (
   }
 
   const firestore = getFirestore();
-  const userDocRef = firestore.collection('users').doc(user.uid);
+  const userDocRef = firestore.collection(COLLECTIONS.USERS).doc(user.uid);
   const userDoc = await userDocRef.get();
 
   if (userDoc.exists()) {

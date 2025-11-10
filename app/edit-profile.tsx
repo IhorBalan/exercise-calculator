@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { BottomFixedContent } from '@/modules/core/components/bottom-fixed-content';
+import { getUser } from '@/modules/user/api/user.api';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 import { useUserProfileUpdateMutation } from '@/modules/user/hooks/use-user-profile-update-mutation';
 import { queryClient } from '@/store';
@@ -210,7 +211,7 @@ export default function EditProfileScreen() {
             <Input
               variant="light"
               label="Email"
-              value={userProfileQuery.data?.email || ''}
+              value={userProfileQuery.data?.email || getUser()?.email || ''}
               editable={false}
               placeholder="Email address"
               leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}

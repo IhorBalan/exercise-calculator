@@ -32,6 +32,8 @@ export default function ProfileScreen() {
   const { data: userProfile } = useUserProfileQuery();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  const displayName = `${userProfile?.firstName || ''} ${userProfile?.lastName || ''}`;
+
   const handleSignOut = async () => {
     try {
       setIsLoggingOut(true);
@@ -76,7 +78,7 @@ export default function ProfileScreen() {
             {/* Name and Email */}
             <View className="flex-1 gap-1">
               <Text className="text-slate-900 text-lg font-medium tracking-tight">
-                {userProfile?.firstName || ''} {userProfile?.lastName || ''}
+                {!displayName || displayName.trim() === '' ? 'User' : displayName}
               </Text>
               <Text className="text-slate-500 text-base tracking-tight">
                 {userProfile?.email || 'No email'}
