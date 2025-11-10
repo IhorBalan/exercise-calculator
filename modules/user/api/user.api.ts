@@ -1,5 +1,6 @@
-import { getAuth } from '@/lib/firebase';
-import { updateProfile } from '@react-native-firebase/auth';
+import { getAuth, getFirestore } from '@/lib/firebase';
+import { omitUndefinedValues } from '@/modules/core/utils/object.utils';
+import type { UserProfile } from '@/modules/user/types/user.types';
 
 export const getUser = () => {
   const auth = getAuth();
@@ -8,19 +9,58 @@ export const getUser = () => {
   return user;
 };
 
-type UpdateUserParams = {
-  displayName?: string | null;
-  photoURL?: string | null;
-};
+export const getUserProfile = async (): Promise<UserProfile | null> => {
+  const user = getUser();
 
-export const updateUser = async (params: UpdateUserParams) => {
-  const auth = getAuth();
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
+  if (!user) {
     throw new Error('No user is currently signed in');
   }
 
-  await updateProfile(currentUser, params);
+  const firestoreInstance = getFirestore();
+  const userDocRef = firestoreInstance.collection('users').doc(user.uid);
+  const userDoc = await userDocRef.get();
 
-  return currentUser;
+  if (!userDoc.exists()) {
+    return null;
+  }
+
+  const data = userDoc.data();
+
+  if (!data) {
+    return null;
+  }
+
+  return data as UserProfile;
+};
+
+export const updateUserProfile = async (
+  params: Omit<UserProfile, 'id' | 'email'>
+): Promise<UserProfile | null> => {
+  const user = getUser();
+
+  if (!user) {
+    throw new Error('No user is currently signed in');
+  }
+
+  const firestore = getFirestore();
+  const userDocRef = firestore.collection('users').doc(user.uid);
+  const userDoc = await userDocRef.get();
+
+  if (userDoc.exists()) {
+    // Update existing document
+    await userDocRef.update({
+      ...omitUndefinedValues(params),
+    });
+  } else {
+    // Create new document
+    await userDocRef.set({
+      id: user.uid,
+      email: user.email,
+      ...omitUndefinedValues(params),
+      updatedAt: Date.now(),
+      createdAt: Date.now(),
+    });
+  }
+
+  return getUserProfile();
 };

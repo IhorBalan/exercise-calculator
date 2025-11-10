@@ -5,7 +5,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/modules/auth/context/auth-context';
-import { useUserQuery } from '@/modules/user/hooks/use-user-query';
+import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 
 // Stats data
 const personalStats = [
@@ -28,8 +28,8 @@ const settingsOptions = [
 ];
 
 export default function ProfileScreen() {
-  const { user, logout } = useAuth();
-  const { data: userData } = useUserQuery();
+  const { logout } = useAuth();
+  const { data: userProfile } = useUserProfileQuery();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleSignOut = async () => {
@@ -45,12 +45,8 @@ export default function ProfileScreen() {
 
   // Get user initials for avatar
   const getUserInitials = () => {
-    if (!user?.name) return 'U';
-    const names = user.name.split(' ');
-    if (names.length >= 2) {
-      return `${names[0][0]}${names[1][0]}`.toUpperCase();
-    }
-    return user.name[0].toUpperCase();
+    if (!userProfile?.firstName || !userProfile?.lastName) return 'U';
+    return `${userProfile.firstName[0]}${userProfile.lastName[0]}`.toUpperCase();
   };
 
   return (
@@ -70,7 +66,7 @@ export default function ProfileScreen() {
           <View className="flex-row items-center gap-4 mb-12">
             {/* Avatar */}
             <View className="w-20 h-20 bg-blue-500 rounded-full border-4 border-blue-100 items-center justify-center">
-              {user?.image ? (
+              {userProfile?.image ? (
                 <Text className="text-white text-2xl font-normal">IMG</Text>
               ) : (
                 <Text className="text-white text-2xl font-normal">{getUserInitials()}</Text>
@@ -80,10 +76,10 @@ export default function ProfileScreen() {
             {/* Name and Email */}
             <View className="flex-1 gap-1">
               <Text className="text-slate-900 text-lg font-medium tracking-tight">
-                {userData?.displayName || 'User'}
+                {userProfile?.firstName || ''} {userProfile?.lastName || ''}
               </Text>
               <Text className="text-slate-500 text-base tracking-tight">
-                {userData?.email || 'No email'}
+                {userProfile?.email || 'No email'}
               </Text>
             </View>
           </View>

@@ -24,6 +24,7 @@ if (getApps().length === 0) {
   });
 }
 
-// Export modular API functions
+// Export standard API functions
 export { getApp } from '@react-native-firebase/app';
 export { getAuth } from '@react-native-firebase/auth';
+export { getFirestore } from '@react-native-firebase/firestore';

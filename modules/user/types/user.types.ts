@@ -1,6 +1,10 @@
-export type User = {
+export type UserProfile = {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   image?: string;
+  weight?: number;
+  height?: number;
+  birthday?: string;
 };
