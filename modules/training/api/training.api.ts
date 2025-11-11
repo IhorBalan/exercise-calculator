@@ -3,14 +3,16 @@ import { COLLECTIONS } from '@/modules/core/constants/api.constants';
 import { getExerciseById } from '@/modules/muscle-group/api/muscle-group.api';
 import { type Exercise } from '@/modules/muscle-group/types/muscle-group.types';
 import { type Training } from '@/modules/training/types/training.types';
+import { getUser } from '@/modules/user/api/user.api';
+import { addDoc, collection, getDocs, query, where } from '@react-native-firebase/firestore';
 
 export const createTraining = async (
   training: Omit<Training, 'id' | 'createdAt' | 'updatedAt'>
 ) => {
   const firestore = getFirestore();
-  const trainingRef = firestore.collection(COLLECTIONS.TRAININGS);
+  const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
 
-  await trainingRef.add({
+  await addDoc(trainingRef, {
     ...training,
     createdAt: Date.now(),
     updatedAt: Date.now(),
@@ -18,11 +20,22 @@ export const createTraining = async (
 };
 
 export const getTrainingsByMuscleGroupId = async (muscleGroupId?: string): Promise<Training[]> => {
-  const firestore = getFirestore();
-  const trainingRef = firestore.collection(COLLECTIONS.TRAININGS);
-  const snapshot = await trainingRef.where('muscleGroupId', '==', muscleGroupId).get();
+  const user = getUser();
 
-  return snapshot.docs.map(doc => doc.data() as Training);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const firestore = getFirestore();
+  const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
+  const q = query(
+    trainingRef,
+    where('muscleGroupId', '==', muscleGroupId),
+    where('userId', '==', user.uid)
+  );
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as Training);
 };
 
 export const getTrainingRecordsByMuscleGroupId = async (
@@ -30,31 +43,31 @@ export const getTrainingRecordsByMuscleGroupId = async (
 ): Promise<(Training & { exercise: Exercise })[]> => {
   const trainings = await getTrainingsByMuscleGroupId(muscleGroupId);
 
-  const records: Training[] = [];
+  const records: Record<string, Training> = {};
 
   for (let index = 0; index < trainings.length; index++) {
     const training = trainings[index];
-    const isRecord = trainings
-      .filter(t => t.exercienseId === training.exercienseId)
-      .every(t => t.weight < training.weight);
 
-    if (isRecord) {
-      records.push(training);
+    if (records[training.exercienseId]) {
+      if (records[training.exercienseId].weight < training.weight) {
+        records[training.exercienseId] = training;
+      }
+    } else {
+      records[training.exercienseId] = training;
     }
-  }
 
-  console.log('records', records);
+    console.log('training', training);
+  }
 
   const result: (Training & { exercise: Exercise })[] = [];
 
-  for (let index = 0; index < records.length; index++) {
-    const record = records[index];
+  for (const record of Object.values(records)) {
     const exercise = await getExerciseById(record.exercienseId);
 
-    result.push({ ...record, exercise });
+    if (exercise) {
+      result.push({ ...record, exercise });
+    }
   }
-
-  console.log('result', result);
 
   return result;
 };

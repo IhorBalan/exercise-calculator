@@ -8,13 +8,13 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       // Stale time: how long data is considered fresh (5 minutes)
-      staleTime: 1000 * 60 * 5,
+      // staleTime: 1000 * 60 * 5,
       // Cache time: how long unused data stays in cache (24 hours for persistence)
       gcTime: 1000 * 60 * 60 * 24,
       // Retry failed requests
       retry: 1,
       // Refetch on window focus (handled by React Native AppState)
-      refetchOnWindowFocus: false,
+      // refetchOnWindowFocus: false,
       // Use cached data when offline
       networkMode: 'offlineFirst',
     },

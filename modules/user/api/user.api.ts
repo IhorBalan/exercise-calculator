@@ -2,6 +2,7 @@ import { getAuth, getFirestore } from '@/lib/firebase';
 import { COLLECTIONS } from '@/modules/core/constants/api.constants';
 import { omitUndefinedValues } from '@/modules/core/utils/object.utils';
 import type { UserProfile } from '@/modules/user/types/user.types';
+import { doc, getDoc, setDoc, updateDoc } from '@react-native-firebase/firestore';
 
 export const getUser = () => {
   const auth = getAuth();
@@ -17,9 +18,9 @@ export const getUserProfile = async (): Promise<UserProfile | null> => {
     throw new Error('No user is currently signed in');
   }
 
-  const firestoreInstance = getFirestore();
-  const userDocRef = firestoreInstance.collection(COLLECTIONS.USERS).doc(user.uid);
-  const userDoc = await userDocRef.get();
+  const firestore = getFirestore();
+  const userDocRef = doc(firestore, COLLECTIONS.USERS, user.uid);
+  const userDoc = await getDoc(userDocRef);
 
   if (!userDoc.exists()) {
     return null;
@@ -44,17 +45,17 @@ export const updateUserProfile = async (
   }
 
   const firestore = getFirestore();
-  const userDocRef = firestore.collection(COLLECTIONS.USERS).doc(user.uid);
-  const userDoc = await userDocRef.get();
+  const userDocRef = doc(firestore, COLLECTIONS.USERS, user.uid);
+  const userDoc = await getDoc(userDocRef);
 
   if (userDoc.exists()) {
     // Update existing document
-    await userDocRef.update({
+    await updateDoc(userDocRef, {
       ...omitUndefinedValues(params),
     });
   } else {
     // Create new document
-    await userDocRef.set({
+    await setDoc(userDocRef, {
       id: user.uid,
       email: user.email,
       ...omitUndefinedValues(params),

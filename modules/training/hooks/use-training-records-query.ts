@@ -4,10 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 const TRAINING_RECORDS_QUERY_KEY = 'TRAINING_RECORDS';
 
 export const useTrainingRecordsQuery = (muscleGroupId?: string) => {
-  console.log('muscleGroupId', muscleGroupId);
   return useQuery({
     queryKey: [TRAINING_RECORDS_QUERY_KEY, muscleGroupId],
-    queryFn: () => getTrainingRecordsByMuscleGroupId(muscleGroupId),
+    queryFn: async () => {
+      console.log('before muscleGroupId', muscleGroupId);
+      const res = await getTrainingRecordsByMuscleGroupId(muscleGroupId);
+      console.log('res', res);
+      return res;
+    },
     enabled: !!muscleGroupId,
   });
 };

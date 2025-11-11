@@ -10,7 +10,7 @@ export interface PersonalRecordsContainerProps {
 
 export function PersonalRecordsContainer({ muscleGroupId }: PersonalRecordsContainerProps) {
   const { data: trainingRecords = [] } = useTrainingRecordsQuery(muscleGroupId);
-  console.log('trainingRecords', trainingRecords);
+
   return (
     <View className="px-4">
       <View className="flex-row items-center gap-2 mb-4">

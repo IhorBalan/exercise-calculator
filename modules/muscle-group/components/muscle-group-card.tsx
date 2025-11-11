@@ -1,24 +1,12 @@
 import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { MuscleGroupWithProgress } from '../types/muscle-group.types';
+import { MuscleGroup } from '../types/muscle-group.types';
 
-export interface MuscleGroupCardProps extends MuscleGroupWithProgress {
+export interface MuscleGroupCardProps extends MuscleGroup {
   onPress?: () => void;
 }
 
-function formatVolume(volume: number): string {
-  if (volume >= 1000) {
-    return `${(volume / 1000).toFixed(1)}k kg`;
-  }
-  return `${volume} kg`;
-}
-
-function formatGrowth(growth: number): string {
-  const percentage = Math.round(growth * 100);
-  return `${growth >= 0 ? '+' : ''}${percentage}%`;
-}
-
-export function MuscleGroupCard({ name, emoji, volume, growth, color, id }: MuscleGroupCardProps) {
+export function MuscleGroupCard({ name, emoji, color, id }: MuscleGroupCardProps) {
   return (
     <Pressable
       onPress={() =>
@@ -27,9 +15,6 @@ export function MuscleGroupCard({ name, emoji, volume, growth, color, id }: Musc
           params: {
             name,
             id,
-            emoji,
-            volume,
-            growth,
           },
         })
       }
@@ -41,11 +26,11 @@ export function MuscleGroupCard({ name, emoji, volume, growth, color, id }: Musc
         </View>
         <View className="flex-1">
           <Text className="text-slate-900 text-base tracking-tight">{name}</Text>
-          <Text className="text-slate-500 text-sm tracking-tight">{formatVolume(volume)}</Text>
+          <Text className="text-slate-500 text-sm tracking-tight">{'volume'}</Text>
         </View>
       </View>
       <View className="bg-green-50 px-2.5 py-2 rounded-lg">
-        <Text className="text-green-600 text-sm tracking-tight">{formatGrowth(growth)}</Text>
+        <Text className="text-green-600 text-sm tracking-tight">{'growth'}</Text>
       </View>
     </Pressable>
   );

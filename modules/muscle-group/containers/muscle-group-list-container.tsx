@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 
-import { MuscleGroupCard } from '../components/muscle-group-card';
-import { useMuscleGroupListQuery } from '../hooks/use-muscle-group-list-query';
+import { MuscleGroupCard } from '@/modules/muscle-group/components/muscle-group-card';
+import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
 
 export function MuscleGroupListContainer() {
   const { data: muscleGroups = [], isLoading } = useMuscleGroupListQuery();
