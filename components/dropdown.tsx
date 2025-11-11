@@ -60,7 +60,7 @@ export function Dropdown({
       <Text className="text-neutral-950 text-sm font-medium tracking-tight">{label}</Text>
       <Pressable
         onPress={() => !disabled && setIsOpen(!isOpen)}
-        className={`bg-gray-100 rounded-xl h-12 px-4 flex-row items-center justify-between ${
+        className={`bg-gray-100 rounded-2xl h-14 px-4 flex-row items-center justify-between ${
           disabled ? 'opacity-50' : ''
         }`}
         disabled={disabled}

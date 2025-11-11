@@ -1,23 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 import { BottomModal } from '@/components/bottom-modal';
 import { Button } from '@/components/button';
 import { Dropdown, type DropdownOption } from '@/components/dropdown';
 import { Input } from '@/components/input';
+import { useExercisesListQuery } from '@/modules/muscle-group/hooks/use-exercises-list-query';
 import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
-
-// const muscleGroups = ['Chest', 'Back', 'Shoulders', 'Legs', 'Arms', 'Core'];
-
-const exercisesByMuscle: Record<string, string[]> = {
-  Chest: ['Bench Press', 'Incline Press', 'Dumbbell Fly'],
-  Back: ['Deadlift', 'Pull-ups', 'Barbell Row', 'Lat Pulldown'],
-  Shoulders: ['Overhead Press', 'Lateral Raise'],
-  Legs: ['Squat', 'Lunges', 'Leg Curl'],
-  Arms: ['Tricep Dips', 'Hammer Curl'],
-  Core: ['Plank', 'Crunches'],
-};
 
 export interface AddWorkoutModalProps {
   isOpen: boolean;
@@ -25,12 +15,13 @@ export interface AddWorkoutModalProps {
 }
 
 export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
-  const { data: muscleGroupList, isLoading: isLoadingMuscleGroups } = useMuscleGroupListQuery();
+  const { data: muscleGroupList } = useMuscleGroupListQuery();
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>('');
   const [selectedExercise, setSelectedExercise] = useState<string>('');
   const [weight, setWeight] = useState('0');
   const [reps, setReps] = useState(0);
   const [sets, setSets] = useState(0);
+  const { data: exercisesList } = useExercisesListQuery(selectedMuscleGroup);
 
   // Convert muscle groups to dropdown options
   const muscleGroupOptions: DropdownOption[] =
@@ -40,12 +31,16 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
     })) || [];
 
   // Get exercise options based on selected muscle group
-  const exerciseOptions: DropdownOption[] = selectedMuscleGroup
-    ? exercisesByMuscle[selectedMuscleGroup]?.map(exercise => ({
-        label: exercise,
-        value: exercise,
+  const exerciseOptions: DropdownOption[] = useMemo(() => {
+    if (!selectedMuscleGroup) return [];
+
+    return (
+      exercisesList?.map(exercise => ({
+        label: exercise.name,
+        value: exercise.id,
       })) || []
-    : [];
+    );
+  }, [selectedMuscleGroup, exercisesList]);
 
   const resetForm = () => {
     setSelectedMuscleGroup('');
@@ -56,14 +51,6 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
   };
 
   const handleSave = () => {
-    // Handle save logic here
-    console.log({
-      muscleGroup: selectedMuscleGroup,
-      exercise: selectedExercise,
-      weight,
-      reps,
-      sets,
-    });
     // Reset form
     resetForm();
     onClose();

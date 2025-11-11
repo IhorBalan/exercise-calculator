@@ -9,3 +9,9 @@ export type MuscleGroupWithProgress = MuscleGroup & {
   volume: number;
   growth: number;
 };
+
+export type Exercise = {
+  id: string;
+  name: string;
+  muscleGroupId: string;
+};
