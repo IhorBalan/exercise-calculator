@@ -8,6 +8,7 @@ import { Dropdown, type DropdownOption } from '@/components/dropdown';
 import { Input } from '@/components/input';
 import { useExercisesListQuery } from '@/modules/muscle-group/hooks/use-exercises-list-query';
 import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
+import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training-create-mutation';
 
 export interface AddWorkoutModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
   const [reps, setReps] = useState(0);
   const [sets, setSets] = useState(0);
   const { data: exercisesList } = useExercisesListQuery(selectedMuscleGroup);
+  const trainingCreateMutation = useTrainingCreateMutation();
 
   // Convert muscle groups to dropdown options
   const muscleGroupOptions: DropdownOption[] =
@@ -51,9 +53,26 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
   };
 
   const handleSave = () => {
-    // Reset form
-    resetForm();
-    onClose();
+    trainingCreateMutation.mutate(
+      {
+        muscleGroupId: selectedMuscleGroup,
+        exercienseId: selectedExercise,
+        sets,
+        reps,
+        weight: parseFloat(weight),
+        date: new Date().toISOString(),
+      },
+      {
+        onSuccess: () => {
+          // Reset form
+          resetForm();
+          onClose();
+        },
+        onError: error => {
+          console.error('Create training error:', error);
+        },
+      }
+    );
   };
 
   const handleClose = () => {

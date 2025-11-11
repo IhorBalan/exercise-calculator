@@ -6,4 +6,6 @@ export type Training = {
   reps: number;
   weight: number;
   date: string;
+  createdAt: number;
+  updatedAt: number;
 };
