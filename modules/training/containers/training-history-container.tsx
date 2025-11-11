@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 
 import { WorkoutHistoryCard } from '@/modules/muscle-group/components/workout-history-card';
 import { Training } from '@/modules/training/types/training.types';
+import { startOfDay } from 'date-fns';
 import { useMemo } from 'react';
 import { WorkoutHistoryEmptyState } from '../components/workout-history-empty-state';
 import { useTrainingHistoryQuery } from '../hooks/use-training-history-query';
@@ -22,7 +23,9 @@ export function WorkoutHistoryContainer({
     () =>
       trainings.reduce(
         (acc, training) => {
-          const date = training.date;
+          console.log('training', training.date);
+          const date = startOfDay(training.date).toISOString();
+
           if (!acc[date]) {
             acc[date] = [];
           }
@@ -48,14 +51,16 @@ export function WorkoutHistoryContainer({
         <WorkoutHistoryEmptyState />
       ) : (
         <View className="gap-4">
-          {Object.entries(trainingHistory).map(([date, trainings], trainingIndex) => (
-            <WorkoutHistoryCard
-              key={trainingIndex}
-              date={date}
-              trainingCount={trainings.length}
-              trainings={trainings}
-            />
-          ))}
+          {Object.entries(trainingHistory)
+            .sort((a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime())
+            .map(([date, trainings], trainingIndex) => (
+              <WorkoutHistoryCard
+                key={trainingIndex}
+                date={date}
+                trainingCount={trainings.length}
+                trainings={trainings}
+              />
+            ))}
         </View>
       )}
     </View>

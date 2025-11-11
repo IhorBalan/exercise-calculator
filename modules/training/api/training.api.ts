@@ -9,11 +9,18 @@ import { addDoc, collection, getDocs, query, where } from '@react-native-firebas
 export const createTraining = async (
   training: Omit<Training, 'id' | 'createdAt' | 'updatedAt'>
 ) => {
+  const user = getUser();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
   const firestore = getFirestore();
   const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
 
   await addDoc(trainingRef, {
     ...training,
+    userId: user.uid,
     createdAt: Date.now(),
     updatedAt: Date.now(),
   });
