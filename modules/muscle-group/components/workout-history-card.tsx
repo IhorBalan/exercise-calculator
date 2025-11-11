@@ -18,7 +18,7 @@ export interface WorkoutHistoryCardProps {
 
 export function WorkoutHistoryCard({ date, trainingCount, trainings }: WorkoutHistoryCardProps) {
   return (
-    <View className="bg-white p-6 rounded-3xl shadow-sm gap-6">
+    <View className="bg-white p-4 rounded-3xl shadow-sm gap-6">
       {/* Workout Header */}
       <View className="flex-row items-center justify-between">
         <Text className="text-slate-900 text-base tracking-tight">
