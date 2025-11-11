@@ -16,7 +16,7 @@ export default function MuscleDetailsScreen() {
   const volume = (params.volume as string) || '4.2k kg';
   const growth = (params.growth as string) || '+31.3%';
   const muscleGroupId = (params.id as string) || '';
-  console.log('muscleGroupId', muscleGroupId);
+
   const [isAddWorkoutOpen, setIsAddWorkoutOpen] = useState(false);
 
   return (

@@ -17,3 +17,11 @@ export const getExercises = async (muscleGroupId: string): Promise<Exercise[]> =
 
   return snapshot.docs.map(doc => doc.data() as Exercise);
 };
+
+export const getExerciseById = async (exerciseId: string): Promise<Exercise> => {
+  const firestore = getFirestore();
+  const exerciseRef = firestore.collection(COLLECTIONS.EXERCISES).doc(exerciseId);
+  const snapshot = await exerciseRef.get();
+
+  return snapshot.data() as Exercise;
+};
