@@ -6,7 +6,7 @@ import { BottomModal } from '@/components/bottom-modal';
 import { Button } from '@/components/button';
 import { Dropdown, type DropdownOption } from '@/components/dropdown';
 import { Input } from '@/components/input';
-import { useExercisesListQuery } from '@/modules/muscle-group/hooks/use-exercises-list-query';
+import { useExercisesListQuery } from '@/modules/exercise/hooks/use-exercises-list-query';
 import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
 import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training-create-mutation';
 

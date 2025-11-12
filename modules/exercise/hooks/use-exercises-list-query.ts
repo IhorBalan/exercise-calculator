@@ -1,4 +1,4 @@
-import { getExercises } from '@/modules/muscle-group/api/muscle-group.api';
+import { getExercises } from '@/modules/exercise/api/exercise.api';
 import { useQuery } from '@tanstack/react-query';
 
 const EXERCISES_LIST_QUERY_KEY = 'EXERCISES_LIST';

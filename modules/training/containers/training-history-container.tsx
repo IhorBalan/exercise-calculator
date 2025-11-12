@@ -2,11 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 
 import { WorkoutHistoryCard } from '@/modules/muscle-group/components/workout-history-card';
+import { Exercise } from '@/modules/muscle-group/types/muscle-group.types';
+import { WorkoutHistoryEmptyState } from '@/modules/training/components/workout-history-empty-state';
+import { useTrainingHistoryQuery } from '@/modules/training/hooks/use-training-history-query';
 import { Training } from '@/modules/training/types/training.types';
 import { startOfDay } from 'date-fns';
 import { useMemo } from 'react';
-import { WorkoutHistoryEmptyState } from '../components/workout-history-empty-state';
-import { useTrainingHistoryQuery } from '../hooks/use-training-history-query';
 
 export interface WorkoutHistoryContainerProps {
   muscleGroupId?: string;
@@ -23,7 +24,6 @@ export function WorkoutHistoryContainer({
     () =>
       trainings.reduce(
         (acc, training) => {
-          console.log('training', training.date);
           const date = startOfDay(training.date).toISOString();
 
           if (!acc[date]) {
@@ -32,7 +32,7 @@ export function WorkoutHistoryContainer({
           acc[date].push(training);
           return acc;
         },
-        {} as Record<string, Training[]>
+        {} as Record<string, (Training & { exercise: Exercise })[]>
       ),
     [trainings]
   );

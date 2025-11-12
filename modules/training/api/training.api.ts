@@ -45,6 +45,26 @@ export const getTrainingsByMuscleGroupId = async (muscleGroupId?: string): Promi
   return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as Training);
 };
 
+export const getTrainingHistoryByMuscleGroupId = async (
+  muscleGroupId?: string
+): Promise<(Training & { exercise: Exercise })[]> => {
+  const trainings = await getTrainingsByMuscleGroupId(muscleGroupId);
+
+  const result: (Training & { exercise: Exercise })[] = [];
+
+  for (let index = 0; index < trainings.length; index++) {
+    const training = trainings[index];
+
+    const exercise = await getExerciseById(training.exercienseId);
+
+    if (exercise) {
+      result.push({ ...training, exercise });
+    }
+  }
+
+  return result;
+};
+
 export const getTrainingRecordsByMuscleGroupId = async (
   muscleGroupId?: string
 ): Promise<(Training & { exercise: Exercise })[]> => {

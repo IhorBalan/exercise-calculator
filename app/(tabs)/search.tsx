@@ -1,146 +1,10 @@
+import { useExercisesSearchQuery } from '@/modules/exercise/hooks/use-exercises-search-query';
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Sample exercise data organized by muscle group
-const exercises = [
-  // Chest exercises
-  {
-    name: 'Bench Press',
-    description: 'Compound pressing movement for chest',
-    muscleGroup: 'Chest',
-    emoji: '💪',
-    badgeColor: 'bg-blue-100',
-    badgeTextColor: 'text-blue-700',
-  },
-  {
-    name: 'Incline Press',
-    description: 'Upper chest development',
-    muscleGroup: 'Chest',
-    emoji: '💪',
-    badgeColor: 'bg-blue-100',
-    badgeTextColor: 'text-blue-700',
-  },
-  {
-    name: 'Dumbbell Fly',
-    description: 'Chest isolation exercise',
-    muscleGroup: 'Chest',
-    emoji: '💪',
-    badgeColor: 'bg-blue-100',
-    badgeTextColor: 'text-blue-700',
-  },
-  // Back exercises
-  {
-    name: 'Deadlift',
-    description: 'Full body compound movement',
-    muscleGroup: 'Back',
-    emoji: '🏋️',
-    badgeColor: 'bg-green-100',
-    badgeTextColor: 'text-green-700',
-  },
-  {
-    name: 'Pull-ups',
-    description: 'Bodyweight back exercise',
-    muscleGroup: 'Back',
-    emoji: '🏋️',
-    badgeColor: 'bg-green-100',
-    badgeTextColor: 'text-green-700',
-  },
-  {
-    name: 'Barbell Row',
-    description: 'Back thickness builder',
-    muscleGroup: 'Back',
-    emoji: '🏋️',
-    badgeColor: 'bg-green-100',
-    badgeTextColor: 'text-green-700',
-  },
-  {
-    name: 'Lat Pulldown',
-    description: 'Lat width development',
-    muscleGroup: 'Back',
-    emoji: '🏋️',
-    badgeColor: 'bg-green-100',
-    badgeTextColor: 'text-green-700',
-  },
-  // Shoulder exercises
-  {
-    name: 'Overhead Press',
-    description: 'Shoulder compound movement',
-    muscleGroup: 'Shoulders',
-    emoji: '🎯',
-    badgeColor: 'bg-purple-100',
-    badgeTextColor: 'text-purple-700',
-  },
-  {
-    name: 'Lateral Raise',
-    description: 'Side delt isolation',
-    muscleGroup: 'Shoulders',
-    emoji: '🎯',
-    badgeColor: 'bg-purple-100',
-    badgeTextColor: 'text-purple-700',
-  },
-  // Leg exercises
-  {
-    name: 'Squat',
-    description: 'King of leg exercises',
-    muscleGroup: 'Legs',
-    emoji: '🦵',
-    badgeColor: 'bg-orange-100',
-    badgeTextColor: 'text-orange-700',
-  },
-  {
-    name: 'Lunges',
-    description: 'Unilateral leg exercise',
-    muscleGroup: 'Legs',
-    emoji: '🦵',
-    badgeColor: 'bg-orange-100',
-    badgeTextColor: 'text-orange-700',
-  },
-  {
-    name: 'Leg Curl',
-    description: 'Hamstring isolation',
-    muscleGroup: 'Legs',
-    emoji: '🦵',
-    badgeColor: 'bg-orange-100',
-    badgeTextColor: 'text-orange-700',
-  },
-  // Arm exercises
-  {
-    name: 'Tricep Dips',
-    description: 'Tricep compound movement',
-    muscleGroup: 'Arms',
-    emoji: '💪',
-    badgeColor: 'bg-pink-100',
-    badgeTextColor: 'text-pink-700',
-  },
-  {
-    name: 'Hammer Curl',
-    description: 'Bicep and forearm exercise',
-    muscleGroup: 'Arms',
-    emoji: '💪',
-    badgeColor: 'bg-pink-100',
-    badgeTextColor: 'text-pink-700',
-  },
-  // Core exercises
-  {
-    name: 'Plank',
-    description: 'Core stabilization',
-    muscleGroup: 'Core',
-    emoji: '⭐',
-    badgeColor: 'bg-cyan-100',
-    badgeTextColor: 'text-cyan-700',
-  },
-  {
-    name: 'Crunches',
-    description: 'Abdominal exercise',
-    muscleGroup: 'Core',
-    emoji: '⭐',
-    badgeColor: 'bg-cyan-100',
-    badgeTextColor: 'text-cyan-700',
-  },
-];
-
 export default function SearchScreen() {
+  const { data: exercises = [] } = useExercisesSearchQuery('');
   return (
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
@@ -172,7 +36,7 @@ export default function SearchScreen() {
             <View key={index} className="bg-white p-4 rounded-2xl shadow-sm flex-row items-start">
               {/* Icon */}
               <View className="w-12 h-12 bg-slate-100 rounded-xl items-center justify-center mr-3">
-                <Text className="text-xl">{exercise.emoji}</Text>
+                <Text className="text-xl">{exercise.muscleGroup.emoji}</Text>
               </View>
 
               {/* Content */}
@@ -180,17 +44,15 @@ export default function SearchScreen() {
                 {/* Title and Badge Row */}
                 <View className="flex-row items-start justify-between">
                   <Text className="text-slate-900 text-base tracking-tight">{exercise.name}</Text>
-                  <View className={`${exercise.badgeColor} px-2 py-0.5 rounded-lg`}>
-                    <Text
-                      className={`${exercise.badgeTextColor} text-xs font-medium tracking-tight`}
-                    >
-                      {exercise.muscleGroup}
+                  <View className={`${exercise.muscleGroup.color} px-2 py-0.5 rounded-lg`}>
+                    <Text className={`text-xs text-slate-900 font-medium tracking-tight`}>
+                      {exercise.muscleGroup.name}
                     </Text>
                   </View>
                 </View>
 
                 {/* Description */}
-                <Text className="text-slate-500 text-sm tracking-tight">
+                <Text className="text-slate-500 text-sm tracking-tight" numberOfLines={1}>
                   {exercise.description}
                 </Text>
               </View>

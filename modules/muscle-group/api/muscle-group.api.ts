@@ -1,14 +1,6 @@
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-  getFirestore,
-} from '@react-native-firebase/firestore';
 import { COLLECTIONS } from '@/modules/core/constants/api.constants';
-import { type Exercise, type MuscleGroup } from '@/modules/muscle-group/types/muscle-group.types';
+import { type MuscleGroup } from '@/modules/muscle-group/types/muscle-group.types';
+import { collection, doc, getDoc, getDocs, getFirestore } from '@react-native-firebase/firestore';
 
 export const getMuscleGroups = async (): Promise<MuscleGroup[]> => {
   const firestore = getFirestore();
@@ -18,24 +10,14 @@ export const getMuscleGroups = async (): Promise<MuscleGroup[]> => {
   return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as MuscleGroup);
 };
 
-export const getExercises = async (muscleGroupId: string): Promise<Exercise[]> => {
+export const getMuscleGroupById = async (muscleGroupId: string): Promise<MuscleGroup | null> => {
   const firestore = getFirestore();
-  const exercisesRef = collection(firestore, COLLECTIONS.EXERCISES);
-  const q = query(exercisesRef, where('muscleGroupId', '==', muscleGroupId));
-  const snapshot = await getDocs(q);
-
-  return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as Exercise);
-};
-
-export const getExerciseById = async (exerciseId: string): Promise<Exercise | null> => {
-  const firestore = getFirestore();
-  const exerciseRef = doc(firestore, COLLECTIONS.EXERCISES, exerciseId);
-  const snapshot = await getDoc(exerciseRef);
+  const muscleGroupRef = doc(firestore, COLLECTIONS.MUSCLE_GROUPS, muscleGroupId);
+  const snapshot = await getDoc(muscleGroupRef);
 
   if (!snapshot.exists()) {
-    return null;
+    throw new Error(`Muscle group with id ${muscleGroupId} not found`);
   }
 
-  const data = snapshot.data();
-  return data ? (data as Exercise) : null;
+  return snapshot.data() as MuscleGroup;
 };
