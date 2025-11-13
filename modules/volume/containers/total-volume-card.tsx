@@ -6,10 +6,10 @@ export function TotalVolumeCard() {
   const { data: totalVolume = 0 } = useTotalVolumeQuery();
   return (
     <View className="mx-4 bg-blue-500 rounded-3xl shadow-md relative">
-      <View className="relative p-6 pb-12 flex-1 rounded-3xl overflow-hidden">
+      <View className="relative p-6 h-40 flex-1 rounded-3xl overflow-hidden">
         <View className="absolute -left-[100px] -top-[240px] w-[350px] h-[350px] bg-white/10 rounded-full" />
 
-        <View className="flex-row justify-between items-start">
+        <View className="flex-row justify-between items-center">
           <View className="gap-2">
             <Text className="text-blue-100 text-base tracking-tight">Total Volume</Text>
             <Text className="text-white text-3xl font-medium">{totalVolume} kg</Text>
