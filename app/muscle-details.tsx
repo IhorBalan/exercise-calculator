@@ -5,16 +5,14 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/modules/core/components/button';
-import { VolumeChart } from '@/modules/muscle-group/components/volume-chart';
 import { PersonalRecordsContainer } from '@/modules/muscle-group/containers/personal-records-container';
 import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
 import { WorkoutHistoryContainer } from '@/modules/training/containers/training-history-container';
+import { WeeklyMuscleVolumeChart } from '@/modules/volume/containers/weekly-muscle-volume-chart';
 
 export default function MuscleDetailsScreen() {
   const params = useLocalSearchParams();
   const muscleName = (params.name as string) || 'Chest';
-  const volume = (params.volume as string) || '4.2k kg';
-  const growth = (params.growth as string) || '+31.3%';
   const muscleGroupId = (params.id as string) || '';
 
   const [isAddWorkoutOpen, setIsAddWorkoutOpen] = useState(false);
@@ -44,13 +42,8 @@ export default function MuscleDetailsScreen() {
         </View>
 
         <View className="pb-14 gap-8">
-          {/* Volume Chart Card */}
-          <VolumeChart volume={volume} growth={growth} chartData={[]} />
-
-          {/* Personal Records Section */}
+          <WeeklyMuscleVolumeChart muscleGroupId={muscleGroupId} />
           <PersonalRecordsContainer muscleGroupId={muscleGroupId} />
-
-          {/* Workout History Section */}
           <WorkoutHistoryContainer muscleGroupId={muscleGroupId} />
         </View>
       </ScrollView>

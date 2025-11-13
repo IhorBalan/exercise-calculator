@@ -45,3 +45,31 @@ export const getWeeklyVolumeData = async (): Promise<WeeklyVolumeData[]> => {
 
   return weeklyData.reverse();
 };
+
+export const getWeeklyVolumeChartByMuscleGroupId = async (
+  muscleGroupId: string
+): Promise<WeeklyVolumeData[]> => {
+  const user = getUser();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const trainings = await getTrainings({
+    startDate: addDays(new Date(), -7).toISOString(),
+    endDate: new Date().toISOString(),
+  }).then(trainings => trainings.filter(training => training.muscleGroupId === muscleGroupId));
+
+  const weeklyData: WeeklyVolumeData[] = [];
+
+  for (let i = 0; i < 7; i++) {
+    const date = addDays(new Date(), -i);
+    const trainingsForDate = trainings.filter(training => isSameDay(new Date(training.date), date));
+
+    const volume = trainingsForDate.reduce((acc, training) => acc + getTrainingVolume(training), 0);
+
+    weeklyData.push({ day: format(date, 'EE'), value: volume });
+  }
+
+  return weeklyData.reverse();
+};

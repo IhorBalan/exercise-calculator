@@ -1,11 +1,15 @@
 import { ColumnChart } from '@/modules/core/components/column-chart';
-import { useWeeklyVolumeQuery } from '@/modules/volume/hooks/use-weekly-volume-query';
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo } from 'react';
 import { Text, View } from 'react-native';
+import { useWeeklyVolumeByMuscleGroupQuery } from '../hooks/use-weekly-volume-by-muscle-group-query';
 
-export function WeeklyVolumeChart() {
-  const { data = [] } = useWeeklyVolumeQuery();
+interface WeeklyMuscleVolumeChartProps {
+  muscleGroupId: string;
+}
+
+export function WeeklyMuscleVolumeChart({ muscleGroupId }: WeeklyMuscleVolumeChartProps) {
+  const { data = [] } = useWeeklyVolumeByMuscleGroupQuery(muscleGroupId);
 
   const formattedData = useMemo(() => {
     return data.map(item => ({
@@ -15,7 +19,7 @@ export function WeeklyVolumeChart() {
   }, [data]);
 
   return (
-    <View className="mx-4 mt-6 p-6 bg-white rounded-3xl shadow-sm">
+    <View className="mx-4 p-6 bg-white rounded-3xl shadow-sm">
       {data.length === 0 || data.every(item => item.value === 0) ? (
         <View className="items-center justify-center">
           <View className="w-16 h-16 bg-blue-100 rounded-full items-center justify-center mb-4">
