@@ -1,4 +1,6 @@
 import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/muscle-group-list-container';
+import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
+import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 import { TotalVolumeCard } from '@/modules/volume/containers/total-volume-card';
 import { WeeklyVolumeChart } from '@/modules/volume/containers/weekly-volume-chart';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,9 +14,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
-
 export default function HomeScreen() {
+  const { data: userProfile } = useUserProfileQuery();
   const [isAddWorkoutOpen, setIsAddWorkoutOpen] = useState(false);
   const titleOpacity = useSharedValue(0);
   const titleTranslateY = useSharedValue(20);
@@ -25,16 +26,12 @@ export default function HomeScreen() {
   const contentOpacity = useSharedValue(0);
 
   useEffect(() => {
-    // Animate "Welcome back!" text
     titleOpacity.value = withTiming(1, { duration: 600 });
     titleTranslateY.value = withTiming(0, { duration: 600 });
 
-    // Animate "Here's your progress this week" text with delay
     subtitleOpacity.value = withDelay(200, withTiming(1, { duration: 600 }));
     subtitleTranslateY.value = withDelay(200, withTiming(0, { duration: 600 }));
 
-    // Animate content sections after welcome text
-    // "Welcome back" takes 600ms, subtitle finishes at 800ms, so delay by 1000ms
     contentOpacity.value = withDelay(1000, withTiming(1, { duration: 200 }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -62,13 +59,13 @@ export default function HomeScreen() {
             style={titleAnimatedStyle}
             className="text-slate-900 text-xl font-medium tracking-tight"
           >
-            Welcome back!
+            Welcome, {userProfile?.firstName}
           </Animated.Text>
           <Animated.Text
             style={subtitleAnimatedStyle}
             className="text-slate-600 text-base tracking-tight"
           >
-            Here&apos;s your progress this week
+            Every rep counts, every set matters
           </Animated.Text>
         </View>
 
