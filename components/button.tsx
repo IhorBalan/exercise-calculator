@@ -23,7 +23,7 @@ export function Button({
 
   const variantClasses = {
     primary: 'bg-blue-500',
-    secondary: 'bg-white border border-black/10',
+    secondary: 'bg-white shadow-sm',
     outline: 'bg-white border border-black/10',
   };
 

@@ -75,6 +75,7 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen name="muscle-details" options={{ headerShown: false }} />
+        <Stack.Screen name="exercise-details" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

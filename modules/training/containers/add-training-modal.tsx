@@ -163,7 +163,7 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
 
       {/* Action Buttons */}
       <View className="flex-row gap-3 pt-10 pb-4">
-        <Button variant="secondary" size="md" className="flex-1" onPress={handleClose}>
+        <Button variant="outline" size="md" className="flex-1" onPress={handleClose}>
           Cancel
         </Button>
         <Button

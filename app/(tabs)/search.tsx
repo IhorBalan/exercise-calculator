@@ -1,6 +1,7 @@
 import { useExercisesSearchQuery } from '@/modules/exercise/hooks/use-exercises-search-query';
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { router } from 'expo-router';
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SearchScreen() {
@@ -33,7 +34,19 @@ export default function SearchScreen() {
         {/* Exercise List */}
         <View className="px-4 mt-6 gap-4 pb-6">
           {exercises.map((exercise, index) => (
-            <View key={index} className="bg-white p-4 rounded-2xl shadow-sm flex-row items-start">
+            <Pressable
+              key={index}
+              onPress={() =>
+                router.push({
+                  pathname: '/exercise-details',
+                  params: {
+                    id: exercise.id,
+                    name: exercise.name,
+                  },
+                })
+              }
+              className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center active:opacity-80"
+            >
               {/* Icon */}
               <View className="w-12 h-12 bg-slate-100 rounded-xl items-center justify-center mr-3">
                 <Text className="text-xl">{exercise.muscleGroup.emoji}</Text>
@@ -56,7 +69,12 @@ export default function SearchScreen() {
                   {exercise.description}
                 </Text>
               </View>
-            </View>
+
+              {/* Chevron */}
+              <View className="ml-2 items-center justify-center">
+                <Ionicons name="chevron-forward" size={20} color="#cbd5e1" />
+              </View>
+            </Pressable>
           ))}
         </View>
       </ScrollView>
