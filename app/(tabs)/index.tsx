@@ -1,6 +1,6 @@
 import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/muscle-group-list-container';
 import { TotalVolumeCard } from '@/modules/user/components/total-volume-card';
-import { WeeklyActivityCard } from '@/modules/user/components/weekly-activity-card';
+import { WeeklyActivityCard } from '@/modules/user/components/weekly-activity-chart';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
