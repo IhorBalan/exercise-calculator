@@ -22,7 +22,9 @@ export function WeeklyVolumeChart() {
           <View className="w-16 h-16 bg-blue-100 rounded-full items-center justify-center mb-4">
             <Ionicons name="bar-chart-outline" size={32} color="#3b82f6" />
           </View>
-          <Text className="text-slate-900 text-base font-medium tracking-tight mb-1">Activity</Text>
+          <Text className="text-slate-900 text-base font-medium tracking-tight mb-1">
+            No activity for last 7 days
+          </Text>
           <Text className="text-slate-500 text-sm max-w-[250px] text-center tracking-tight">
             Log workouts for a few days to see your activity progress
           </Text>

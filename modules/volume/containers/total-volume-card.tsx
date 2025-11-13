@@ -3,8 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 
 export function TotalVolumeCard() {
-  const { data: totalVolume } = useTotalVolumeQuery();
-
+  const { data: totalVolume = 0 } = useTotalVolumeQuery();
   return (
     <View className="mx-4 bg-blue-500 rounded-3xl shadow-md relative">
       <View className="relative p-6 pb-12 flex-1 rounded-3xl overflow-hidden">

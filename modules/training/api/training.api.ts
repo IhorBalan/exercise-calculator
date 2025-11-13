@@ -117,7 +117,12 @@ export const getTrainings = async ({
 
   const firestore = getFirestore();
   const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
-  const q = query(trainingRef, where('date', '>=', startDate), where('date', '<=', endDate));
+  const q = query(
+    trainingRef,
+    where('userId', '==', user.uid),
+    where('date', '>=', startDate),
+    where('date', '<=', endDate)
+  );
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as Training);

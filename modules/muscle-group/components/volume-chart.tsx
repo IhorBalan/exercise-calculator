@@ -62,7 +62,7 @@ export function VolumeChart({ volume, growth, chartData }: VolumeChartProps) {
             <Ionicons name="bar-chart-outline" size={32} color="#3b82f6" />
           </View>
           <Text className="text-slate-900 text-base font-medium tracking-tight mb-1">
-            No volume data yet
+            No activity for last 7 days
           </Text>
           <Text className="text-slate-500 text-sm max-w-[250px] text-center tracking-tight">
             Log workouts for a few days to see your volume progress

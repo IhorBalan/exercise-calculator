@@ -15,20 +15,9 @@ export const getTotalUserVolume = async () => {
   return trainings.reduce((acc, training) => acc + getTrainingVolume(training), 0);
 };
 
-// const weeklyData = [
-//   { day: 'Mon', value: 65, percentage: 0.65 },
-//   { day: 'Tue', value: 80, percentage: 0.8 },
-//   { day: 'Wed', value: 55, percentage: 0.55 },
-//   { day: 'Thu', value: 95, percentage: 0.95 },
-//   { day: 'Fri', value: 75, percentage: 0.75 },
-//   { day: 'Sat', value: 0, percentage: 0 },
-//   { day: 'Sun', value: 0, percentage: 0 },
-// ];
-
 export type WeeklyVolumeData = {
   day: string;
   value: number;
-  // percentage: number;
 };
 
 export const getWeeklyVolumeData = async (): Promise<WeeklyVolumeData[]> => {
