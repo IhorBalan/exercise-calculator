@@ -1,5 +1,6 @@
-import { Exercise } from '@/modules/muscle-group/types/muscle-group.types';
+import { type Exercise } from '@/modules/exercise/types/exercise.types';
 import { Training } from '@/modules/training/types/training.types';
+import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
 import { format } from 'date-fns';
 import { Text, View } from 'react-native';
 
@@ -12,7 +13,6 @@ export interface WorkoutHistoryCardProps {
 export function WorkoutHistoryCard({ date, trainingCount, trainings }: WorkoutHistoryCardProps) {
   return (
     <View className="bg-white p-4 rounded-3xl shadow-sm gap-6">
-      {/* Workout Header */}
       <View className="flex-row items-center justify-between">
         <Text className="text-slate-900 text-base tracking-tight">
           {format(date, 'MMM d, yyyy')}
@@ -22,7 +22,6 @@ export function WorkoutHistoryCard({ date, trainingCount, trainings }: WorkoutHi
         </View>
       </View>
 
-      {/* Exercise List */}
       <View className="gap-3">
         {trainings.map((training, trainingIndex) => (
           <View
@@ -34,7 +33,7 @@ export function WorkoutHistoryCard({ date, trainingCount, trainings }: WorkoutHi
                 {training.exercise.name}
               </Text>
               <Text className="text-slate-600 text-base tracking-tight">
-                {'training.exercise.volume'}
+                {getTrainingVolume(training)} kg
               </Text>
             </View>
             <Text className="text-slate-500 text-sm tracking-tight">

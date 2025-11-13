@@ -35,9 +35,7 @@ export function Input({
           isLight ? 'bg-white border border-gray-200' : 'bg-gray-100'
         } ${error ? 'border-red-400' : ''}`}
       >
-        {leftElement && (
-          <View className="left-3 top-0 bottom-0 justify-center z-10">{leftElement}</View>
-        )}
+        {leftElement && <View className="justify-center z-10">{leftElement}</View>}
         <TextInput
           placeholderTextColor="#717182"
           style={{
@@ -45,9 +43,7 @@ export function Input({
           }}
           {...textInputProps}
         />
-        {rightElement && (
-          <View className="right-3 top-0 bottom-0 justify-center z-10">{rightElement}</View>
-        )}
+        {rightElement && <View className="justify-center z-10">{rightElement}</View>}
       </View>
       {error && <Text className="text-red-500 text-sm tracking-tight">{error}</Text>}
       {helperText && !error && (

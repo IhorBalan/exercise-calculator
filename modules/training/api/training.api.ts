@@ -4,6 +4,7 @@ import { getExerciseById } from '@/modules/exercise/api/exercise.api';
 import { type Exercise } from '@/modules/exercise/types/exercise.types';
 import { type Training } from '@/modules/training/types/training.types';
 import { getUser } from '@/modules/user/api/user.api';
+import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
 import { addDoc, collection, getDocs, query, where } from '@react-native-firebase/firestore';
 
 export const createTraining = async (
@@ -76,7 +77,7 @@ export const getTrainingRecordsByMuscleGroupId = async (
     const training = trainings[index];
 
     if (records[training.exercienseId]) {
-      if (records[training.exercienseId].weight < training.weight) {
+      if (getTrainingVolume(records[training.exercienseId]) < getTrainingVolume(training)) {
         records[training.exercienseId] = training;
       }
     } else {
@@ -97,4 +98,34 @@ export const getTrainingRecordsByMuscleGroupId = async (
   }
 
   return result;
+};
+
+type GetTrainingsParams = {
+  startDate: string;
+  endDate: string;
+};
+
+export const getTrainings = async ({
+  startDate,
+  endDate,
+}: GetTrainingsParams): Promise<Training[]> => {
+  const user = getUser();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const firestore = getFirestore();
+  const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
+  const q = query(trainingRef, where('date', '>=', startDate), where('date', '<=', endDate));
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as Training);
+};
+
+export const getAllTrainings = async (): Promise<Training[]> => {
+  return getTrainings({
+    startDate: new Date('2025-01-01').toISOString(),
+    endDate: new Date().toISOString(),
+  });
 };

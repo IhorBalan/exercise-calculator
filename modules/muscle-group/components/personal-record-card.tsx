@@ -1,5 +1,6 @@
-import { Exercise } from '@/modules/muscle-group/types/muscle-group.types';
-import { Training } from '@/modules/training/types/training.types';
+import { type Exercise } from '@/modules/exercise/types/exercise.types';
+import { type Training } from '@/modules/training/types/training.types';
+import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
 import { format } from 'date-fns';
 import { Text, View } from 'react-native';
 
@@ -17,9 +18,11 @@ export function PersonalRecordCard({ record }: PersonalRecordCardProps) {
         </Text>
       </View>
       <View className="items-end gap-0.5">
-        <Text className="text-slate-900 text-base tracking-tight">{record.weight} kg</Text>
+        <Text className="text-slate-900 text-base tracking-tight">
+          {getTrainingVolume(record)} kg
+        </Text>
         <Text className="text-slate-500 text-sm tracking-tight">
-          {record.sets} sets • {record.reps} reps
+          {record.sets} sets • {record.reps} reps • {record.weight} kg
         </Text>
       </View>
     </View>

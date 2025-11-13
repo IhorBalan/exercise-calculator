@@ -1,6 +1,6 @@
 import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/muscle-group-list-container';
-import { TotalVolumeCard } from '@/modules/user/components/total-volume-card';
-import { WeeklyActivityCard } from '@/modules/user/components/weekly-activity-chart';
+import { TotalVolumeCard } from '@/modules/volume/containers/total-volume-card';
+import { WeeklyVolumeChart } from '@/modules/volume/containers/weekly-volume-chart';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
@@ -13,16 +13,6 @@ import Animated, {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
-// Sample data for the week
-const weeklyData = [
-  { day: 'Mon', value: 65, percentage: 0.65 },
-  { day: 'Tue', value: 80, percentage: 0.8 },
-  { day: 'Wed', value: 55, percentage: 0.55 },
-  { day: 'Thu', value: 95, percentage: 0.95 },
-  { day: 'Fri', value: 75, percentage: 0.75 },
-  { day: 'Sat', value: 0, percentage: 0 },
-  { day: 'Sun', value: 0, percentage: 0 },
-];
 
 export default function HomeScreen() {
   const [isAddWorkoutOpen, setIsAddWorkoutOpen] = useState(false);
@@ -83,9 +73,9 @@ export default function HomeScreen() {
         </View>
 
         <Animated.View style={[contentAnimatedStyle, { paddingBottom: 30 }]}>
-          <TotalVolumeCard volume="25.1k kg" growth="+7.3%" />
+          <TotalVolumeCard />
 
-          <WeeklyActivityCard data={weeklyData} />
+          <WeeklyVolumeChart />
 
           {/* Muscle Groups Section */}
           <MuscleGroupListContainer />
