@@ -2,7 +2,7 @@ import { getFirestore } from '@/lib/firebase';
 import { COLLECTIONS } from '@/modules/core/constants/api.constants';
 import { Exercise } from '@/modules/exercise/types/exercise.types';
 import { getMuscleGroupById } from '@/modules/muscle-group/api/muscle-group.api';
-import { MuscleGroup } from '@/modules/muscle-group/types/muscle-group.types';
+import { type MuscleGroup } from '@/modules/muscle-group/types/muscle-group.types';
 import { getUser } from '@/modules/user/api/user.api';
 import { collection, doc, getDoc, getDocs, query, where } from '@react-native-firebase/firestore';
 

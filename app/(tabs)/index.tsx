@@ -65,7 +65,7 @@ export default function HomeScreen() {
             style={subtitleAnimatedStyle}
             className="text-slate-600 text-base tracking-tight"
           >
-            Every rep counts, every set matters
+            Here&apos;s your weekly progress
           </Animated.Text>
         </View>
 

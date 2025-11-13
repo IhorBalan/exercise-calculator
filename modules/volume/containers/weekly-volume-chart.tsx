@@ -1,11 +1,11 @@
 import { ColumnChart } from '@/modules/core/components/column-chart';
-import { useWeeklyVolumeQuery } from '@/modules/volume/hooks/use-weekly-volume-query';
+import { useWeeklyVolumeChartQuery } from '@/modules/volume/hooks/use-weekly-volume-chart-query';
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo } from 'react';
 import { Text, View } from 'react-native';
 
 export function WeeklyVolumeChart() {
-  const { data = [] } = useWeeklyVolumeQuery();
+  const { data = [] } = useWeeklyVolumeChartQuery();
 
   const formattedData = useMemo(() => {
     return data.map(item => ({

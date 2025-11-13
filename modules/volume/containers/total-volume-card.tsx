@@ -1,9 +1,10 @@
-import { useTotalVolumeQuery } from '@/modules/volume/hooks/use-total-volume-query';
+import { useWeeklyVolumeQuery } from '@/modules/volume/hooks/use-weekly-volume-query';
 import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 
 export function TotalVolumeCard() {
-  const { data } = useTotalVolumeQuery();
+  const { data } = useWeeklyVolumeQuery();
+
   return (
     <View className="mx-4 bg-blue-500 rounded-3xl shadow-md relative">
       <View className="relative p-6 flex-1 rounded-3xl overflow-hidden">

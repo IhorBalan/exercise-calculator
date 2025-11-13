@@ -1,4 +1,4 @@
-import { getAllTrainings, getTrainings } from '@/modules/training/api/training.api';
+import { getTrainings } from '@/modules/training/api/training.api';
 import { getUser } from '@/modules/user/api/user.api';
 import { getTrainingsVolume, getTrainingVolume } from '@/modules/volume/utils/volume.utils';
 import { addDays, endOfWeek, format, getDay, isSameDay, startOfWeek } from 'date-fns';
@@ -8,40 +8,30 @@ type TotalVolumeResponse = {
   improvementPercentage: number;
 };
 
-export const getTotalUserVolume = async (): Promise<TotalVolumeResponse> => {
+export const getWeeklyVolume = async (): Promise<TotalVolumeResponse> => {
   const user = getUser();
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  const trainings = await getAllTrainings();
-
-  const currentDayOfWeek = getDay(new Date());
-
-  const currentWeekTrainings = await getTrainings({
+  const trainings = await getTrainings({
     startDate: startOfWeek(new Date()).toISOString(),
     endDate: endOfWeek(new Date()).toISOString(),
   });
 
-  const previousWeekTrainings = await getTrainings({
-    startDate: startOfWeek(addDays(new Date(), -7)).toISOString(),
-    // we take same amount of days as the current week. For example, if the current week day is Wednesday, we take the previous week from Monday to Wednesday.
-    endDate: addDays(startOfWeek(addDays(new Date(), -7)), currentDayOfWeek).toISOString(),
-  });
+  const currentDayOfWeek = getDay(new Date());
 
-  const currentWeekVolume = getTrainingsVolume(currentWeekTrainings);
-  const previousWeekVolume = getTrainingsVolume(previousWeekTrainings);
-
-  let improvementPercentage = 0;
-
-  if (previousWeekVolume === 0) {
-    if (currentWeekVolume > 0) {
-      improvementPercentage = 100;
+  const improvementPercentage = await getImprovementPercentage(
+    {
+      startDate: startOfWeek(new Date()).toISOString(),
+      endDate: endOfWeek(new Date()).toISOString(),
+    },
+    {
+      startDate: startOfWeek(addDays(new Date(), -7)).toISOString(),
+      endDate: addDays(startOfWeek(addDays(new Date(), -7)), currentDayOfWeek).toISOString(),
     }
-  } else {
-    improvementPercentage = ((currentWeekVolume - previousWeekVolume) / previousWeekVolume) * 100;
-  }
+  );
 
   return { totalVolume: getTrainingsVolume(trainings), improvementPercentage };
 };
@@ -51,7 +41,7 @@ export type WeeklyVolumeData = {
   value: number;
 };
 
-export const getWeeklyVolumeData = async (): Promise<WeeklyVolumeData[]> => {
+export const getWeeklyVolumeChartData = async (): Promise<WeeklyVolumeData[]> => {
   const user = getUser();
 
   if (!user) {
@@ -59,14 +49,14 @@ export const getWeeklyVolumeData = async (): Promise<WeeklyVolumeData[]> => {
   }
 
   const trainings = await getTrainings({
-    startDate: addDays(new Date(), -7).toISOString(),
-    endDate: new Date().toISOString(),
+    startDate: startOfWeek(new Date()).toISOString(),
+    endDate: endOfWeek(new Date()).toISOString(),
   });
 
   const weeklyData: WeeklyVolumeData[] = [];
 
   for (let i = 0; i < 7; i++) {
-    const date = addDays(new Date(), -i);
+    const date = addDays(startOfWeek(new Date()), i);
     const trainingsForDate = trainings.filter(training => isSameDay(new Date(training.date), date));
 
     const volume = trainingsForDate.reduce((acc, training) => acc + getTrainingVolume(training), 0);
@@ -74,7 +64,7 @@ export const getWeeklyVolumeData = async (): Promise<WeeklyVolumeData[]> => {
     weeklyData.push({ day: format(date, 'EE'), value: volume });
   }
 
-  return weeklyData.reverse();
+  return weeklyData;
 };
 
 export const getWeeklyVolumeChartByMuscleGroupId = async (
@@ -103,4 +93,67 @@ export const getWeeklyVolumeChartByMuscleGroupId = async (
   }
 
   return weeklyData.reverse();
+};
+
+export const getImprovementPercentage = async (
+  a: { startDate: string; endDate: string; muscleGroupId?: string },
+  b: { startDate: string; endDate: string; muscleGroupId?: string }
+): Promise<number> => {
+  const trainingsA = await getTrainings({
+    startDate: a.startDate,
+    endDate: a.endDate,
+  }).then(trainings =>
+    trainings.filter(training =>
+      a.muscleGroupId ? training.muscleGroupId === a.muscleGroupId : true
+    )
+  );
+  const trainingsB = await getTrainings({
+    startDate: b.startDate,
+    endDate: b.endDate,
+  }).then(trainings =>
+    trainings.filter(training =>
+      b.muscleGroupId ? training.muscleGroupId === b.muscleGroupId : true
+    )
+  );
+
+  const volumeA = getTrainingsVolume(trainingsA);
+  const volumeB = getTrainingsVolume(trainingsB);
+
+  if (volumeB === 0) {
+    if (volumeA > 0) {
+      return 100;
+    }
+    return 0;
+  }
+
+  return ((volumeA - volumeB) / volumeB) * 100;
+};
+
+export const getWeeklyVolumeByMuscleGroupId = async (
+  muscleGroupId: string
+): Promise<{
+  volume: number;
+  improvementPercentage: number;
+}> => {
+  const trainings = await getTrainings({
+    startDate: startOfWeek(new Date()).toISOString(),
+    endDate: endOfWeek(new Date()).toISOString(),
+  }).then(trainings => trainings.filter(training => training.muscleGroupId === muscleGroupId));
+
+  const currentDayOfWeek = getDay(new Date());
+
+  const improvementPercentage = await getImprovementPercentage(
+    {
+      startDate: startOfWeek(new Date()).toISOString(),
+      endDate: endOfWeek(new Date()).toISOString(),
+      muscleGroupId,
+    },
+    {
+      startDate: startOfWeek(addDays(new Date(), -7)).toISOString(),
+      endDate: addDays(startOfWeek(addDays(new Date(), -7)), currentDayOfWeek).toISOString(),
+      muscleGroupId,
+    }
+  );
+
+  return { volume: getTrainingsVolume(trainings), improvementPercentage };
 };
