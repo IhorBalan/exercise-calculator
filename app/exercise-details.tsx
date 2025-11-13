@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button } from '@/components/button';
+import { Button } from '@/modules/core/components/button';
 import { useExerciseByIdQuery } from '@/modules/exercise/hooks/use-exercise-by-id-query';
 
 export default function ExerciseDetailsScreen() {

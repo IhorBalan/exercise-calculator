@@ -2,10 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import { BottomModal } from '@/components/bottom-modal';
-import { Button } from '@/components/button';
-import { Dropdown, type DropdownOption } from '@/components/dropdown';
-import { Input } from '@/components/input';
+import { BottomModal } from '@/modules/core/components/bottom-modal';
+import { Button } from '@/modules/core/components/button';
+import { Dropdown, type DropdownOption } from '@/modules/core/components/dropdown';
+import { Input } from '@/modules/core/components/input';
 import { useExercisesListQuery } from '@/modules/exercise/hooks/use-exercises-list-query';
 import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
 import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training-create-mutation';

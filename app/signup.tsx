@@ -2,8 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { Button } from '@/modules/core/components/button';
+import { Input } from '@/modules/core/components/input';
 import { AuthPageLayout } from '@/modules/auth/components/auth-page-layout';
 import { useAuth } from '@/modules/auth/context/auth-context';
 

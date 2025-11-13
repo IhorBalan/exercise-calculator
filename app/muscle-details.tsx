@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button } from '@/components/button';
+import { Button } from '@/modules/core/components/button';
 import { VolumeChart } from '@/modules/muscle-group/components/volume-chart';
 import { PersonalRecordsContainer } from '@/modules/muscle-group/containers/personal-records-container';
 import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';

@@ -1,10 +1,10 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 
-import { AnimatedTabBar } from '@/components/animated-tab-bar';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { AnimatedTabBar } from '@/modules/core/components/animated-tab-bar';
+import { IconSymbol } from '@/modules/core/components/ui/icon-symbol';
+import { Colors } from '@/modules/core/constants/theme';
+import { useColorScheme } from '@/modules/core/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();

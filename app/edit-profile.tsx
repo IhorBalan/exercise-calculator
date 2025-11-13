@@ -7,8 +7,8 @@ import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { z } from 'zod';
 
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { Button } from '@/modules/core/components/button';
+import { Input } from '@/modules/core/components/input';
 import { BottomFixedContent } from '@/modules/core/components/bottom-fixed-content';
 import { getUser } from '@/modules/user/api/user.api';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';

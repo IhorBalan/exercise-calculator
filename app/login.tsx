@@ -2,8 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { Button } from '@/modules/core/components/button';
+import { Input } from '@/modules/core/components/input';
 import { AuthPageLayout } from '@/modules/auth/components/auth-page-layout';
 import { useSignInWithEmailAndPassword } from '@/modules/auth/hooks/use-sign-in-with-email-and-password';
 
