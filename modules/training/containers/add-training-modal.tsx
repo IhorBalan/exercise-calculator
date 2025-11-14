@@ -43,13 +43,17 @@ export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutMod
   const trainingCreateMutation = useTrainingCreateMutation();
 
   useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
     if (frozenFields?.muscleGroupId) {
       setSelectedMuscleGroup(frozenFields.muscleGroupId);
     }
     if (frozenFields?.exerciseId) {
       setSelectedExercise(frozenFields.exerciseId);
     }
-  }, [frozenFields?.muscleGroupId, frozenFields?.exerciseId]);
+  }, [frozenFields?.muscleGroupId, frozenFields?.exerciseId, isOpen]);
 
   // Convert muscle groups to dropdown options
   const muscleGroupOptions: DropdownOption[] =
