@@ -7,13 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/modules/auth/context/auth-context';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 
-// Stats data
-const personalStats = [
-  { icon: 'scale-outline', value: '75 kg', label: 'Weight' },
-  { icon: 'calendar-outline', value: '28', label: 'Age' },
-  { icon: 'time-outline', value: '12', label: 'Weeks' },
-];
-
 const trainingStats = [
   { label: 'Total Workouts', value: '87', fullWidth: false },
   { label: 'This Month', value: '16', fullWidth: false },
@@ -65,7 +58,7 @@ export default function ProfileScreen() {
         {/* Profile Card */}
         <View className="mx-4 mt-3 p-6 bg-white rounded-3xl shadow-sm">
           {/* User Info */}
-          <View className="flex-row items-center gap-4 mb-12">
+          <View className="flex-row items-center gap-4">
             {/* Avatar */}
             <View className="w-20 h-20 bg-blue-500 rounded-full border-4 border-blue-100 items-center justify-center">
               {userProfile?.image ? (
@@ -85,32 +78,17 @@ export default function ProfileScreen() {
               </Text>
             </View>
           </View>
-
-          {/* Personal Stats */}
-          <View className="flex-row gap-3">
-            {personalStats.map((stat, index) => (
-              <View key={index} className="flex-1 bg-slate-50 p-3 rounded-2xl items-center gap-1">
-                <Ionicons name={stat.icon as any} size={20} color="#0f172b" />
-                <Text className="text-slate-900 text-base tracking-tight">{stat.value}</Text>
-                <Text className="text-slate-500 text-xs tracking-tight">{stat.label}</Text>
-              </View>
-            ))}
-          </View>
         </View>
 
         {/* Training Stats Section */}
         <View className="px-4 mt-6">
-          <Text className="text-slate-900 text-base tracking-tight mb-4">Training Stats</Text>
+          <Text className="text-slate-900 text-base font-medium tracking-tight mb-4">
+            Training Stats
+          </Text>
 
-          <View className="flex-row flex-wrap gap-3">
+          <View className="flex-row flex-wrap justify-between gap-y-4">
             {trainingStats.map((stat, index) => (
-              <View
-                key={index}
-                className={`bg-white p-4 rounded-2xl shadow-sm ${
-                  stat.fullWidth ? 'w-full' : 'flex-1'
-                } ${index >= 2 ? 'min-h-[152px]' : 'min-h-[112px]'}`}
-                style={!stat.fullWidth ? { minWidth: 170 } : undefined}
-              >
+              <View key={index} className={'bg-white p-4 w-[48%] rounded-2xl shadow-sm'}>
                 <Text className="text-slate-600 text-sm tracking-tight mb-7">{stat.label}</Text>
                 <Text className="text-slate-900 text-2xl tracking-tight mb-1">{stat.value}</Text>
                 {stat.subtitle && (
@@ -123,7 +101,7 @@ export default function ProfileScreen() {
 
         {/* Settings Section */}
         <View className="px-4 mt-6">
-          <Text className="text-slate-900 text-base tracking-tight mb-4">Settings</Text>
+          <Text className="text-slate-900 text-base font-medium tracking-tight mb-4">Settings</Text>
 
           <View className="gap-3">
             {settingsOptions.map((option, index) => (

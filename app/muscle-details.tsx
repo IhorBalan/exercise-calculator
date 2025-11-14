@@ -62,7 +62,11 @@ export default function MuscleDetailsScreen() {
       </View>
 
       {/* Add Workout Modal */}
-      <AddWorkoutModal isOpen={isAddWorkoutOpen} onClose={() => setIsAddWorkoutOpen(false)} />
+      <AddWorkoutModal
+        isOpen={isAddWorkoutOpen}
+        onClose={() => setIsAddWorkoutOpen(false)}
+        frozenFields={{ muscleGroupId }}
+      />
     </SafeAreaView>
   );
 }

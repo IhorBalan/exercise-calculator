@@ -16,25 +16,40 @@ import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-trainin
 import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
 import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 export interface AddWorkoutModalProps {
   isOpen: boolean;
   onClose: () => void;
+  frozenFields?: {
+    muscleGroupId?: string;
+    exerciseId?: string;
+  };
 }
 
-export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
+export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutModalProps) {
   const queryClient = useQueryClient();
   const { data: muscleGroupList } = useMuscleGroupListQuery();
-  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>('');
-  const [selectedExercise, setSelectedExercise] = useState<string>('');
+  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>(
+    frozenFields?.muscleGroupId || ''
+  );
+  const [selectedExercise, setSelectedExercise] = useState<string>(frozenFields?.exerciseId || '');
   const [weight, setWeight] = useState('0');
   const [reps, setReps] = useState(0);
   const [sets, setSets] = useState(0);
   const [newTrainingRecordId, setNewTrainingRecordId] = useState<string | null>(null);
   const { data: exercisesList } = useExercisesListQuery(selectedMuscleGroup);
   const trainingCreateMutation = useTrainingCreateMutation();
+
+  useEffect(() => {
+    if (frozenFields?.muscleGroupId) {
+      setSelectedMuscleGroup(frozenFields.muscleGroupId);
+    }
+    if (frozenFields?.exerciseId) {
+      setSelectedExercise(frozenFields.exerciseId);
+    }
+  }, [frozenFields?.muscleGroupId, frozenFields?.exerciseId]);
 
   // Convert muscle groups to dropdown options
   const muscleGroupOptions: DropdownOption[] =
@@ -123,6 +138,7 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
               setSelectedMuscleGroup(value);
               setSelectedExercise(''); // Reset exercise when muscle group changes
             }}
+            disabled={!!frozenFields?.muscleGroupId}
           />
           <Dropdown
             label="Exercise"
@@ -130,7 +146,7 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
             value={selectedExercise}
             placeholder="Select exercise"
             onSelect={setSelectedExercise}
-            disabled={!selectedMuscleGroup}
+            disabled={!selectedMuscleGroup || !!frozenFields?.exerciseId}
           />
           <Input
             label="Weight (kg)"
@@ -139,7 +155,6 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
             keyboardType="numeric"
             placeholder="50"
           />
-          {/* Reps */}
           <View className="gap-2">
             <Text className="text-neutral-950 text-sm font-medium tracking-tight">Reps</Text>
             <View className="flex-row items-center gap-2">
@@ -160,8 +175,6 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
               </Pressable>
             </View>
           </View>
-
-          {/* Sets */}
           <View className="gap-2">
             <Text className="text-neutral-950 text-sm font-medium tracking-tight">Sets</Text>
             <View className="flex-row items-center gap-2">
@@ -183,8 +196,6 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
             </View>
           </View>
         </View>
-
-        {/* Action Buttons */}
         <View className="flex-row gap-3 pt-10 pb-4">
           <Button variant="outline" size="md" className="flex-1" onPress={handleClose}>
             Cancel

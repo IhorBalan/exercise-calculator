@@ -4,4 +4,5 @@ export type Exercise = {
   muscleGroupId: string;
   description: string;
   image?: string;
+  instructions?: string;
 };

@@ -1,10 +1,12 @@
 import { BottomFixedContent } from '@/modules/core/components/bottom-fixed-content';
 import { Button } from '@/modules/core/components/button';
 import { useExerciseByIdQuery } from '@/modules/exercise/hooks/use-exercise-by-id-query';
+import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
 import { TrainingHistoryOfExerciseContainer } from '@/modules/training/containers/training-history-of-exercise-container';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
 import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -13,7 +15,7 @@ export default function ExerciseDetailsScreen() {
   const exerciseId = (params.id as string) || '';
   const { data: exercise } = useExerciseByIdQuery(exerciseId);
   const insets = useSafeAreaInsets();
-
+  const [isAddWorkoutOpen, setIsAddWorkoutOpen] = useState(false);
   if (!exercise) {
     return null;
   }
@@ -100,14 +102,21 @@ export default function ExerciseDetailsScreen() {
       </ScrollView>
       <BottomFixedContent>
         <View className="flex-row gap-3">
-          <Button variant="outline" size="md" className="flex-1">
-            Show instructions
-          </Button>
-          <Button variant="primary" size="md" className="flex-1">
+          <Button
+            variant="primary"
+            size="md"
+            className="flex-1"
+            onPress={() => setIsAddWorkoutOpen(true)}
+          >
             Add Training
           </Button>
         </View>
       </BottomFixedContent>
+      <AddWorkoutModal
+        isOpen={isAddWorkoutOpen}
+        onClose={() => setIsAddWorkoutOpen(false)}
+        frozenFields={{ exerciseId, muscleGroupId: exercise.muscleGroupId }}
+      />
     </SafeAreaView>
   );
 }
