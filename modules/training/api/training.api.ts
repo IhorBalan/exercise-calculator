@@ -102,6 +102,27 @@ export const getTrainingHistoryByMuscleGroupId = async (
   return result;
 };
 
+export const getTrainingHistoryOfExerciseQuery = async (
+  exerciseId?: string
+): Promise<Training[]> => {
+  const user = getUser();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const firestore = getFirestore();
+  const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
+  const q = query(
+    trainingRef,
+    where('exercienseId', '==', exerciseId),
+    where('userId', '==', user.uid)
+  );
+
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as Training);
+};
+
 export const getTrainingRecordsByMuscleGroupId = async (
   muscleGroupId?: string
 ): Promise<(Training & { exercise: Exercise })[]> => {
@@ -119,8 +140,6 @@ export const getTrainingRecordsByMuscleGroupId = async (
     } else {
       records[training.exercienseId] = training;
     }
-
-    console.log('training', training);
   }
 
   const result: (Training & { exercise: Exercise })[] = [];

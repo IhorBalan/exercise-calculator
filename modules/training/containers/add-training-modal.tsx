@@ -10,7 +10,8 @@ import {
 import { getIsTrainingRecord } from '@/modules/training/api/training.api';
 import { RecordCelebrationModal } from '@/modules/training/components/record-celebration-modal';
 import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training-create-mutation';
-import { TRAINING_HISTORY_QUERY_KEY } from '@/modules/training/hooks/use-training-history-query';
+import { TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-exercise-query';
+import { TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-muscle-group-query';
 import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-training-records-query';
 import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
 import { Ionicons } from '@expo/vector-icons';
@@ -84,7 +85,8 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
           }
 
           queryClient.invalidateQueries({ queryKey: [WEEKLY_VOLUME_QUERY_KEY] });
-          queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_QUERY_KEY] });
+          queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY] });
+          queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY] });
           queryClient.invalidateQueries({ queryKey: [MUSCLE_GROUP_LIST_QUERY_KEY] });
           queryClient.invalidateQueries({ queryKey: [TRAINING_RECORDS_QUERY_KEY] });
         },

@@ -1,6 +1,7 @@
 import { BottomFixedContent } from '@/modules/core/components/bottom-fixed-content';
 import { Button } from '@/modules/core/components/button';
 import { useExerciseByIdQuery } from '@/modules/exercise/hooks/use-exercise-by-id-query';
+import { TrainingHistoryOfExerciseContainer } from '@/modules/training/containers/training-history-of-exercise-container';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -92,11 +93,8 @@ export default function ExerciseDetailsScreen() {
               </View>
             </View>
           </View>
-          <View className="px-6">
-            <Text className="text-slate-900 text-base font-medium tracking-tight mb-2">
-              Training history
-            </Text>
-            <View className="flex-row gap-3 mt-2"></View>
+          <View className="px-6 pb-24">
+            <TrainingHistoryOfExerciseContainer exerciseId={exerciseId} />
           </View>
         </View>
       </ScrollView>

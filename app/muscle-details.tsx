@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/modules/core/components/button';
 import { PersonalRecordsContainer } from '@/modules/muscle-group/containers/personal-records-container';
 import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
-import { WorkoutHistoryContainer } from '@/modules/training/containers/training-history-container';
+import { WorkoutHistoryContainer } from '@/modules/training/containers/training-history-of-muscle-group-container';
 import { WeeklyMuscleVolumeChart } from '@/modules/volume/containers/weekly-muscle-volume-chart';
 
 export default function MuscleDetailsScreen() {

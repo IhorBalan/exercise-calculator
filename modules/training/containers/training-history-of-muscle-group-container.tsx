@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { Exercise } from '@/modules/exercise/types/exercise.types';
 import { WorkoutHistoryCard } from '@/modules/muscle-group/components/workout-history-card';
 import { WorkoutHistoryEmptyState } from '@/modules/training/components/workout-history-empty-state';
-import { useTrainingHistoryQuery } from '@/modules/training/hooks/use-training-history-query';
+import { useTrainingHistoryOfMuscleGroupQuery } from '@/modules/training/hooks/use-training-history-of-muscle-group-query';
 import { Training } from '@/modules/training/types/training.types';
 import { startOfDay } from 'date-fns';
 import { useMemo } from 'react';
@@ -18,7 +18,7 @@ export function WorkoutHistoryContainer({
   muscleGroupId,
   className = 'px-4 mb-24',
 }: WorkoutHistoryContainerProps) {
-  const { data: trainings = [], isLoading } = useTrainingHistoryQuery(muscleGroupId);
+  const { data: trainings = [], isLoading } = useTrainingHistoryOfMuscleGroupQuery(muscleGroupId);
 
   const trainingHistory = useMemo(
     () =>
