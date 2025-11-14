@@ -49,8 +49,8 @@ export function TrainingHistoryOfExerciseContainer({ exerciseId }: { exerciseId:
               <View key={trainingIndex} className="gap-4">
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center gap-2">
-                    <Ionicons name="calendar-outline" size={20} color="#000" />
-                    <Text className="text-slate-900 text-base tracking-tight">
+                    <Ionicons name="calendar-outline" size={18} color="#000" />
+                    <Text className="text-slate-900 text-sm tracking-tight">
                       {format(date, 'MMM d, yyyy')}
                     </Text>
                   </View>
