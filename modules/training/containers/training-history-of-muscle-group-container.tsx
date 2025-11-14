@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 import { Exercise } from '@/modules/exercise/types/exercise.types';
 import { WorkoutHistoryCard } from '@/modules/muscle-group/components/workout-history-card';
@@ -46,7 +46,7 @@ export function WorkoutHistoryContainer({
 
       {isLoading ? (
         <View className="bg-white p-8 rounded-3xl shadow-sm items-center justify-center">
-          <Text className="text-slate-500 text-sm mt-3">Loading workout history...</Text>
+          <ActivityIndicator size={24} color="#3B82F6" />
         </View>
       ) : trainings.length === 0 ? (
         <WorkoutHistoryEmptyState />

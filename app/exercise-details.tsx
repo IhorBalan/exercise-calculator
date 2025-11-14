@@ -42,9 +42,9 @@ export default function ExerciseDetailsScreen() {
                 <Ionicons name="arrow-back" size={16} color="#000000" />
               </Pressable>
               <View className="flex-1 items-center">
-                <Text className="text-white text-base font-semibold tracking-tight drop-shadow-lg">
+                {/* <Text className="text-white text-base font-semibold tracking-tight drop-shadow-lg">
                   {exercise.name}
-                </Text>
+                </Text> */}
               </View>
               <View className="w-9" />
             </View>
@@ -61,8 +61,8 @@ export default function ExerciseDetailsScreen() {
           <View className="absolute -top-[20px] left-0 w-full h-[20px] bg-white rounded-t-3xl"></View>
           <View className="">
             <View className="px-6">
-              <Text className="text-slate-900 text-base font-medium tracking-tight mb-2">
-                About this exercise
+              <Text className="text-slate-900 text-xl font-medium tracking-tight mb-2">
+                {exercise.name}
               </Text>
               <Text className="text-slate-600 text-sm tracking-tight leading-5">
                 {exercise.description}
