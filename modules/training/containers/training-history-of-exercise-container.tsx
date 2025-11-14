@@ -1,6 +1,7 @@
 import { WorkoutHistoryEmptyState } from '@/modules/training/components/workout-history-empty-state';
 import { Training } from '@/modules/training/types/training.types';
 import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
+import { Ionicons } from '@expo/vector-icons';
 import { format, startOfDay } from 'date-fns';
 import { useMemo } from 'react';
 import { Text, View } from 'react-native';
@@ -41,15 +42,18 @@ export function TrainingHistoryOfExerciseContainer({ exerciseId }: { exerciseId:
       ) : trainings.length === 0 ? (
         <WorkoutHistoryEmptyState />
       ) : (
-        <View className="gap-4">
+        <View className="gap-6">
           {Object.entries(trainingHistory)
             .sort((a, b) => new Date(b[0]).getTime() - new Date(a[0]).getTime())
             .map(([date, trainings], trainingIndex) => (
-              <View key={trainingIndex} className="gap-6">
+              <View key={trainingIndex} className="gap-4">
                 <View className="flex-row items-center justify-between">
-                  <Text className="text-slate-900 text-base tracking-tight">
-                    {format(date, 'MMM d, yyyy')}
-                  </Text>
+                  <View className="flex-row items-center gap-2">
+                    <Ionicons name="calendar-outline" size={20} color="#000" />
+                    <Text className="text-slate-900 text-base tracking-tight">
+                      {format(date, 'MMM d, yyyy')}
+                    </Text>
+                  </View>
                   <View className="bg-blue-100 px-2 py-1 rounded-lg">
                     <Text className="text-blue-500 text-xs font-medium">
                       {trainings.length} trainings
