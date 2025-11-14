@@ -1,16 +1,22 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useMemo, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
-
 import { BottomModal } from '@/modules/core/components/bottom-modal';
 import { Button } from '@/modules/core/components/button';
 import { Dropdown, type DropdownOption } from '@/modules/core/components/dropdown';
 import { Input } from '@/modules/core/components/input';
 import { useExercisesListQuery } from '@/modules/exercise/hooks/use-exercises-list-query';
-import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
+import {
+  MUSCLE_GROUP_LIST_QUERY_KEY,
+  useMuscleGroupListQuery,
+} from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
 import { getIsTrainingRecord } from '@/modules/training/api/training.api';
 import { RecordCelebrationModal } from '@/modules/training/components/record-celebration-modal';
 import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training-create-mutation';
+import { TRAINING_HISTORY_QUERY_KEY } from '@/modules/training/hooks/use-training-history-query';
+import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-training-records-query';
+import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
+import { Ionicons } from '@expo/vector-icons';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
 
 export interface AddWorkoutModalProps {
   isOpen: boolean;
@@ -18,6 +24,7 @@ export interface AddWorkoutModalProps {
 }
 
 export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
+  const queryClient = useQueryClient();
   const { data: muscleGroupList } = useMuscleGroupListQuery();
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>('');
   const [selectedExercise, setSelectedExercise] = useState<string>('');
@@ -75,6 +82,11 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
           if (isNewRecord) {
             setNewTrainingRecordId(data.id);
           }
+
+          queryClient.invalidateQueries({ queryKey: [WEEKLY_VOLUME_QUERY_KEY] });
+          queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_QUERY_KEY] });
+          queryClient.invalidateQueries({ queryKey: [MUSCLE_GROUP_LIST_QUERY_KEY] });
+          queryClient.invalidateQueries({ queryKey: [TRAINING_RECORDS_QUERY_KEY] });
         },
         onError: error => {
           console.error('Create training error:', error);

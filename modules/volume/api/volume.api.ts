@@ -1,7 +1,16 @@
 import { getTrainings } from '@/modules/training/api/training.api';
 import { getUser } from '@/modules/user/api/user.api';
 import { getTrainingsVolume, getTrainingVolume } from '@/modules/volume/utils/volume.utils';
-import { addDays, endOfWeek, format, getDay, isSameDay, startOfWeek } from 'date-fns';
+import {
+  addDays,
+  endOfISOWeek,
+  endOfWeek,
+  format,
+  getDay,
+  isSameDay,
+  startOfISOWeek,
+  startOfWeek,
+} from 'date-fns';
 
 type TotalVolumeResponse = {
   totalVolume: number;
@@ -49,14 +58,14 @@ export const getWeeklyVolumeChartData = async (): Promise<WeeklyVolumeData[]> =>
   }
 
   const trainings = await getTrainings({
-    startDate: startOfWeek(new Date()).toISOString(),
-    endDate: endOfWeek(new Date()).toISOString(),
+    startDate: startOfISOWeek(new Date()).toISOString(),
+    endDate: endOfISOWeek(new Date()).toISOString(),
   });
 
   const weeklyData: WeeklyVolumeData[] = [];
 
   for (let i = 0; i < 7; i++) {
-    const date = addDays(startOfWeek(new Date()), i);
+    const date = addDays(startOfISOWeek(new Date()), i);
     const trainingsForDate = trainings.filter(training => isSameDay(new Date(training.date), date));
 
     const volume = trainingsForDate.reduce((acc, training) => acc + getTrainingVolume(training), 0);

@@ -71,7 +71,6 @@ export default function ExerciseDetailsScreen() {
             </View>
           </View>
 
-          {/* Stats Cards */}
           <View className="px-4">
             <Text className="text-slate-900 text-base font-medium tracking-tight mb-2">
               Your progress
@@ -96,14 +95,6 @@ export default function ExerciseDetailsScreen() {
               Show training history
             </Button>
           </View>
-
-          {/* Workout History Section */}
-          {/* <View className="px-4">
-            <View className="flex-row items-center gap-2 mb-4">
-              <Ionicons name="time-outline" size={20} color="#d946ef" />
-              <Text className="text-slate-900 text-base tracking-tight">Training History</Text>
-            </View>
-          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>

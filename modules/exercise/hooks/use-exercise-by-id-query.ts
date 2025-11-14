@@ -1,5 +1,6 @@
 import { getExerciseById } from '@/modules/exercise/api/exercise.api';
-import { Exercise, MuscleGroup } from '@/modules/muscle-group/types/muscle-group.types';
+import { Exercise } from '@/modules/exercise/types/exercise.types';
+import { MuscleGroup } from '@/modules/muscle-group/types/muscle-group.types';
 import { useQuery } from '@tanstack/react-query';
 
 const EXERCISE_BY_ID_QUERY_KEY = 'EXERCISE_BY_ID';

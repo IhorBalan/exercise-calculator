@@ -1,7 +1,7 @@
 import { getTrainingHistoryByMuscleGroupId } from '@/modules/training/api/training.api';
 import { useQuery } from '@tanstack/react-query';
 
-const TRAINING_HISTORY_QUERY_KEY = 'TRAINING_HISTORY';
+export const TRAINING_HISTORY_QUERY_KEY = 'TRAINING_HISTORY';
 
 export function useTrainingHistoryQuery(muscleGroupId?: string) {
   return useQuery({

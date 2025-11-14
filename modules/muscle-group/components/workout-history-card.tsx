@@ -37,7 +37,7 @@ export function WorkoutHistoryCard({ date, trainingCount, trainings }: WorkoutHi
               </Text>
             </View>
             <Text className="text-slate-500 text-sm tracking-tight">
-              {training.sets} sets • {training.reps} reps • {training.weight}
+              {training.sets} sets • {training.reps} reps • {training.weight} kg
             </Text>
           </View>
         ))}

@@ -234,8 +234,8 @@ export const getIsTrainingRecord = async (trainingId: string): Promise<boolean> 
   const snapshot = await getDocs(trainingsQuery);
 
   const trainings = snapshot.docs
-    .map((docSnapshot: any) => docSnapshot.data() as Training)
-    .filter((t: Training) => t.id !== training.id);
+    .filter((docSnapshot: any) => docSnapshot.id !== trainingDoc.id)
+    .map((docSnapshot: any) => docSnapshot.data() as Training);
 
   if (trainings.length === 0) {
     return true;

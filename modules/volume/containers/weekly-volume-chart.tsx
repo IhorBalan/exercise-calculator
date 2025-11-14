@@ -30,7 +30,9 @@ export function WeeklyVolumeChart() {
         </View>
       ) : (
         <View className="gap-2 h-40">
-          <Text className="text-slate-900 text-base font-medium tracking-tight mb-5">Activity</Text>
+          <Text className="text-slate-900 text-base font-medium tracking-tight mb-5">
+            Weekly Activity
+          </Text>
           <ColumnChart data={formattedData} />
         </View>
       )}

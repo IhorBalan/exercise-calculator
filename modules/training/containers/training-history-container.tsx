@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Text, View } from 'react-native';
 
+import { Exercise } from '@/modules/exercise/types/exercise.types';
 import { WorkoutHistoryCard } from '@/modules/muscle-group/components/workout-history-card';
-import { Exercise } from '@/modules/muscle-group/types/muscle-group.types';
 import { WorkoutHistoryEmptyState } from '@/modules/training/components/workout-history-empty-state';
 import { useTrainingHistoryQuery } from '@/modules/training/hooks/use-training-history-query';
 import { Training } from '@/modules/training/types/training.types';
@@ -30,6 +30,7 @@ export function WorkoutHistoryContainer({
             acc[date] = [];
           }
           acc[date].push(training);
+          acc[date].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
           return acc;
         },
         {} as Record<string, (Training & { exercise: Exercise })[]>
