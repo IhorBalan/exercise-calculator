@@ -8,6 +8,8 @@ import { Dropdown, type DropdownOption } from '@/modules/core/components/dropdow
 import { Input } from '@/modules/core/components/input';
 import { useExercisesListQuery } from '@/modules/exercise/hooks/use-exercises-list-query';
 import { useMuscleGroupListQuery } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
+import { getIsTrainingRecord } from '@/modules/training/api/training.api';
+import { RecordCelebrationModal } from '@/modules/training/components/record-celebration-modal';
 import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training-create-mutation';
 
 export interface AddWorkoutModalProps {
@@ -22,6 +24,7 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
   const [weight, setWeight] = useState('0');
   const [reps, setReps] = useState(0);
   const [sets, setSets] = useState(0);
+  const [newTrainingRecordId, setNewTrainingRecordId] = useState<string | null>(null);
   const { data: exercisesList } = useExercisesListQuery(selectedMuscleGroup);
   const trainingCreateMutation = useTrainingCreateMutation();
 
@@ -52,7 +55,7 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
     setSets(0);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     trainingCreateMutation.mutate(
       {
         muscleGroupId: selectedMuscleGroup,
@@ -63,10 +66,15 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
         date: new Date().toISOString(),
       },
       {
-        onSuccess: () => {
-          // Reset form
+        onSuccess: async data => {
           resetForm();
           onClose();
+
+          const isNewRecord = await getIsTrainingRecord(data.id);
+
+          if (isNewRecord) {
+            setNewTrainingRecordId(data.id);
+          }
         },
         onError: error => {
           console.error('Create training error:', error);
@@ -84,98 +92,108 @@ export function AddWorkoutModal({ isOpen, onClose }: AddWorkoutModalProps) {
   const canSave = selectedMuscleGroup && selectedExercise && weight && reps > 0 && sets > 0;
 
   return (
-    <BottomModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title="New Training"
-      snapPoints={['80%', '90%']}
-    >
-      <View className="gap-6">
-        <Dropdown
-          label="Muscle Group"
-          options={muscleGroupOptions}
-          value={selectedMuscleGroup}
-          placeholder="Select muscle group"
-          onSelect={value => {
-            setSelectedMuscleGroup(value);
-            setSelectedExercise(''); // Reset exercise when muscle group changes
-          }}
-        />
-        <Dropdown
-          label="Exercise"
-          options={exerciseOptions}
-          value={selectedExercise}
-          placeholder="Select exercise"
-          onSelect={setSelectedExercise}
-          disabled={!selectedMuscleGroup}
-        />
-        <Input
-          label="Weight (kg)"
-          value={weight}
-          onChangeText={setWeight}
-          keyboardType="numeric"
-          placeholder="50"
-        />
-        {/* Reps */}
-        <View className="gap-2">
-          <Text className="text-neutral-950 text-sm font-medium tracking-tight">Reps</Text>
-          <View className="flex-row items-center gap-2">
-            <Pressable
-              onPress={() => reps > 1 && setReps(reps - 1)}
-              className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-            >
-              <Ionicons name="remove" size={16} color="#000000" />
-            </Pressable>
-            <View className="flex-1 bg-gray-100 rounded-xl h-12 items-center justify-center">
-              <Text className="text-neutral-950 text-base tracking-tight">{reps}</Text>
+    <>
+      <BottomModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        title="New Training"
+        snapPoints={['80%', '90%']}
+      >
+        <View className="gap-6">
+          <Dropdown
+            label="Muscle Group"
+            options={muscleGroupOptions}
+            value={selectedMuscleGroup}
+            placeholder="Select muscle group"
+            onSelect={value => {
+              setSelectedMuscleGroup(value);
+              setSelectedExercise(''); // Reset exercise when muscle group changes
+            }}
+          />
+          <Dropdown
+            label="Exercise"
+            options={exerciseOptions}
+            value={selectedExercise}
+            placeholder="Select exercise"
+            onSelect={setSelectedExercise}
+            disabled={!selectedMuscleGroup}
+          />
+          <Input
+            label="Weight (kg)"
+            value={weight}
+            onChangeText={setWeight}
+            keyboardType="numeric"
+            placeholder="50"
+          />
+          {/* Reps */}
+          <View className="gap-2">
+            <Text className="text-neutral-950 text-sm font-medium tracking-tight">Reps</Text>
+            <View className="flex-row items-center gap-2">
+              <Pressable
+                onPress={() => reps > 1 && setReps(reps - 1)}
+                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
+              >
+                <Ionicons name="remove" size={16} color="#000000" />
+              </Pressable>
+              <View className="flex-1 bg-gray-100 rounded-xl h-12 items-center justify-center">
+                <Text className="text-neutral-950 text-base tracking-tight">{reps}</Text>
+              </View>
+              <Pressable
+                onPress={() => setReps(reps + 1)}
+                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
+              >
+                <Ionicons name="add" size={16} color="#000000" />
+              </Pressable>
             </View>
-            <Pressable
-              onPress={() => setReps(reps + 1)}
-              className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-            >
-              <Ionicons name="add" size={16} color="#000000" />
-            </Pressable>
+          </View>
+
+          {/* Sets */}
+          <View className="gap-2">
+            <Text className="text-neutral-950 text-sm font-medium tracking-tight">Sets</Text>
+            <View className="flex-row items-center gap-2">
+              <Pressable
+                onPress={() => sets > 1 && setSets(sets - 1)}
+                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
+              >
+                <Ionicons name="remove" size={16} color="#000000" />
+              </Pressable>
+              <View className="flex-1 bg-gray-100 rounded-xl h-12 items-center justify-center">
+                <Text className="text-neutral-950 text-base tracking-tight">{sets}</Text>
+              </View>
+              <Pressable
+                onPress={() => setSets(sets + 1)}
+                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
+              >
+                <Ionicons name="add" size={16} color="#000000" />
+              </Pressable>
+            </View>
           </View>
         </View>
 
-        {/* Sets */}
-        <View className="gap-2">
-          <Text className="text-neutral-950 text-sm font-medium tracking-tight">Sets</Text>
-          <View className="flex-row items-center gap-2">
-            <Pressable
-              onPress={() => sets > 1 && setSets(sets - 1)}
-              className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-            >
-              <Ionicons name="remove" size={16} color="#000000" />
-            </Pressable>
-            <View className="flex-1 bg-gray-100 rounded-xl h-12 items-center justify-center">
-              <Text className="text-neutral-950 text-base tracking-tight">{sets}</Text>
-            </View>
-            <Pressable
-              onPress={() => setSets(sets + 1)}
-              className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-            >
-              <Ionicons name="add" size={16} color="#000000" />
-            </Pressable>
-          </View>
+        {/* Action Buttons */}
+        <View className="flex-row gap-3 pt-10 pb-4">
+          <Button variant="outline" size="md" className="flex-1" onPress={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            size="md"
+            className="flex-1"
+            onPress={handleSave}
+            disabled={!canSave}
+          >
+            Save Training
+          </Button>
         </View>
-      </View>
+      </BottomModal>
 
-      {/* Action Buttons */}
-      <View className="flex-row gap-3 pt-10 pb-4">
-        <Button variant="outline" size="md" className="flex-1" onPress={handleClose}>
-          Cancel
-        </Button>
-        <Button
-          variant="primary"
-          size="md"
-          className="flex-1"
-          onPress={handleSave}
-          disabled={!canSave}
-        >
-          Save Training
-        </Button>
-      </View>
-    </BottomModal>
+      <RecordCelebrationModal
+        isOpen={!!newTrainingRecordId}
+        trainingId={newTrainingRecordId}
+        onClose={() => {
+          setNewTrainingRecordId(null);
+        }}
+      />
+    </>
   );
 }
