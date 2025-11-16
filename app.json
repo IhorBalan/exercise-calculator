@@ -9,10 +9,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.liftup.app",
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "package": "com.liftup.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -29,6 +31,8 @@
       "bundler": "metro"
     },
     "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
       "expo-router",
       [
         "expo-splash-screen",
@@ -39,6 +43,14 @@
           "backgroundColor": "#ffffff",
           "dark": {
             "backgroundColor": "#000000"
+          }
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
           }
         }
       ]
