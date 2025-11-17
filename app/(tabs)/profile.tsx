@@ -1,18 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/modules/auth/context/auth-context';
+import { useUserGlobalStatsQuery } from '@/modules/user/hooks/use-use-global-stats-query';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
-
-const trainingStats = [
-  { label: 'Total Workouts', value: '87', fullWidth: false },
-  { label: 'This Month', value: '16', fullWidth: false },
-  { label: 'Total Volume', value: '384k', subtitle: 'kg lifted', fullWidth: false },
-  { label: 'Avg/Week', value: '25.1k', subtitle: 'kg lifted', fullWidth: false },
-];
 
 const settingsOptions = [
   { icon: 'person-outline', label: 'Edit Profile', color: 'bg-blue-50', iconColor: '#3b82f6' },
@@ -23,6 +17,40 @@ const settingsOptions = [
 export default function ProfileScreen() {
   const { logout } = useAuth();
   const { data: userProfile } = useUserProfileQuery();
+  const userGlobalStatsQuery = useUserGlobalStatsQuery();
+
+  const trainingStats = useMemo(() => {
+    const { data: userGlobalStats } = userGlobalStatsQuery;
+    if (userGlobalStats) {
+      return [
+        {
+          label: 'Total Workouts',
+          value: userGlobalStats.trainings.total.toString(),
+          fullWidth: false,
+        },
+        {
+          label: 'This Month',
+          value: userGlobalStats.trainings.thisMonth.toString(),
+          fullWidth: false,
+        },
+        {
+          label: 'Total Volume',
+          value: userGlobalStats.volume.total.toString(),
+          subtitle: 'kg lifted',
+          fullWidth: false,
+        },
+        {
+          label: 'Avg/Week',
+          value: userGlobalStats.volume.avgWeekly.toString(),
+          subtitle: 'kg lifted',
+          fullWidth: false,
+        },
+      ];
+    }
+
+    return [];
+  }, [userGlobalStatsQuery.data]);
+
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const displayName = `${userProfile?.firstName || ''} ${userProfile?.lastName || ''}`;
