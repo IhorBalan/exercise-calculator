@@ -13,6 +13,7 @@ export function WeeklyMuscleVolumeChart({ muscleGroupId }: WeeklyMuscleVolumeCha
 
   const formattedData = useMemo(() => {
     return data.map(item => ({
+      id: item.day,
       label: item.day,
       value: item.value,
     }));

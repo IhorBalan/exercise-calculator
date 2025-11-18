@@ -24,12 +24,12 @@ export default function ProfileScreen() {
     if (userGlobalStats) {
       return [
         {
-          label: 'Total Workouts',
+          label: 'Workouts Completed',
           value: userGlobalStats.trainings.total.toString(),
           fullWidth: false,
         },
         {
-          label: 'This Month',
+          label: 'Workouts This Month',
           value: userGlobalStats.trainings.thisMonth.toString(),
           fullWidth: false,
         },
@@ -40,7 +40,7 @@ export default function ProfileScreen() {
           fullWidth: false,
         },
         {
-          label: 'Avg/Week',
+          label: 'Avg Weekly Volume',
           value: userGlobalStats.volume.avgWeekly.toString(),
           subtitle: 'kg lifted',
           fullWidth: false,
@@ -76,7 +76,7 @@ export default function ProfileScreen() {
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View className="px-4 pt-8 pb-1 gap-1">
+        <View className="px-4 pt-8 pb-1 gap-1 relative">
           <Text className="text-slate-900 text-xl font-medium tracking-tight">Profile</Text>
           <Text className="text-slate-600 text-base tracking-tight">
             Manage your account and settings

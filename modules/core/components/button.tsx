@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Pressable, PressableProps, Text } from 'react-native';
+import { Pressable, PressableProps, Text, View } from 'react-native';
 
 export interface ButtonProps extends Omit<PressableProps, 'children'> {
   children: ReactNode;
@@ -7,6 +7,8 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   className?: string;
+  startAdornment?: ReactNode;
+  endAdornment?: ReactNode;
 }
 
 export function Button({
@@ -16,10 +18,12 @@ export function Button({
   fullWidth = false,
   className = '',
   disabled,
+  startAdornment,
+  endAdornment,
   ...pressableProps
 }: ButtonProps) {
   const baseClasses =
-    'rounded-xl items-center justify-center active:opacity-80 disabled:opacity-50';
+    'rounded-xl flex-row items-center justify-center active:opacity-80 disabled:opacity-50';
 
   const variantClasses = {
     primary: 'bg-blue-500',
@@ -53,6 +57,7 @@ export function Button({
       disabled={disabled}
       {...pressableProps}
     >
+      {startAdornment && <View className="mr-2">{startAdornment}</View>}
       {typeof children === 'string' ? (
         <Text
           className={`${textSizeClasses[size]} font-medium tracking-tight ${textColorClasses[variant]}`}
@@ -62,6 +67,7 @@ export function Button({
       ) : (
         children
       )}
+      {endAdornment && <View className="ml-2">{endAdornment}</View>}
     </Pressable>
   );
 }

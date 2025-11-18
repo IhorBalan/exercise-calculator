@@ -1,7 +1,10 @@
 import { Text, View } from 'react-native';
 
 type ColumnChartProps = {
+  activeId?: string;
+  onSelect?: (id: string) => void;
   data: {
+    id: string;
     label: string;
     value: number;
   }[];

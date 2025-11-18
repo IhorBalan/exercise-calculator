@@ -1,6 +1,7 @@
+import { Button } from '@/modules/core/components/button';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
+import { ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MuscleGroupRuleCard } from '@/modules/muscle-group/components/muscle-group-rule-card';
@@ -8,62 +9,12 @@ import { MuscleGroupRuleCard } from '@/modules/muscle-group/components/muscle-gr
 // Muscle group progression rules data
 const muscleGroupRules = [
   {
-    name: 'Chest',
+    name: 'Bench Press',
     emoji: '💪',
     color: 'bg-blue-50',
     rules: [
       { label: '+1 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
       { label: 'Max 12 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
-      { label: '+2.5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
-    ],
-  },
-  {
-    name: 'Back',
-    emoji: '🏋️',
-    color: 'bg-emerald-50',
-    rules: [
-      { label: '+1 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
-      { label: 'Max 12 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
-      { label: '+5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
-    ],
-  },
-  {
-    name: 'Shoulders',
-    emoji: '🎯',
-    color: 'bg-purple-50',
-    rules: [
-      { label: '+1 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
-      { label: 'Max 15 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
-      { label: '+2.5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
-    ],
-  },
-  {
-    name: 'Legs',
-    emoji: '🦵',
-    color: 'bg-amber-50',
-    rules: [
-      { label: '+1 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
-      { label: 'Max 10 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
-      { label: '+5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
-    ],
-  },
-  {
-    name: 'Arms',
-    emoji: '💪',
-    color: 'bg-pink-50',
-    rules: [
-      { label: '+2 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
-      { label: 'Max 15 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
-      { label: '+2.5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
-    ],
-  },
-  {
-    name: 'Core',
-    emoji: '⭐',
-    color: 'bg-cyan-50',
-    rules: [
-      { label: '+3 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
-      { label: 'Max 20 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
       { label: '+2.5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
     ],
   },
@@ -77,7 +28,6 @@ export default function RulesScreen() {
   return (
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Header */}
         <View className="px-4 pt-8 pb-6 gap-1">
           <Text className="text-slate-900 text-xl font-medium tracking-tight">
             Progression Rules
@@ -87,7 +37,6 @@ export default function RulesScreen() {
           </Text>
         </View>
 
-        {/* Info Card */}
         <View className="mx-4 p-4 bg-blue-100 border border-blue-100 rounded-2xl flex-row gap-3">
           <Ionicons name="information-circle" size={20} color="#3b82f6" />
           <Text className="flex-1 text-blue-600 text-sm leading-5 tracking-tight">
@@ -96,9 +45,20 @@ export default function RulesScreen() {
           </Text>
         </View>
 
-        {/* Muscle Group Rules Section */}
-        <View className="px-4 mt-6">
-          <Text className="text-slate-900 text-base tracking-tight mb-4">Muscle Group Rules</Text>
+        <View className="px-4 mt-8">
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className="text-slate-900 font-medium text-base tracking-tight">
+              Your Exercise Rules
+            </Text>
+            <Button
+              variant="primary"
+              size="sm"
+              startAdornment={<Ionicons name="add" size={16} color="white" />}
+              onPress={() => {}}
+            >
+              Add Rule
+            </Button>
+          </View>
 
           <View className="gap-4">
             {muscleGroupRules.map((group, index) => (
@@ -112,19 +72,14 @@ export default function RulesScreen() {
             ))}
           </View>
         </View>
-
-        {/* Custom Rules Section */}
         <View className="px-4 mt-8">
           <View className="flex-row items-center justify-between mb-6">
-            <Text className="text-slate-900 text-base tracking-tight">Custom Rules</Text>
-            <Pressable className="bg-blue-500 flex-row items-center gap-2 px-3 py-2 rounded-xl active:opacity-80">
-              <Ionicons name="add" size={16} color="white" />
-              <Text className="text-white text-sm font-medium tracking-tight">Add Rule</Text>
-            </Pressable>
+            <Text className="text-slate-900 text-base font-medium tracking-tight">
+              Advanced Settings
+            </Text>
           </View>
 
           <View className="gap-3">
-            {/* Deload Week */}
             <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between">
               <View className="flex-1 gap-1">
                 <Text className="text-slate-900 text-base tracking-tight">Deload Week</Text>
@@ -136,13 +91,12 @@ export default function RulesScreen() {
                 <Switch
                   value={deloadWeek}
                   onValueChange={setDeloadWeek}
-                  trackColor={{ false: '#cbd5e1', true: '#030213' }}
+                  trackColor={{ false: '#cbd5e1', true: '#3b82f6' }}
                   thumbColor="#ffffff"
                 />
               </View>
             </View>
 
-            {/* Rest Days */}
             <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between">
               <View className="flex-1 gap-1">
                 <Text className="text-slate-900 text-base tracking-tight">Rest Days</Text>
@@ -154,7 +108,7 @@ export default function RulesScreen() {
                 <Switch
                   value={restDays}
                   onValueChange={setRestDays}
-                  trackColor={{ false: '#cbd5e1', true: '#030213' }}
+                  trackColor={{ false: '#cbd5e1', true: '#3b82f6' }}
                   thumbColor="#ffffff"
                 />
               </View>
@@ -172,7 +126,7 @@ export default function RulesScreen() {
                 <Switch
                   value={autoSuggest}
                   onValueChange={setAutoSuggest}
-                  trackColor={{ false: '#cbd5e1', true: '#030213' }}
+                  trackColor={{ false: '#cbd5e1', true: '#3b82f6' }}
                   thumbColor="#ffffff"
                 />
               </View>
