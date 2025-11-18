@@ -4,9 +4,10 @@ import {
   BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Keyboard, StyleSheet, Text, View } from 'react-native';
+import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useKeyboardHeight } from '@/modules/core/hooks/use-keyboard-height';
 
 export interface BottomModalProps {
   children: ReactNode;
@@ -31,33 +32,10 @@ export function BottomModal({
 }: BottomModalProps) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const insets = useSafeAreaInsets();
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const keyboardHeight = useKeyboardHeight();
 
   // Default snap points: 50% and 90% of screen height
   const defaultSnapPoints = useMemo(() => ['50%', '90%'], []);
-
-  // Listen to keyboard events to get keyboard height
-  useEffect(() => {
-    const keyboardWillShow = Keyboard.addListener('keyboardWillShow', e => {
-      setKeyboardHeight(e.endCoordinates.height);
-    });
-    const keyboardDidShow = Keyboard.addListener('keyboardDidShow', e => {
-      setKeyboardHeight(e.endCoordinates.height);
-    });
-    const keyboardWillHide = Keyboard.addListener('keyboardWillHide', () => {
-      setKeyboardHeight(0);
-    });
-    const keyboardDidHide = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardHeight(0);
-    });
-
-    return () => {
-      keyboardWillShow.remove();
-      keyboardDidShow.remove();
-      keyboardWillHide.remove();
-      keyboardDidHide.remove();
-    };
-  }, []);
 
   // Handle sheet changes
   const handleSheetChanges = useCallback(
@@ -75,8 +53,6 @@ export function BottomModal({
       bottomSheetModalRef.current?.present();
     } else {
       bottomSheetModalRef.current?.dismiss();
-      // Reset keyboard height when modal closes
-      setKeyboardHeight(0);
     }
   }, [isOpen]);
 

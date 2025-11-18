@@ -1,4 +1,5 @@
 import Logo from '@/assets/icons/logo.svg';
+import { useKeyboardHeight } from '@/modules/core/hooks/use-keyboard-height';
 import { AntDesign } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
@@ -17,6 +18,8 @@ export function AuthPageLayout({
   children,
   linkTo = 'signup',
 }: AuthPageLayoutProps) {
+  const keyboardHeight = useKeyboardHeight();
+
   const handleGoogleLogin = async () => {
     return;
   };
@@ -29,6 +32,7 @@ export function AuthPageLayout({
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top', 'bottom']}>
       <ScrollView
         contentContainerClassName="items-center justify-center px-4"
+        contentContainerStyle={{ paddingBottom: keyboardHeight }}
         keyboardShouldPersistTaps="handled"
       >
         <View className="items-center gap-4 mb-12 pt-12">
