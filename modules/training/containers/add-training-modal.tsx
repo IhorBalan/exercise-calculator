@@ -17,7 +17,7 @@ import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volum
 import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Keyboard, Pressable, Text, View } from 'react-native';
 
 export interface AddWorkoutModalProps {
   isOpen: boolean;
@@ -117,9 +117,15 @@ export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutMod
   };
 
   const handleClose = () => {
+    // Dismiss keyboard before closing
+    Keyboard.dismiss();
     // Reset form on close
     resetForm();
     onClose();
+  };
+
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
   };
 
   const canSave = selectedMuscleGroup && selectedExercise && weight && reps > 0 && sets > 0;
@@ -131,6 +137,7 @@ export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutMod
         onClose={handleClose}
         title="New Training"
         snapPoints={['80%', '90%']}
+        enableScrollableContent={true}
       >
         <View className="gap-6">
           <Dropdown
@@ -158,6 +165,8 @@ export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutMod
             onChangeText={setWeight}
             keyboardType="numeric"
             placeholder="50"
+            returnKeyType="done"
+            onSubmitEditing={dismissKeyboard}
           />
           <View className="gap-2">
             <Text className="text-neutral-950 text-sm font-medium tracking-tight">Reps</Text>
