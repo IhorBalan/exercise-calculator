@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@/modules/core/components/button';
 import { Dropdown } from '@/modules/core/components/dropdown';
 import { Input } from '@/modules/core/components/input';
+import { useKeyboardHeight } from '@/modules/core/hooks/use-keyboard-height';
 import { Ionicons } from '@expo/vector-icons';
 
 const progressionPriorityOptions = [
@@ -20,12 +21,12 @@ export default function RuleDetailsModal() {
   const initialReps = (params.reps as string) || '1';
   const initialMinReps = (params.minReps as string) || '8';
   const initialMaxReps = (params.maxReps as string) || '12';
+  const keyboardHeight = useKeyboardHeight();
 
   const [repsToAdd, setRepsToAdd] = useState(initialReps);
   const [minReps, setMinReps] = useState(initialMinReps);
   const [maxReps, setMaxReps] = useState(initialMaxReps);
   const [weightIncrement, setWeightIncrement] = useState('2.5');
-  const [volumeIncrease, setVolumeIncrease] = useState('5');
   const [selectedPriority, setSelectedPriority] = useState('Increase reps first');
 
   const handleSave = () => {
@@ -36,7 +37,6 @@ export default function RuleDetailsModal() {
       minReps,
       maxReps,
       weightIncrement,
-      volumeIncrease,
       selectedPriority,
     });
     router.back();
@@ -47,25 +47,33 @@ export default function RuleDetailsModal() {
   };
 
   return (
-    <SafeAreaView className="bg-white" edges={['top']}>
-      <ScrollView className="" showsVerticalScrollIndicator={false}>
-        <View className="gap-8">
-          <View className="flex-row px-4 items-center justify-between pt-6 pb-8 relative">
+    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: keyboardHeight }}
+      >
+        {/* Header */}
+        <View className="px-4 pt-8 pb-6 gap-1">
+          <View className="flex-row items-center justify-between mb-2">
             <Pressable
               onPress={() => router.back()}
-              className="w-10 h-10 rounded-xl bg-white items-center  justify-center active:opacity-80"
+              className="w-9 h-9 rounded-xl bg-white items-center shadow-sm justify-center active:opacity-80"
             >
               <Ionicons name="arrow-back" size={16} color="#000000" />
             </Pressable>
             <View className="flex-1 items-center">
-              <Text className="text-neutral-950 text-lg font-semibold tracking-tight">
+              <Text className="text-slate-900 text-lg font-semibold tracking-tight">
                 Edit Progression Rule
               </Text>
             </View>
-            <View className="w-10" />
+            <View className="w-9" />
           </View>
+        </View>
 
-          <View className="gap-4 px-4">
+        {/* Form Fields */}
+        <View className="px-4 gap-6">
+          <View className="gap-4 p-4 bg-white rounded-2xl shadow-sm">
             <Dropdown
               label="Muscle Group"
               options={[]}
@@ -81,18 +89,23 @@ export default function RuleDetailsModal() {
             />
           </View>
 
-          <View className="gap-6 p-4 mx-4 shadow-lg bg-white rounded-2xl">
+          {/* Reps Progression Card */}
+          <View className="gap-4 p-4 bg-white rounded-2xl shadow-sm">
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-2">
-                <Ionicons name="repeat" size={24} color="#000" />
-                <Text className="text-slate-900 text-base tracking-tight">Reps Progression</Text>
+                <Ionicons name="repeat" size={20} color="#1e293b" />
+                <Text className="text-slate-900 text-base font-medium tracking-tight">
+                  Reps Progression
+                </Text>
               </View>
-              <Switch
-                value={true}
-                onValueChange={() => {}}
-                trackColor={{ false: '#cbd5e1', true: '#3b82f6' }}
-                thumbColor="#ffffff"
-              />
+              <View style={{ transform: [{ scale: 0.85 }] }}>
+                <Switch
+                  value={true}
+                  onValueChange={() => {}}
+                  trackColor={{ false: '#cbd5e1', true: '#3b82f6' }}
+                  thumbColor="#ffffff"
+                />
+              </View>
             </View>
 
             <View className="gap-4">
@@ -134,58 +147,53 @@ export default function RuleDetailsModal() {
             </View>
           </View>
 
-          <View className="gap-4 p-4 mx-4 shadow-lg bg-white rounded-2xl">
+          {/* Weight Progression Card */}
+          <View className="gap-4 p-4 bg-white rounded-2xl shadow-sm">
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-2">
-                <Ionicons name="barbell" size={24} color="#000000" />
-                <Text className="text-slate-900 text-base tracking-tight">Weight Progression</Text>
+                <Ionicons name="barbell" size={20} color="#1e293b" />
+                <Text className="text-slate-900 text-base font-medium tracking-tight">
+                  Weight Progression
+                </Text>
               </View>
-              <Switch
-                value={true}
-                onValueChange={() => {}}
-                trackColor={{ false: '#cbd5e1', true: '#3b82f6' }}
-                thumbColor="#ffffff"
-              />
+              <View style={{ transform: [{ scale: 0.85 }] }}>
+                <Switch
+                  value={true}
+                  onValueChange={() => {}}
+                  trackColor={{ false: '#cbd5e1', true: '#3b82f6' }}
+                  thumbColor="#ffffff"
+                />
+              </View>
             </View>
 
-            <View className="gap-4"></View>
-            {/* Weight increment */}
-            <Input
-              label="Weight increment (kg)"
-              value={weightIncrement}
-              onChangeText={setWeightIncrement}
-              keyboardType="decimal-pad"
-              placeholder="2.5"
-              helperText="How much weight to add when increasing"
-            />
-
-            {/* Progression Priority */}
-            <View className="gap-2">
-              <Dropdown
-                label="Progression Priority"
-                options={progressionPriorityOptions}
-                value={selectedPriority}
-                placeholder="Select priority"
-                onSelect={setSelectedPriority}
+            <View className="gap-4">
+              {/* Weight increment */}
+              <Input
+                label="Weight increment (kg)"
+                value={weightIncrement}
+                onChangeText={setWeightIncrement}
+                keyboardType="decimal-pad"
+                placeholder="2.5"
+                helperText="How much weight to add when increasing"
               />
-              <Text className="text-slate-500 text-sm tracking-tight">
-                Add more reps before adding weight
-              </Text>
+
+              {/* Progression Priority */}
+              <View className="gap-2">
+                <Dropdown
+                  label="Progression Priority"
+                  options={progressionPriorityOptions}
+                  value={selectedPriority}
+                  placeholder="Select priority"
+                  onSelect={setSelectedPriority}
+                />
+                <Text className="text-slate-500 text-sm tracking-tight">
+                  Add more reps before adding weight
+                </Text>
+              </View>
             </View>
           </View>
-
-          <View className="mb-6 px-4">
-            <Input
-              label="Weekly Volume Increase (%)"
-              value={volumeIncrease}
-              onChangeText={setVolumeIncrease}
-              keyboardType="numeric"
-              placeholder="5"
-              helperText="Target percentage increase in total volume per week"
-            />
-          </View>
-
-          <View className="flex-row gap-3 pt-2 pb-14 px-4">
+          {/* Action Buttons */}
+          <View className="flex-row gap-3 pt-4 pb-12">
             <Button variant="outline" className="flex-1" size="md" onPress={handleCancel}>
               Cancel
             </Button>

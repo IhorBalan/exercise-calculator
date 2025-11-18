@@ -29,7 +29,7 @@ export function AuthPageLayout({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top', 'bottom']}>
+    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
       <ScrollView
         contentContainerClassName="items-center justify-center px-4"
         contentContainerStyle={{ paddingBottom: keyboardHeight }}
@@ -94,7 +94,7 @@ export function AuthPageLayout({
         </View>
 
         {/* Terms and Privacy */}
-        <View className="w-full max-w-[320px] mb-8">
+        <View className="w-full max-w-[320px] mb-10">
           <Text className="text-slate-500 text-sm font-normal text-center leading-5 tracking-tight">
             By continuing, you agree to our Terms of Service and Privacy Policy
           </Text>
