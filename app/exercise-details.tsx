@@ -1,4 +1,3 @@
-import { BottomFixedContent } from '@/modules/core/components/bottom-fixed-content';
 import { Button } from '@/modules/core/components/button';
 import { useExerciseByIdQuery } from '@/modules/exercise/hooks/use-exercise-by-id-query';
 import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
@@ -9,6 +8,11 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+const rules = [
+  { label: '+1 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
+  { label: 'Max 12 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
+  { label: '+2.5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
+];
 
 export default function ExerciseDetailsScreen() {
   const params = useLocalSearchParams();
@@ -54,7 +58,7 @@ export default function ExerciseDetailsScreen() {
         </View>
 
         <View
-          className="pb-14 gap-8 bg-white relative"
+          className="pb-14 gap-6 bg-white relative"
           style={{
             minHeight: Dimensions.get('window').height - 300 - insets.top,
             paddingBottom: insets.bottom,
@@ -71,12 +75,11 @@ export default function ExerciseDetailsScreen() {
               </Text>
             </View>
           </View>
-
           <View className="px-6">
             <Text className="text-slate-900 text-base font-medium tracking-tight mb-2">
               Your progress
             </Text>
-            <View className="flex-row gap-3 mt-2">
+            <View className="flex-row gap-3 mt-4">
               <View className="flex-1">
                 <Text className="text-slate-500 text-xs tracking-tight mb-1">Total Volume</Text>
                 <Text className="text-slate-800 text-lg font-semibold tracking-tight">1000 kg</Text>
@@ -95,12 +98,40 @@ export default function ExerciseDetailsScreen() {
               </View>
             </View>
           </View>
+
+          <View className="h-px bg-slate-100 w-full" />
+
+          <View className="px-6">
+            <View className="flex-row items-center justify-between mb-6">
+              <Text className="text-slate-900 text-base font-medium tracking-tight">
+                Progression Rules
+              </Text>
+              <Button
+                variant="secondary"
+                size="sm"
+                startAdornment={<Ionicons name="pencil" size={12} color="black" />}
+                onPress={() => {}}
+              >
+                Edit Rules
+              </Button>
+            </View>
+            <View className="flex-row gap-3">
+              {rules.map((rule, index) => (
+                <View key={index} className={`${rule.color} px-4 py-2 rounded-lg`}>
+                  <Text className={`${rule.textColor} text-sm font-medium tracking-tight`}>
+                    {rule.label}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+          <View className="h-px bg-slate-100 w-full" />
           <View className="px-6 pb-24">
             <TrainingHistoryOfExerciseContainer exerciseId={exerciseId} />
           </View>
         </View>
       </ScrollView>
-      <BottomFixedContent>
+      {/* <BottomFixedContent>
         <View className="flex-row gap-3">
           <Button
             variant="primary"
@@ -111,7 +142,7 @@ export default function ExerciseDetailsScreen() {
             Add Training
           </Button>
         </View>
-      </BottomFixedContent>
+      </BottomFixedContent> */}
       <AddWorkoutModal
         isOpen={isAddWorkoutOpen}
         onClose={() => setIsAddWorkoutOpen(false)}

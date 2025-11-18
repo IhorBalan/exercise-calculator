@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "LiftUp",
-    "slug": "LiftUp",
+    "slug": "exercise-calculator",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

@@ -63,7 +63,7 @@ export default function RuleDetailsModal() {
               <Ionicons name="arrow-back" size={16} color="#000000" />
             </Pressable>
             <View className="flex-1 items-center">
-              <Text className="text-slate-900 text-lg font-semibold tracking-tight">
+              <Text className="text-slate-900 text-lg font-medium tracking-tight">
                 Edit Progression Rule
               </Text>
             </View>
