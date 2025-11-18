@@ -1,8 +1,7 @@
-import { useAuth } from '@/modules/auth/context/auth-context';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import Logo from '@/assets/icons/logo.svg';
+import { AntDesign } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AuthPageLayoutProps = {
@@ -18,59 +17,26 @@ export function AuthPageLayout({
   children,
   linkTo = 'signup',
 }: AuthPageLayoutProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
-
   const handleGoogleLogin = async () => {
-    try {
-      setIsLoading(true);
-      // Mock login - replace with actual Google OAuth implementation
-      const mockUser = {
-        id: '1',
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        image: 'https://via.placeholder.com/150',
-      };
-      const mockToken = 'mock-google-token-123';
-      await login(mockUser, mockToken);
-    } catch (error) {
-      console.error('Google login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    return;
   };
 
   const handleAppleLogin = async () => {
-    try {
-      setIsLoading(true);
-      // Mock login - replace with actual Apple OAuth implementation
-      const mockUser = {
-        id: '2',
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        image: 'https://via.placeholder.com/150',
-      };
-      const mockToken = 'mock-apple-token-456';
-      await login(mockUser, mockToken);
-    } catch (error) {
-      console.error('Apple login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    return;
   };
 
   return (
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top', 'bottom']}>
       <ScrollView
-        contentContainerClassName="flex-1 items-center justify-center px-4"
+        contentContainerClassName="items-center justify-center px-4"
         keyboardShouldPersistTaps="handled"
       >
-        <View className="items-center gap-4 mb-12 pt-20">
-          <View className="w-20 h-20 bg-cyan-500 rounded-3xl shadow-lg items-center justify-center">
-            <MaterialCommunityIcons name="dumbbell" size={40} color="white" />
+        <View className="items-center gap-4 mb-12 pt-12">
+          <View className="w-[80px] h-[80px] rounded-3xl overflow-hidden shadow-lg">
+            <Logo width={80} height={80} />
           </View>
 
-          <Text className="text-slate-900 text-2xl font-bold tracking-tight">{title}</Text>
+          <Text className="text-slate-900 text-2xl font-bold tracking-tight mt-2">{title}</Text>
 
           <Text className="text-slate-600 text-base font-normal text-center tracking-tight">
             {description}
@@ -89,37 +55,23 @@ export function AuthPageLayout({
           {/* Google Login Button */}
           <Pressable
             onPress={handleGoogleLogin}
-            disabled={isLoading}
             className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
           >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#4285F4" />
-            ) : (
-              <>
-                <AntDesign name="google" size={16} color="#4285F4" />
-                <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-                  Continue with Google
-                </Text>
-              </>
-            )}
+            <AntDesign name="google" size={16} color="#4285F4" />
+            <Text className="text-neutral-950 text-sm font-medium tracking-tight">
+              Continue with Google
+            </Text>
           </Pressable>
 
           {/* Apple Login Button */}
           <Pressable
             onPress={handleAppleLogin}
-            disabled={isLoading}
             className="bg-white border border-gray-200 rounded-2xl h-14 flex-row items-center justify-center gap-3 active:opacity-80 disabled:opacity-50"
           >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#000000" />
-            ) : (
-              <>
-                <AntDesign name="apple" size={16} color="#000000" />
-                <Text className="text-neutral-950 text-sm font-medium tracking-tight">
-                  Continue with Apple
-                </Text>
-              </>
-            )}
+            <AntDesign name="apple" size={16} color="#000000" />
+            <Text className="text-neutral-950 text-sm font-medium tracking-tight">
+              Continue with Apple
+            </Text>
           </Pressable>
         </View>
 

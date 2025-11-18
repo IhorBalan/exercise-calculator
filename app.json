@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "exercise-calculator",
-    "slug": "exercise-calculator",
+    "name": "LiftUp",
+    "slug": "LiftUp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -53,9 +53,9 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#3b82f6",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#3b82f6"
           }
         }
       ]
