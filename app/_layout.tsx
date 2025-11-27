@@ -10,10 +10,10 @@ import 'react-native-reanimated';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import '../global.css';
 
-import { AddTrainingModalProvider } from '@/modules/training/contexts/add-training-modal-context';
-import { useColorScheme } from '@/modules/core/hooks/use-color-scheme';
 import { setupOnlineManager, useAppFocusManager } from '@/lib/react-query-setup';
 import { AuthProvider, useAuth } from '@/modules/auth/context/auth-context';
+import { useColorScheme } from '@/modules/core/hooks/use-color-scheme';
+import { AddTrainingModalProvider } from '@/modules/training/contexts/add-training-modal-context';
 import { queryClient } from '@/store';
 
 export const unstable_settings = {
@@ -69,9 +69,7 @@ function RootLayoutNav() {
         <Stack.Screen
           name="rule-details"
           options={{
-            presentation: 'transparentModal',
             headerShown: false,
-            animation: 'fade',
           }}
         />
         <Stack.Screen name="muscle-details" options={{ headerShown: false }} />

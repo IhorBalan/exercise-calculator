@@ -1,3 +1,4 @@
+import { useKeyboardHeight } from '@/modules/core/hooks/use-keyboard-height';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -5,9 +6,8 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useKeyboardHeight } from '@/modules/core/hooks/use-keyboard-height';
 
 export interface BottomModalProps {
   children: ReactNode;
@@ -18,6 +18,7 @@ export interface BottomModalProps {
   enablePanDownToClose?: boolean;
   enableDismissOnClose?: boolean;
   enableScrollableContent?: boolean;
+  maxDynamicContentSize?: number;
 }
 
 export function BottomModal({
@@ -29,10 +30,12 @@ export function BottomModal({
   enablePanDownToClose = true,
   enableDismissOnClose = true,
   enableScrollableContent = false,
+  maxDynamicContentSize,
 }: BottomModalProps) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const insets = useSafeAreaInsets();
   const keyboardHeight = useKeyboardHeight();
+  const screenHeight = Dimensions.get('window').height;
 
   // Default snap points: 50% and 90% of screen height
   const defaultSnapPoints = useMemo(() => ['50%', '90%'], []);
@@ -70,12 +73,30 @@ export function BottomModal({
     [onClose]
   );
 
+  // Calculate max dynamic content size if provided, otherwise use screen height
+  const calculatedMaxDynamicContentSize = useMemo(() => {
+    if (maxDynamicContentSize !== undefined) {
+      return maxDynamicContentSize;
+    }
+    // If snapPoints are provided and the max is a percentage, calculate it
+    if (snapPoints && snapPoints.length > 0) {
+      const maxSnapPoint = snapPoints[snapPoints.length - 1];
+      if (typeof maxSnapPoint === 'string' && maxSnapPoint.endsWith('%')) {
+        const percentage = parseFloat(maxSnapPoint) / 100;
+        return screenHeight * percentage;
+      }
+    }
+    return undefined;
+  }, [maxDynamicContentSize, snapPoints, screenHeight]);
+
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
       snapPoints={snapPoints || defaultSnapPoints}
       onChange={handleSheetChanges}
       enablePanDownToClose={enablePanDownToClose}
+      enableOverDrag={false}
+      maxDynamicContentSize={calculatedMaxDynamicContentSize}
       backdropComponent={renderBackdrop}
       backgroundStyle={styles.background}
       handleIndicatorStyle={styles.indicator}
