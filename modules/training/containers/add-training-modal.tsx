@@ -13,12 +13,12 @@ import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training
 import { TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-exercise-query';
 import { TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-muscle-group-query';
 import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-training-records-query';
+import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
 import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { Keyboard, Pressable, Text, View } from 'react-native';
-
 export interface AddWorkoutModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -41,6 +41,36 @@ export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutMod
   const [newTrainingRecordId, setNewTrainingRecordId] = useState<string | null>(null);
   const { data: exercisesList } = useExercisesListQuery(selectedMuscleGroup);
   const trainingCreateMutation = useTrainingCreateMutation();
+  const { data: userProfile } = useUserProfileQuery();
+
+  const selectedExerciseData = useMemo(() => {
+    return exercisesList?.find(exercise => exercise.id === selectedExercise) || null;
+  }, [selectedExercise, exercisesList]);
+
+  const weightFieldConfig = useMemo(() => {
+    switch (selectedExerciseData?.type) {
+      case 'BODYWEIGHT_EXERCISE':
+        return {
+          editable: true,
+          info: 'Bodyweight exercise. Set your own weight by defult. You can change it if you are using a weightlifting belt or other equipment.',
+        };
+      case 'EQUIPMENT_EXERCISE':
+        return {
+          editable: true,
+        };
+    }
+
+    return {
+      editable: false,
+    };
+  }, [selectedExerciseData]);
+
+  useEffect(() => {
+    if (userProfile && selectedExerciseData?.type === 'BODYWEIGHT_EXERCISE') {
+      console.log('userProfile', userProfile);
+      setWeight(userProfile.weight?.toString() || '0');
+    }
+  }, [userProfile, selectedExerciseData]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -164,6 +194,8 @@ export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutMod
             value={weight}
             onChangeText={setWeight}
             keyboardType="numeric"
+            editable={weightFieldConfig.editable}
+            helperText={weightFieldConfig.info}
             placeholder="50"
             returnKeyType="done"
             onSubmitEditing={dismissKeyboard}

@@ -5,4 +5,5 @@ export type Exercise = {
   description: string;
   image?: string;
   instructions?: string;
+  type: 'BODYWEIGHT_EXERCISE' | 'EQUIPMENT_EXERCISE';
 };

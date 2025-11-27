@@ -21,6 +21,7 @@ export function Input({
   className = '',
   containerClassName = '',
   variant = 'default',
+  editable = true,
   ...textInputProps
 }: InputProps) {
   const isLight = variant === 'light';
@@ -33,10 +34,11 @@ export function Input({
       <View
         className={`relative h-14 gap-3 rounded-2xl px-4 text-base text-neutral-950 tracking-tight flex-row items-center ${
           isLight ? 'bg-white border border-gray-200' : 'bg-gray-100'
-        } ${error ? 'border-red-400' : ''}`}
+        } ${error ? 'border-red-400' : ''} ${editable ? '' : 'opacity-50'}`}
       >
         {leftElement && <View className="justify-center z-10">{leftElement}</View>}
         <TextInput
+          editable={editable}
           placeholderTextColor="#717182"
           style={{
             flex: 1,
