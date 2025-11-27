@@ -4,11 +4,13 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import { Button } from '@/modules/core/components/button';
 import { Input } from '@/modules/core/components/input';
+import { useToast } from '@/modules/core/components/toast-container';
 import { AuthPageLayout } from '@/modules/auth/components/auth-page-layout';
 import { useSignInWithEmailAndPassword } from '@/modules/auth/hooks/use-sign-in-with-email-and-password';
 
 export default function LoginScreen() {
   const signInWithEmailAndPasswordMutation = useSignInWithEmailAndPassword();
+  const { showToast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -56,8 +58,43 @@ export default function LoginScreen() {
         onSuccess: () => {
           console.log('success');
         },
-        onError: error => {
+        onError: (error: any) => {
           console.error('Email login error:', error);
+
+          // Map Firebase auth errors to user-friendly messages
+          let errorMessage = 'Invalid email or password. Please try again.';
+
+          if (error?.code) {
+            switch (error.code) {
+              case 'auth/invalid-email':
+                errorMessage = 'Invalid email address. Please check your email and try again.';
+                break;
+              case 'auth/user-disabled':
+                errorMessage = 'This account has been disabled. Please contact support.';
+                break;
+              case 'auth/user-not-found':
+                errorMessage = 'No account found with this email. Please sign up first.';
+                break;
+              case 'auth/wrong-password':
+                errorMessage = 'Incorrect password. Please try again.';
+                break;
+              case 'auth/invalid-credential':
+                errorMessage = 'Invalid email or password. Please check your credentials.';
+                break;
+              case 'auth/too-many-requests':
+                errorMessage = 'Too many failed attempts. Please try again later.';
+                break;
+              case 'auth/network-request-failed':
+                errorMessage = 'Network error. Please check your connection and try again.';
+                break;
+              default:
+                errorMessage = error?.message || 'Invalid email or password. Please try again.';
+            }
+          } else if (error?.message) {
+            errorMessage = error.message;
+          }
+
+          showToast(errorMessage, 'error');
         },
       }
     );

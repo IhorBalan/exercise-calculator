@@ -12,6 +12,7 @@ import '../global.css';
 
 import { setupOnlineManager, useAppFocusManager } from '@/lib/react-query-setup';
 import { AuthProvider, useAuth } from '@/modules/auth/context/auth-context';
+import { ToastProvider } from '@/modules/core/components/toast-container';
 import { useColorScheme } from '@/modules/core/hooks/use-color-scheme';
 import { AddTrainingModalProvider } from '@/modules/training/contexts/add-training-modal-context';
 import { queryClient } from '@/store';
@@ -86,11 +87,13 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <BottomSheetModalProvider>
-            <AuthProvider>
-              <AddTrainingModalProvider>
-                <RootLayoutNav />
-              </AddTrainingModalProvider>
-            </AuthProvider>
+            <ToastProvider>
+              <AuthProvider>
+                <AddTrainingModalProvider>
+                  <RootLayoutNav />
+                </AddTrainingModalProvider>
+              </AuthProvider>
+            </ToastProvider>
           </BottomSheetModalProvider>
         </QueryClientProvider>
       </SafeAreaProvider>

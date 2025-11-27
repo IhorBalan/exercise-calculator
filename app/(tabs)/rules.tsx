@@ -1,9 +1,10 @@
 import { Button } from '@/modules/core/components/button';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { ScrollView, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { ProgressionRuleInfoModal } from '@/app/progression-rule-info-modal';
 import { MuscleGroupRuleCard } from '@/modules/muscle-group/components/muscle-group-rule-card';
 
 // Muscle group progression rules data
@@ -24,6 +25,7 @@ export default function RulesScreen() {
   const [deloadWeek, setDeloadWeek] = useState(true);
   const [restDays, setRestDays] = useState(true);
   const [autoSuggest, setAutoSuggest] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
   return (
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
@@ -36,14 +38,28 @@ export default function RulesScreen() {
             Customize your progressive overload strategy
           </Text>
         </View>
-
-        <View className="mx-4 p-4 bg-blue-100 border border-blue-100 rounded-2xl flex-row gap-3">
-          <Ionicons name="information-circle" size={20} color="#3b82f6" />
-          <Text className="flex-1 text-blue-600 text-sm leading-5 tracking-tight">
-            Progressive overload is key to building strength. Set your weekly rep increases, weight
-            thresholds, and progression priorities.
-          </Text>
-        </View>
+        <Pressable onPress={() => setIsInfoModalOpen(true)}>
+          <View className="mx-4 p-4 bg-white rounded-2xl shadow-sm gap-4">
+            <View className="flex-row gap-4 items-center">
+              <View className="w-12 h-12 bg-blue-50 rounded-2xl items-center justify-center">
+                <Ionicons name="information-circle-outline" size={24} color="#3b82f6" />
+              </View>
+              <View className="flex-1 gap-2">
+                <Text className="text-slate-800 text-sm leading-5 tracking-tight font-regular">
+                  Set simple rules that tell you when to add more reps and when to increase weight.
+                </Text>
+                {/* <Button
+                variant="outline"
+                size="sm"
+                onPress={() => setIsInfoModalOpen(true)}
+                className="self-start border-slate-200"
+              >
+                More info
+              </Button> */}
+              </View>
+            </View>
+          </View>
+        </Pressable>
 
         <View className="px-4 mt-8">
           <View className="flex-row items-center justify-between mb-4">
@@ -137,6 +153,12 @@ export default function RulesScreen() {
         {/* Bottom spacing */}
         <View className="h-6" />
       </ScrollView>
+
+      {/* Progression Rule Info Modal */}
+      <ProgressionRuleInfoModal
+        isOpen={isInfoModalOpen}
+        onClose={() => setIsInfoModalOpen(false)}
+      />
     </SafeAreaView>
   );
 }

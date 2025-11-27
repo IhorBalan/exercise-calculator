@@ -17,7 +17,7 @@ export function ProgressionRuleInfoModal({ isOpen, onClose }: ProgressionRuleInf
       snapPoints={['90%']}
       enableScrollableContent
     >
-      <View className="gap-6 pb-10">
+      <View className="gap-6 pb-4">
         {/* Introduction */}
         <View className="flex-row items-center pb-6 border-b border-slate-200">
           <Text className="text-slate-700 text-sm text-center leading-5 tracking-tight">
