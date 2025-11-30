@@ -1,3 +1,4 @@
+import { useExerciseByIdQuery } from '@/modules/exercise/hooks/use-exercise-by-id-query';
 import { WorkoutTimer } from '@/modules/training/containers/workout-timer';
 import { WorkoutTimerDetails } from '@/modules/training/containers/workout-timer-details';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,6 +20,8 @@ export default function WorkoutProcessScreen() {
     muscleGroup: string;
     exercise: string;
   } | null>(null);
+
+  const { data: exercise } = useExerciseByIdQuery(workoutDetails?.exercise || '');
 
   const step = useMemo(() => {
     return !!workoutDetails ? 'timer' : 'details';
@@ -64,7 +67,7 @@ export default function WorkoutProcessScreen() {
           <Text
             className={`text-lg font-semibold tracking-tight ${isDark ? 'text-slate-300' : 'text-slate-900'}`}
           >
-            {step === 'details' ? 'Workout Timer' : 'Push Up'}
+            {step === 'details' ? 'Workout Timer' : exercise?.name}
           </Text>
           {step === 'details' && (
             <Pressable
@@ -76,7 +79,12 @@ export default function WorkoutProcessScreen() {
           )}
         </View>
         {step === 'details' && <WorkoutTimerDetails onSubmit={setWorkoutDetails} />}
-        {step === 'timer' && <WorkoutTimer />}
+        {step === 'timer' && workoutDetails && (
+          <WorkoutTimer
+            muscleGroupId={workoutDetails.muscleGroup}
+            exerciseId={workoutDetails.exercise}
+          />
+        )}
       </SafeAreaView>
     </Animated.View>
   );

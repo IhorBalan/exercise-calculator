@@ -1,4 +1,12 @@
 import { Button } from '@/modules/core/components/button';
+import { MUSCLE_GROUP_LIST_QUERY_KEY } from '@/modules/muscle-group/hooks/use-muscle-group-list-query';
+import { useTrainingByIdQuery } from '@/modules/training/hooks/use-training-by-id-query';
+import { TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-exercise-query';
+import { TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-muscle-group-query';
+import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-training-records-query';
+import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
+import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
+import { queryClient } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -28,27 +36,50 @@ const motivationalMessages = [
 export default function WorkoutTimerSummaryScreen() {
   const params = useLocalSearchParams();
   const navigation = useNavigation();
-  const completedSessions = params.completedSessions
-    ? JSON.parse(params.completedSessions as string)
-    : [];
-  const totalDuration = params.totalDuration ? Number(params.totalDuration) : 0;
+  const trainingId = params.trainingId as string;
+
+  const { data: training } = useTrainingByIdQuery(trainingId || '6E6CaZKTzTKFXYKF5Bnh');
+
+  const stats = useMemo(() => {
+    if (!training) return [];
+
+    return [
+      {
+        label: 'Volume',
+        value: getTrainingVolume(training) + ' kg',
+        icon: 'barbell-outline',
+      },
+      {
+        label: 'Completed Sessions',
+        value: training.sessions?.length || 0,
+        icon: 'time-outline',
+      },
+      {
+        label: 'Total Reps',
+        value: training.sessions?.reduce((acc, session) => acc + session.reps, 0) || 0,
+        icon: 'repeat-outline',
+      },
+      {
+        label: 'Avg Weight per Rep',
+        value:
+          (getTrainingVolume(training) /
+            (training.sessions?.reduce((acc, session) => acc + session.reps, 0) || 1) || 0) + ' kg',
+        icon: 'trending-up-outline',
+      },
+    ];
+  }, [training]);
 
   const randomMessage = useMemo(() => {
     return motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
   }, []);
 
-  const formattedDuration = useMemo(() => {
-    const hours = Math.floor(totalDuration / 3600);
-    const minutes = Math.floor((totalDuration % 3600) / 60);
-    const seconds = totalDuration % 60;
-
-    if (hours > 0) {
-      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }, [totalDuration]);
-
   const handleGoHome = () => {
+    queryClient.invalidateQueries({ queryKey: [WEEKLY_VOLUME_QUERY_KEY] });
+    queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY] });
+    queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY] });
+    queryClient.invalidateQueries({ queryKey: [MUSCLE_GROUP_LIST_QUERY_KEY] });
+    queryClient.invalidateQueries({ queryKey: [TRAINING_RECORDS_QUERY_KEY] });
+
     navigation.reset({
       index: 0,
       routes: [{ name: '(tabs)' as never }],
@@ -76,69 +107,29 @@ export default function WorkoutTimerSummaryScreen() {
           {/* Summary Stats */}
           <View className="bg-white rounded-2xl shadow-sm p-6 mb-6">
             <View className="gap-4">
-              <View className="flex-row items-center justify-between pb-4 border-b border-slate-100">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 bg-blue-50 rounded-xl items-center justify-center">
-                    <Ionicons name="time-outline" size={20} color="#3b82f6" />
+              {stats.map((stat, index) => (
+                <View
+                  key={index}
+                  className="flex-row items-center justify-between pb-4 border-b border-slate-100"
+                >
+                  <View className="flex-row items-center gap-3">
+                    <View className="w-10 h-10 bg-blue-50 rounded-xl items-center justify-center">
+                      <Ionicons name={stat.icon as any} size={20} color="#3b82f6" />
+                    </View>
+                    <Text className="text-slate-600 text-base font-regular tracking-tight">
+                      {stat.label}
+                    </Text>
                   </View>
-                  <Text className="text-slate-600 text-base font-regular tracking-tight">
-                    Total Time
+                  <Text className="text-slate-900 text-lg font-medium tracking-tight">
+                    {stat.value}
                   </Text>
                 </View>
-                <Text className="text-slate-900 text-lg font-medium tracking-tight">
-                  {formattedDuration}
-                </Text>
-              </View>
-
-              <View className="flex-row items-center justify-between pb-4 border-b border-slate-100">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 bg-purple-50 rounded-xl items-center justify-center">
-                    <Ionicons name="repeat-outline" size={20} color="#a855f7" />
-                  </View>
-                  <Text className="text-slate-600 text-base font-regular tracking-tight">
-                    Sessions Completed
-                  </Text>
-                </View>
-                <Text className="text-slate-900 text-lg font-medium tracking-tight">
-                  {completedSessions.length}
-                </Text>
-              </View>
-
-              <View className="flex-row items-center justify-between pb-4 border-b border-slate-100">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 bg-green-50 rounded-xl items-center justify-center">
-                    <Ionicons name="barbell-outline" size={20} color="#22c55e" />
-                  </View>
-                  <Text className="text-slate-600 text-base font-regular tracking-tight">
-                    Weight
-                  </Text>
-                </View>
-                <Text className="text-slate-900 text-lg font-medium tracking-tight">100 kg</Text>
-              </View>
-              <View className="flex-row items-center justify-between">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 bg-amber-50 rounded-xl items-center justify-center">
-                    <Ionicons name="trending-up-outline" size={20} color="#f59e0b" />
-                  </View>
-                  <Text className="text-slate-600 text-base font-regular tracking-tight">
-                    Volume
-                  </Text>
-                </View>
-                <Text className="text-slate-900 text-lg font-medium tracking-tight">100 kg</Text>
-              </View>
+              ))}
             </View>
+            <Button variant="primary" size="md" fullWidth onPress={handleGoHome} className="mt-10">
+              Done
+            </Button>
           </View>
-
-          {/* Action Button */}
-          <Button
-            variant="primary"
-            size="md"
-            fullWidth
-            onPress={handleGoHome}
-            className="mb-6 mt-6"
-          >
-            Done
-          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>

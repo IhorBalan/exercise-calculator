@@ -172,7 +172,7 @@ export default function AddTrainingScreen() {
     trainingCreateMutation.mutate(
       {
         muscleGroupId: data.muscleGroupId,
-        exercienseId: data.exerciseId,
+        exerciseId: data.exerciseId,
         sessions: data.sessions.map(session => ({
           id: v4(),
           weight: parseFloat(session.weight),

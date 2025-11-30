@@ -92,7 +92,7 @@ export const getTrainingHistoryByMuscleGroupId = async (
   for (let index = 0; index < trainings.length; index++) {
     const training = trainings[index];
 
-    const exercise = await getExerciseById(training.exercienseId);
+    const exercise = await getExerciseById(training.exerciseId);
 
     if (exercise) {
       result.push({ ...training, exercise });
@@ -115,7 +115,7 @@ export const getTrainingHistoryOfExerciseQuery = async (
   const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
   const q = query(
     trainingRef,
-    where('exercienseId', '==', exerciseId),
+    where('exerciseId', '==', exerciseId),
     where('userId', '==', user.uid)
   );
 
@@ -133,19 +133,19 @@ export const getTrainingRecordsByMuscleGroupId = async (
   for (let index = 0; index < trainings.length; index++) {
     const training = trainings[index];
 
-    if (records[training.exercienseId]) {
-      if (getTrainingVolume(records[training.exercienseId]) < getTrainingVolume(training)) {
-        records[training.exercienseId] = training;
+    if (records[training.exerciseId]) {
+      if (getTrainingVolume(records[training.exerciseId]) < getTrainingVolume(training)) {
+        records[training.exerciseId] = training;
       }
     } else {
-      records[training.exercienseId] = training;
+      records[training.exerciseId] = training;
     }
   }
 
   const result: (Training & { exercise: Exercise })[] = [];
 
   for (const record of Object.values(records)) {
-    const exercise = await getExerciseById(record.exercienseId);
+    const exercise = await getExerciseById(record.exerciseId);
 
     if (exercise) {
       result.push({ ...record, exercise });
@@ -201,7 +201,7 @@ export const getTrainingsByExerciseId = async (exerciseId: string): Promise<Trai
   const trainingRef = collection(firestore, COLLECTIONS.TRAININGS);
   const q = query(
     trainingRef,
-    where('exercienseId', '==', exerciseId),
+    where('exerciseId', '==', exerciseId),
     where('userId', '==', user.uid)
   );
   const snapshot = await getDocs(q);
@@ -212,7 +212,7 @@ export const getTrainingsByExerciseId = async (exerciseId: string): Promise<Trai
 export const isNewRecord = async (
   newTraining: Omit<Training, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
 ): Promise<boolean> => {
-  const existingTrainings = await getTrainingsByExerciseId(newTraining.exercienseId);
+  const existingTrainings = await getTrainingsByExerciseId(newTraining.exerciseId);
   const newVolume = getTrainingVolume(newTraining as Training);
 
   if (existingTrainings.length === 0) {
@@ -247,7 +247,7 @@ export const getIsTrainingRecord = async (trainingId: string): Promise<boolean> 
 
   const trainingsQuery = query(
     trainingCollectionRef,
-    where('exercienseId', '==', training.exercienseId),
+    where('exerciseId', '==', training.exerciseId),
     where('userId', '==', user.uid)
   );
   const snapshot = await getDocs(trainingsQuery);

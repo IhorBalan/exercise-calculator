@@ -4,7 +4,7 @@ import { Text, TextInput, TextInputProps, View } from 'react-native';
 export interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
-  helperText?: string;
+  helperText?: string | boolean;
   leftElement?: ReactNode;
   rightElement?: ReactNode;
   className?: string;

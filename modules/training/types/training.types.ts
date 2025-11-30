@@ -7,7 +7,7 @@ export type WorkoutSession = {
 export type Training = {
   id: string;
   muscleGroupId: string;
-  exercienseId: string;
+  exerciseId: string;
   sessions?: WorkoutSession[];
   date: string;
   userId: string;

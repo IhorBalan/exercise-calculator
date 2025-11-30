@@ -27,6 +27,11 @@ type CompletedSession = {
   completedAt: number;
 };
 
+type WorkoutTimerProps = {
+  muscleGroupId: string;
+  exerciseId: string;
+};
+
 const useClockTime = () => {
   const [time, setTime] = useState(Date.now());
 
@@ -107,7 +112,7 @@ const AnimatedTimerDisplay = ({ title, formattedTime }: AnimatedTimerDisplayProp
   );
 };
 
-export const WorkoutTimer = () => {
+export const WorkoutTimer = ({ muscleGroupId, exerciseId }: WorkoutTimerProps) => {
   const [completedSessions, setCompletedSessions] = useState<CompletedSession[]>([]);
   const [sessionTime, setSessionTime] = useState(0);
   const [isSessionInProgress, setIsSessionInProgress] = useState(false);
@@ -197,20 +202,21 @@ export const WorkoutTimer = () => {
     } else if (pendingAction === 'finish') {
       trainingCreateMutation.mutate(
         {
-          muscleGroupId: '',
-          exercienseId: '',
-          sets: 0,
-          reps: 0,
-          weight: 0,
+          muscleGroupId,
+          exerciseId,
+          sessions: completedSessions.map(session => ({
+            id: session.id,
+            weight: session.weight,
+            reps: session.reps,
+          })),
           date: new Date().toISOString(),
         },
         {
-          onSuccess: () => {
+          onSuccess: ({ id }) => {
             router.push({
               pathname: '/workout-timer-summary',
               params: {
-                completedSessions: JSON.stringify(completedSessions),
-                totalDuration: Math.floor(totalDuration).toString(),
+                trainingId: id,
               },
             });
           },
@@ -276,6 +282,8 @@ export const WorkoutTimer = () => {
         isOpen={isSessionCompleteModalOpen}
         onClose={() => setIsSessionCompleteModalOpen(false)}
         onSubmit={handleSessionCompleted}
+        sessions={completedSessions}
+        exerciseId={exerciseId}
       />
       {lastCompletedSession && (
         <AnimatedModal
