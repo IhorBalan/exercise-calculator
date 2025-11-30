@@ -1,15 +1,16 @@
-import { useKeyboardHeight } from '@/modules/core/hooks/use-keyboard-height';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
+  BottomSheetModalProps,
   BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
+import { cssInterop } from 'nativewind';
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export interface BottomModalProps {
+export interface BottomModalProps extends BottomSheetModalProps {
   children: ReactNode;
   isOpen: boolean;
   onClose: () => void;
@@ -21,24 +22,25 @@ export interface BottomModalProps {
   maxDynamicContentSize?: number;
 }
 
+cssInterop(BottomSheetModal, {
+  backgroundClassName: 'backgroundStyle',
+  handleIndicatorClassName: 'handleIndicatorStyle',
+});
+
 export function BottomModal({
   children,
   isOpen,
   onClose,
-  snapPoints,
   title,
   enablePanDownToClose = true,
   enableDismissOnClose = true,
   enableScrollableContent = false,
   maxDynamicContentSize,
+  ...props
 }: BottomModalProps) {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const insets = useSafeAreaInsets();
-  const keyboardHeight = useKeyboardHeight();
   const screenHeight = Dimensions.get('window').height;
-
-  // Default snap points: 50% and 90% of screen height
-  const defaultSnapPoints = useMemo(() => ['50%', '90%'], []);
 
   // Handle sheet changes
   const handleSheetChanges = useCallback(
@@ -79,38 +81,35 @@ export function BottomModal({
       return maxDynamicContentSize;
     }
     // If snapPoints are provided and the max is a percentage, calculate it
-    if (snapPoints && snapPoints.length > 0) {
-      const maxSnapPoint = snapPoints[snapPoints.length - 1];
+    if (props.snapPoints && props.snapPoints.length > 0) {
+      const maxSnapPoint = props.snapPoints[props.snapPoints.length - 1];
       if (typeof maxSnapPoint === 'string' && maxSnapPoint.endsWith('%')) {
         const percentage = parseFloat(maxSnapPoint) / 100;
         return screenHeight * percentage;
       }
     }
     return undefined;
-  }, [maxDynamicContentSize, snapPoints, screenHeight]);
+  }, [maxDynamicContentSize, props.snapPoints, screenHeight]);
 
   return (
     <BottomSheetModal
       ref={bottomSheetModalRef}
-      snapPoints={snapPoints || defaultSnapPoints}
       onChange={handleSheetChanges}
       enablePanDownToClose={enablePanDownToClose}
       enableOverDrag={false}
       maxDynamicContentSize={calculatedMaxDynamicContentSize}
       backdropComponent={renderBackdrop}
-      backgroundStyle={styles.background}
-      handleIndicatorStyle={styles.indicator}
+      backgroundClassName={'bg-background-modal rounded-t-3xl'}
+      handleIndicatorClassName={'bg-[#d1d5db] w-10 h-1'}
       keyboardBehavior="interactive"
       keyboardBlurBehavior="restore"
       android_keyboardInputMode="adjustResize"
+      {...props}
     >
       {enableScrollableContent ? (
         <BottomSheetScrollView
           style={styles.scrollContent}
-          contentContainerStyle={[
-            styles.scrollContentContainer,
-            { paddingBottom: insets.bottom + keyboardHeight },
-          ]}
+          contentContainerStyle={[styles.scrollContentContainer, { paddingBottom: insets.bottom }]}
           keyboardShouldPersistTaps="handled"
         >
           {/* Header */}
@@ -141,16 +140,6 @@ export function BottomModal({
 }
 
 const styles = StyleSheet.create({
-  background: {
-    backgroundColor: '#ffffff',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-  },
-  indicator: {
-    backgroundColor: '#d1d5db',
-    width: 40,
-    height: 4,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,

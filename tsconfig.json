@@ -12,6 +12,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts",
-    "svg-env.d.ts"
+    "svg-env.d.ts",
+    "bottom-sheet-env.d.ts"
   ]
 }

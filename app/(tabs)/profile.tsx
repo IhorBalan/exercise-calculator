@@ -5,19 +5,29 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '@/modules/auth/context/auth-context';
+import { useThemeSelector } from '@/modules/core/providers/theme-selector-provider';
+import { ThemeChangeModal } from '@/modules/user/components/theme-change-modal';
 import { useUserGlobalStatsQuery } from '@/modules/user/hooks/use-use-global-stats-query';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 
 const settingsOptions = [
   { icon: 'person-outline', label: 'Edit Profile', color: 'bg-blue-50', iconColor: '#3b82f6' },
   { icon: 'trophy-outline', label: 'Fitness Goals', color: 'bg-purple-50', iconColor: '#a855f7' },
+  {
+    icon: 'color-palette-outline',
+    label: 'Theme',
+    color: 'bg-amber-50',
+    iconColor: '#f59e0b',
+  },
   { icon: 'settings-outline', label: 'Preferences', color: 'bg-slate-50', iconColor: '#64748b' },
 ];
 
 export default function ProfileScreen() {
   const { logout } = useAuth();
+  const { themeMode } = useThemeSelector();
   const { data: userProfile } = useUserProfileQuery();
   const userGlobalStatsQuery = useUserGlobalStatsQuery();
+  const [showThemeModal, setShowThemeModal] = useState(false);
 
   const trainingStats = useMemo(() => {
     const { data: userGlobalStats } = userGlobalStatsQuery;
@@ -73,22 +83,22 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background-page" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-4 pt-8 pb-1 gap-1 relative">
-          <Text className="text-slate-900 text-xl font-medium tracking-tight">Profile</Text>
-          <Text className="text-slate-600 text-base tracking-tight">
+          <Text className="text-accent text-xl font-medium tracking-tight">Profile</Text>
+          <Text className="text-body text-base tracking-tight">
             Manage your account and settings
           </Text>
         </View>
 
         {/* Profile Card */}
-        <View className="mx-4 mt-3 p-6 bg-white rounded-3xl shadow-sm">
+        <View className="mx-4 mt-3 p-6 bg-background rounded-3xl shadow-sm">
           {/* User Info */}
           <View className="flex-row items-center gap-4">
             {/* Avatar */}
-            <View className="w-20 h-20 bg-blue-500 rounded-full border-4 border-blue-100 items-center justify-center">
+            <View className="w-20 h-20 bg-primary rounded-full border-4 border-blue-100 items-center justify-center">
               {userProfile?.image ? (
                 <Text className="text-white text-2xl font-normal">IMG</Text>
               ) : (
@@ -98,10 +108,10 @@ export default function ProfileScreen() {
 
             {/* Name and Email */}
             <View className="flex-1 gap-1">
-              <Text className="text-slate-900 text-lg font-medium tracking-tight">
+              <Text className="text-accent text-lg font-medium tracking-tight">
                 {!displayName || displayName.trim() === '' ? 'User' : displayName}
               </Text>
-              <Text className="text-slate-500 text-base tracking-tight">
+              <Text className="text-body text-base tracking-tight">
                 {userProfile?.email || 'No email'}
               </Text>
             </View>
@@ -110,17 +120,17 @@ export default function ProfileScreen() {
 
         {/* Training Stats Section */}
         <View className="px-4 mt-6">
-          <Text className="text-slate-900 text-base font-medium tracking-tight mb-4">
+          <Text className="text-accent text-base font-medium tracking-tight mb-4">
             Training Stats
           </Text>
 
           <View className="flex-row flex-wrap justify-between gap-y-4">
             {trainingStats.map((stat, index) => (
-              <View key={index} className={'bg-white p-4 w-[48%] rounded-2xl shadow-sm'}>
-                <Text className="text-slate-600 text-sm tracking-tight mb-7">{stat.label}</Text>
-                <Text className="text-slate-900 text-2xl tracking-tight mb-1">{stat.value}</Text>
+              <View key={index} className={'bg-background p-4 w-[48%] rounded-2xl shadow-sm'}>
+                <Text className="text-accent/70 text-sm tracking-tight mb-7">{stat.label}</Text>
+                <Text className="text-accent text-2xl tracking-tight mb-1">{stat.value}</Text>
                 {stat.subtitle && (
-                  <Text className="text-slate-500 text-xs tracking-tight">{stat.subtitle}</Text>
+                  <Text className="text-body text-xs tracking-tight">{stat.subtitle}</Text>
                 )}
               </View>
             ))}
@@ -129,7 +139,7 @@ export default function ProfileScreen() {
 
         {/* Settings Section */}
         <View className="px-4 mt-6">
-          <Text className="text-slate-900 text-base font-medium tracking-tight mb-4">Settings</Text>
+          <Text className="text-accent text-base font-medium tracking-tight mb-4">Settings</Text>
 
           <View className="gap-3">
             {settingsOptions.map((option, index) => (
@@ -138,9 +148,11 @@ export default function ProfileScreen() {
                 onPress={() => {
                   if (option.label === 'Edit Profile') {
                     router.push('/edit-profile');
+                  } else if (option.label === 'Theme') {
+                    setShowThemeModal(true);
                   }
                 }}
-                className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between active:opacity-80"
+                className="bg-background transition-colors p-4 rounded-2xl shadow-sm flex-row items-center justify-between active:opacity-80"
               >
                 <View className="flex-row items-center gap-3">
                   <View
@@ -148,9 +160,14 @@ export default function ProfileScreen() {
                   >
                     <Ionicons name={option.icon as any} size={20} color={option.iconColor} />
                   </View>
-                  <Text className="text-slate-900 text-base tracking-tight">{option.label}</Text>
+                  <Text className="text-accent text-base tracking-tight">{option.label}</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+                <View className="flex-row items-center gap-2">
+                  {option.label === 'Theme' && (
+                    <Text className="text-body text-sm tracking-tight capitalize">{themeMode}</Text>
+                  )}
+                  <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+                </View>
               </Pressable>
             ))}
           </View>
@@ -170,6 +187,9 @@ export default function ProfileScreen() {
           </Pressable>
         </View>
       </ScrollView>
+
+      {/* Theme Selection Modal */}
+      <ThemeChangeModal isOpen={showThemeModal} onClose={() => setShowThemeModal(false)} />
     </SafeAreaView>
   );
 }

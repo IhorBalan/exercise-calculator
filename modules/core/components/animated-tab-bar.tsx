@@ -55,13 +55,10 @@ export function AnimatedTabBar(props: BottomTabBarProps) {
       style={[
         animatedStyle,
         {
-          backgroundColor: '#FFFFFF',
-          borderTopWidth: 1,
-          borderTopColor: '#F3F4F6',
           paddingBottom: insets.bottom,
         },
       ]}
-      className="flex-row items-center justify-around"
+      className="flex-row items-center justify-around bg-background border-t border-divider"
     >
       {props.state.routes.map((route, index) => {
         const { options } = props.descriptors[route.key];

@@ -4,10 +4,10 @@ import React from 'react';
 import { AnimatedTabBar } from '@/modules/core/components/animated-tab-bar';
 import { IconSymbol } from '@/modules/core/components/ui/icon-symbol';
 import { Colors } from '@/modules/core/constants/theme';
-import { useColorScheme } from '@/modules/core/hooks/use-color-scheme';
+import { useThemeSelector } from '@/modules/core/providers/theme-selector-provider';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useThemeSelector();
 
   return (
     <Tabs

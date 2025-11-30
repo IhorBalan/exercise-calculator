@@ -15,7 +15,11 @@ import '../global.css';
 import { setupOnlineManager, useAppFocusManager } from '@/lib/react-query-setup';
 import { AuthProvider, useAuth } from '@/modules/auth/context/auth-context';
 import { ToastProvider } from '@/modules/core/components/toast-container';
-import { useColorScheme } from '@/modules/core/hooks/use-color-scheme';
+import { ThemeWrapper } from '@/modules/core/containers/theme-wrapper';
+import {
+  ThemeSelectorProvider,
+  useThemeSelector,
+} from '@/modules/core/providers/theme-selector-provider';
 import { AddTrainingModalProvider } from '@/modules/training/contexts/add-training-modal-context';
 import { queryClient } from '@/store';
 
@@ -27,7 +31,7 @@ function RootLayoutNav() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useThemeSelector();
 
   // Setup React Query for React Native
   useEffect(() => {
@@ -102,17 +106,21 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <BottomSheetModalProvider>
-            <ToastProvider>
-              <AuthProvider>
-                <AddTrainingModalProvider>
-                  <RootLayoutNav />
-                </AddTrainingModalProvider>
-              </AuthProvider>
-            </ToastProvider>
-          </BottomSheetModalProvider>
-        </QueryClientProvider>
+        <ThemeSelectorProvider>
+          <QueryClientProvider client={queryClient}>
+            <BottomSheetModalProvider>
+              <ToastProvider>
+                <AuthProvider>
+                  <AddTrainingModalProvider>
+                    <ThemeWrapper name="default">
+                      <RootLayoutNav />
+                    </ThemeWrapper>
+                  </AddTrainingModalProvider>
+                </AuthProvider>
+              </ToastProvider>
+            </BottomSheetModalProvider>
+          </QueryClientProvider>
+        </ThemeSelectorProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
