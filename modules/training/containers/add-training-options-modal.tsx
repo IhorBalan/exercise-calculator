@@ -23,9 +23,7 @@ export const AddTrainingOptionsModal = ({ isOpen, onClose }: AddTrainingOptionsM
             <View className="w-10 h-10 bg-blue-50 rounded-xl items-center justify-center">
               <Ionicons name="barbell-outline" size={20} color="#3b82f6" />
             </View>
-            <Text className="text-slate-900 text-base font-medium tracking-tight">
-              Start Workout
-            </Text>
+            <Text className="text-slate-900 text-lg font-medium tracking-tight">Start Workout</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
         </Pressable>
@@ -41,7 +39,7 @@ export const AddTrainingOptionsModal = ({ isOpen, onClose }: AddTrainingOptionsM
             <View className="w-10 h-10 bg-purple-50 rounded-xl items-center justify-center">
               <Ionicons name="flash-outline" size={20} color="#a855f7" />
             </View>
-            <Text className="text-slate-900 text-base font-medium tracking-tight">Quick Add</Text>
+            <Text className="text-slate-900 text-lg font-medium tracking-tight">Quick Add</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
         </Pressable>

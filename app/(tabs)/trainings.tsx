@@ -86,7 +86,9 @@ export default function TrainingsScreen() {
         {/* Training List */}
         <View className="px-4 pb-6 gap-3">
           {trainings.length > 0 ? (
-            trainings.map(training => <TrainingCard key={training.id} training={training} />)
+            trainings
+              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+              .map(training => <TrainingCard key={training.id} training={training} />)
           ) : (
             <View className=" p-8 rounded-2xl items-center">
               <Ionicons name="fitness-outline" size={48} color="#cbd5e1" />

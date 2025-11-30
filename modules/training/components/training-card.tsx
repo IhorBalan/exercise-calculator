@@ -68,22 +68,20 @@ export const TrainingCard = ({ training }: TrainingCardProps) => {
       <View className="px-4 pt-4 pb-3">
         <View className="flex-row items-center justify-between mb-2">
           <View className="flex-row items-center gap-3 flex-1">
-            <View
-              className={`w-10 h-10 ${muscleGroupColor} rounded-xl items-center justify-center`}
-            >
-              <Text className="text-lg">{exercise.muscleGroup.emoji}</Text>
-            </View>
             <View className="flex-1">
               <Text
-                className="text-slate-900 text-base font-semibold tracking-tight"
+                className="text-slate-900 text-base font-medium tracking-tight"
                 numberOfLines={1}
               >
                 {exercise.name}
               </Text>
-              <Text className="text-slate-500 text-xs tracking-tight mt-0.5">
-                {exercise.muscleGroup.name}
-              </Text>
             </View>
+          </View>
+          <View className="flex-row items-center gap-1.5">
+            <Ionicons name="time-outline" size={14} color="#94a3b8" />
+            <Text className="text-slate-500 text-xs tracking-tight">
+              {format(new Date(training.date), 'h:mm a')}
+            </Text>
           </View>
         </View>
       </View>
@@ -95,7 +93,7 @@ export const TrainingCard = ({ training }: TrainingCardProps) => {
                 <Ionicons name="layers-outline" size={14} color="#64748b" />
                 <Text className="text-slate-500 text-xs tracking-tight">Sessions</Text>
               </View>
-              <Text className="text-slate-900 text-lg font-semibold tracking-tight">
+              <Text className="text-slate-900 text-lg font-medium tracking-tight">
                 {trainingStats.sessionsCount}
               </Text>
             </View>
@@ -104,7 +102,7 @@ export const TrainingCard = ({ training }: TrainingCardProps) => {
                 <Ionicons name="repeat-outline" size={14} color="#64748b" />
                 <Text className="text-slate-500 text-xs tracking-tight">Reps</Text>
               </View>
-              <Text className="text-slate-900 text-lg font-semibold tracking-tight">
+              <Text className="text-slate-900 text-lg font-medium tracking-tight">
                 {trainingStats.totalReps}
               </Text>
             </View>
@@ -113,21 +111,10 @@ export const TrainingCard = ({ training }: TrainingCardProps) => {
                 <Ionicons name="barbell-outline" size={14} color="#64748b" />
                 <Text className="text-slate-500 text-xs tracking-tight">Volume</Text>
               </View>
-              <Text className="text-slate-900 text-lg font-semibold tracking-tight">
+              <Text className="text-slate-900 text-lg font-medium tracking-tight">
                 {trainingStats.totalVolume} kg
               </Text>
             </View>
-          </View>
-        </View>
-      </View>
-
-      <View className="px-4 pb-3">
-        <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-1.5">
-            <Ionicons name="time-outline" size={14} color="#94a3b8" />
-            <Text className="text-slate-500 text-xs tracking-tight">
-              {format(new Date(training.date), 'h:mm a')}
-            </Text>
           </View>
         </View>
       </View>

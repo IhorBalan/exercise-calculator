@@ -128,26 +128,6 @@ export default function ExerciseDetailsScreen() {
           </View>
         </View>
       </ScrollView>
-      {/* <BottomFixedContent>
-        <View className="flex-row gap-3">
-          <Button
-            variant="primary"
-            size="md"
-            className="flex-1"
-            onPress={() => {
-              router.push({
-                pathname: '/add-training',
-                params: {
-                  exerciseId,
-                  muscleGroupId: exercise.muscleGroupId,
-                },
-              });
-            }}
-          >
-            Add Training
-          </Button>
-        </View>
-      </BottomFixedContent> */}
     </SafeAreaView>
   );
 }

@@ -3,6 +3,7 @@ import { MUSCLE_GROUP_LIST_QUERY_KEY } from '@/modules/muscle-group/hooks/use-mu
 import { useTrainingByIdQuery } from '@/modules/training/hooks/use-training-by-id-query';
 import { TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-exercise-query';
 import { TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-muscle-group-query';
+import { TRAINING_LIST_QUERY_KEY } from '@/modules/training/hooks/use-training-list-query';
 import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-training-records-query';
 import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
 import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
@@ -77,6 +78,7 @@ export default function WorkoutTimerSummaryScreen() {
     queryClient.invalidateQueries({ queryKey: [WEEKLY_VOLUME_QUERY_KEY] });
     queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY] });
     queryClient.invalidateQueries({ queryKey: [TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY] });
+    queryClient.invalidateQueries({ queryKey: [TRAINING_LIST_QUERY_KEY] });
     queryClient.invalidateQueries({ queryKey: [MUSCLE_GROUP_LIST_QUERY_KEY] });
     queryClient.invalidateQueries({ queryKey: [TRAINING_RECORDS_QUERY_KEY] });
 

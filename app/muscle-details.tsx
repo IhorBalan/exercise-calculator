@@ -3,7 +3,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button } from '@/modules/core/components/button';
 import { PersonalRecordsContainer } from '@/modules/muscle-group/containers/personal-records-container';
 import { WorkoutHistoryContainer } from '@/modules/training/containers/training-history-of-muscle-group-container';
 import { WeeklyMuscleVolumeChart } from '@/modules/volume/containers/weekly-muscle-volume-chart';
@@ -43,26 +42,6 @@ export default function MuscleDetailsScreen() {
           <WorkoutHistoryContainer muscleGroupId={muscleGroupId} />
         </View>
       </ScrollView>
-
-      {/* Fixed Bottom Button */}
-      <View className="absolute bottom-0 left-0 right-0 px-4 pt-4 pb-10 bg-white shadow-sm border-t border-gray-100">
-        <Button
-          variant="primary"
-          size="md"
-          fullWidth
-          className="rounded-2xl"
-          onPress={() => {
-            router.push({
-              pathname: '/add-training',
-              params: {
-                muscleGroupId,
-              },
-            });
-          }}
-        >
-          Add Training
-        </Button>
-      </View>
     </SafeAreaView>
   );
 }

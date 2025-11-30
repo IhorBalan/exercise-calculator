@@ -1,4 +1,3 @@
-import { Button } from '@/modules/core/components/button';
 import { WorkoutHistoryEmptyState } from '@/modules/training/components/workout-history-empty-state';
 import { Training } from '@/modules/training/types/training.types';
 import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
@@ -33,15 +32,6 @@ export function TrainingHistoryOfExerciseContainer({ exerciseId }: { exerciseId:
         <Text className="text-slate-900 text-base font-medium tracking-tight">
           Training History
         </Text>
-
-        <Button
-          variant="secondary"
-          size="sm"
-          startAdornment={<Ionicons name="add" size={16} color="black" />}
-          onPress={() => {}}
-        >
-          Add Training
-        </Button>
       </View>
 
       {isLoading ? (
