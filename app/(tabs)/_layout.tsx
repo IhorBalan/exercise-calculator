@@ -1,8 +1,8 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { AnimatedTabBar } from '@/modules/core/components/animated-tab-bar';
-import { IconSymbol } from '@/modules/core/components/ui/icon-symbol';
 import { Colors } from '@/modules/core/constants/theme';
 import { useThemeSelector } from '@/modules/core/providers/theme-selector-provider';
 
@@ -22,35 +22,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="trainings"
         options={{
           title: 'Trainings',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="dumbbell.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="barbell" size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
           title: 'Search',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="magnifyingglass" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="body" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="rules"
         options={{
           title: 'Rules',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chart.bar.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="stats-chart" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
         }}
       />
     </Tabs>
