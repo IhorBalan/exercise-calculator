@@ -1,5 +1,6 @@
 import { BottomModal } from '@/modules/core/components/bottom-modal';
 import { Button } from '@/modules/core/components/button';
+import { Counter } from '@/modules/core/components/counter';
 import { Dropdown, type DropdownOption } from '@/modules/core/components/dropdown';
 import { Input } from '@/modules/core/components/input';
 import { useExercisesListQuery } from '@/modules/exercise/hooks/use-exercises-list-query';
@@ -15,10 +16,9 @@ import { TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY } from '@/modules/training/h
 import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-training-records-query';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
-import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
-import { Keyboard, Pressable, Text, View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 export interface AddWorkoutModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -200,46 +200,20 @@ export function AddWorkoutModal({ isOpen, onClose, frozenFields }: AddWorkoutMod
             returnKeyType="done"
             onSubmitEditing={dismissKeyboard}
           />
-          <View className="gap-2">
-            <Text className="text-neutral-950 text-sm font-medium tracking-tight">Reps</Text>
-            <View className="flex-row items-center gap-2">
-              <Pressable
-                onPress={() => reps > 1 && setReps(reps - 1)}
-                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-              >
-                <Ionicons name="remove" size={16} color="#000000" />
-              </Pressable>
-              <View className="flex-1 bg-gray-100 rounded-xl h-12 items-center justify-center">
-                <Text className="text-neutral-950 text-base tracking-tight">{reps}</Text>
-              </View>
-              <Pressable
-                onPress={() => setReps(reps + 1)}
-                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-              >
-                <Ionicons name="add" size={16} color="#000000" />
-              </Pressable>
-            </View>
-          </View>
-          <View className="gap-2">
-            <Text className="text-neutral-950 text-sm font-medium tracking-tight">Sets</Text>
-            <View className="flex-row items-center gap-2">
-              <Pressable
-                onPress={() => sets > 1 && setSets(sets - 1)}
-                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-              >
-                <Ionicons name="remove" size={16} color="#000000" />
-              </Pressable>
-              <View className="flex-1 bg-gray-100 rounded-xl h-12 items-center justify-center">
-                <Text className="text-neutral-950 text-base tracking-tight">{sets}</Text>
-              </View>
-              <Pressable
-                onPress={() => setSets(sets + 1)}
-                className="bg-white border border-black/10 rounded-xl w-12 h-12 items-center justify-center active:bg-gray-50"
-              >
-                <Ionicons name="add" size={16} color="#000000" />
-              </Pressable>
-            </View>
-          </View>
+          <Counter
+            label="Reps"
+            value={reps}
+            onIncrement={() => setReps(reps + 1)}
+            onDecrement={() => setReps(reps - 1)}
+            min={1}
+          />
+          <Counter
+            label="Sets"
+            value={sets}
+            onIncrement={() => setSets(sets + 1)}
+            onDecrement={() => setSets(sets - 1)}
+            min={1}
+          />
         </View>
         <View className="flex-row gap-3 pt-10 pb-4">
           <Button variant="outline" size="md" className="flex-1" onPress={handleClose}>

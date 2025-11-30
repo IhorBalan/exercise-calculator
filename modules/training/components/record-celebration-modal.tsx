@@ -53,16 +53,19 @@ export function RecordCelebrationModal({
             </View>
             <View className="w-px h-10 bg-slate-200" />
             <View className="items-center gap-1">
-              <Text className="text-slate-500 text-sm tracking-tight">Weight</Text>
+              <Text className="text-slate-500 text-sm tracking-tight">Sessions</Text>
               <Text className="text-slate-900 text-xl font-medium tracking-tight">
-                {training?.weight} kg
+                {training?.sessions?.length}
               </Text>
             </View>
             <View className="w-px h-10 bg-slate-200" />
             <View className="items-center gap-1">
-              <Text className="text-slate-500 text-sm tracking-tight">Sets × Reps</Text>
+              <Text className="text-slate-500 text-sm tracking-tight">Reps × Avg Weight</Text>
               <Text className="text-slate-900 text-xl font-medium tracking-tight">
-                {training?.sets} × {training?.reps}
+                {training?.sessions?.reduce((acc, session) => acc + session.reps, 0)} ×{' '}
+                {training?.sessions?.reduce((acc, session) => acc + session.weight, 0) ||
+                  0 / (training?.sessions?.length || 1)}{' '}
+                kg
               </Text>
             </View>
           </View>

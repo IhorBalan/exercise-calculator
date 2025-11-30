@@ -1,12 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/modules/core/components/button';
 import { PersonalRecordsContainer } from '@/modules/muscle-group/containers/personal-records-container';
-import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
 import { WorkoutHistoryContainer } from '@/modules/training/containers/training-history-of-muscle-group-container';
 import { WeeklyMuscleVolumeChart } from '@/modules/volume/containers/weekly-muscle-volume-chart';
 
@@ -14,8 +12,6 @@ export default function MuscleDetailsScreen() {
   const params = useLocalSearchParams();
   const muscleName = (params.name as string) || 'Chest';
   const muscleGroupId = (params.id as string) || '';
-
-  const [isAddWorkoutOpen, setIsAddWorkoutOpen] = useState(false);
 
   return (
     <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
@@ -55,18 +51,18 @@ export default function MuscleDetailsScreen() {
           size="md"
           fullWidth
           className="rounded-2xl"
-          onPress={() => setIsAddWorkoutOpen(true)}
+          onPress={() => {
+            router.push({
+              pathname: '/add-training',
+              params: {
+                muscleGroupId,
+              },
+            });
+          }}
         >
           Add Training
         </Button>
       </View>
-
-      {/* Add Workout Modal */}
-      <AddWorkoutModal
-        isOpen={isAddWorkoutOpen}
-        onClose={() => setIsAddWorkoutOpen(false)}
-        frozenFields={{ muscleGroupId }}
-      />
     </SafeAreaView>
   );
 }

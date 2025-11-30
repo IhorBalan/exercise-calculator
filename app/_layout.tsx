@@ -1,3 +1,5 @@
+import 'react-native-get-random-values';
+
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -75,6 +77,21 @@ function RootLayoutNav() {
         />
         <Stack.Screen name="muscle-details" options={{ headerShown: false }} />
         <Stack.Screen name="exercise-details" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="workout-process"
+          options={{
+            headerShown: false,
+            presentation: 'containedModal',
+          }}
+        />
+        <Stack.Screen
+          name="workout-timer-summary"
+          options={{ headerShown: false, presentation: 'containedModal' }}
+        />
+        <Stack.Screen
+          name="add-training"
+          options={{ headerShown: false, presentation: 'containedModal' }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

@@ -1,7 +1,11 @@
 import type { Training } from '@/modules/training/types/training.types';
 
 export const getTrainingVolume = (training: Training): number => {
-  return Math.max(training.weight, 1) * training.sets * training.reps;
+  if (!training.sessions || training.sessions.length === 0) {
+    return 0;
+  }
+
+  return training.sessions.reduce((acc, session) => acc + session.weight * session.reps, 0);
 };
 
 export const getTrainingsVolume = (trainings: Training[]): number => {

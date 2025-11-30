@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Pressable, PressableProps, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, PressableProps, Text, View } from 'react-native';
 
 export interface ButtonProps extends Omit<PressableProps, 'children'> {
   children: ReactNode;
@@ -9,6 +9,7 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
   className?: string;
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
+  isLoading?: boolean;
 }
 
 export function Button({
@@ -20,6 +21,7 @@ export function Button({
   disabled,
   startAdornment,
   endAdornment,
+  isLoading = false,
   ...pressableProps
 }: ButtonProps) {
   const baseClasses =
@@ -54,9 +56,12 @@ export function Button({
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${
         fullWidth ? 'w-full' : ''
       } ${className}`}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       {...pressableProps}
     >
+      {isLoading && (
+        <ActivityIndicator size="small" color={textColorClasses[variant]} className="mr-2" />
+      )}
       {startAdornment && <View className="mr-2">{startAdornment}</View>}
       {typeof children === 'string' ? (
         <Text

@@ -1,5 +1,5 @@
 import { MuscleGroupListContainer } from '@/modules/muscle-group/containers/muscle-group-list-container';
-import { AddWorkoutModal } from '@/modules/training/containers/add-training-modal';
+import { AddTrainingOptionsModal } from '@/modules/training/containers/add-training-options-modal';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 import { TotalVolumeCard } from '@/modules/volume/containers/total-volume-card';
 import { WeeklyVolumeChart } from '@/modules/volume/containers/weekly-volume-chart';
@@ -90,7 +90,10 @@ export default function HomeScreen() {
       </Animated.View>
 
       {/* Add Workout Modal */}
-      <AddWorkoutModal isOpen={isAddWorkoutOpen} onClose={() => setIsAddWorkoutOpen(false)} />
+      <AddTrainingOptionsModal
+        isOpen={isAddWorkoutOpen}
+        onClose={() => setIsAddWorkoutOpen(false)}
+      />
     </SafeAreaView>
   );
 }
