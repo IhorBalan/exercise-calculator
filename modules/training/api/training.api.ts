@@ -155,7 +155,7 @@ export const getTrainingRecordsByMuscleGroupId = async (
   return result;
 };
 
-type GetTrainingsParams = {
+export type GetTrainingsParams = {
   startDate: string;
   endDate: string;
 };
