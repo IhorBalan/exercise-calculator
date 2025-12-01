@@ -5,7 +5,6 @@ export type WorkoutSession = {
 };
 
 export type Training = {
-  id: string;
   muscleGroupId: string;
   exerciseId: string;
   sessions?: WorkoutSession[];

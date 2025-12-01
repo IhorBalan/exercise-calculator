@@ -3,4 +3,5 @@ export const COLLECTIONS = {
   MUSCLE_GROUPS: 'muscle-groups',
   EXERCISES: 'exercises',
   TRAININGS: 'trainings',
+  PROGRESSION_RULES: 'progression-rules',
 };

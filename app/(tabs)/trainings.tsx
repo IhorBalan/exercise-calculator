@@ -2,7 +2,7 @@ import { TrainingCard } from '@/modules/training/components/training-card';
 import { AddTrainingOptionsModal } from '@/modules/training/containers/add-training-options-modal';
 import { useTrainingListQuery } from '@/modules/training/hooks/use-training-list-query';
 import { Ionicons } from '@expo/vector-icons';
-import { endOfDay, startOfDay } from 'date-fns';
+import { endOfDay, isSameDay, startOfDay } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +15,7 @@ const getWeekDays = () => {
   for (let i = 6; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
-    const dateString = date.toISOString().split('T')[0];
+    const dateString = date.toISOString();
     const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
     const dayNumber = date.getDate();
 
@@ -30,6 +30,7 @@ export default function TrainingsScreen() {
   const [isAddOptionsModalOpen, setIsAddOptionsModalOpen] = useState(false);
 
   const weekDays = useMemo(() => getWeekDays(), []);
+  console.log('selectedDate', selectedDate);
   // api
   const { data: trainings = [] } = useTrainingListQuery({
     startDate: startOfDay(selectedDate).toISOString(),
@@ -52,7 +53,7 @@ export default function TrainingsScreen() {
           <View className="bg-white rounded-2xl shadow-sm p-4">
             <View className="gap-2 flex-row">
               {weekDays.map(day => {
-                const isSelected = selectedDate === day.dateString;
+                const isSelected = isSameDay(new Date(selectedDate), day.date);
 
                 return (
                   <Pressable
@@ -88,7 +89,7 @@ export default function TrainingsScreen() {
           {trainings.length > 0 ? (
             trainings
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-              .map(training => <TrainingCard key={training.id} training={training} />)
+              .map((training, index) => <TrainingCard key={index} training={training} />)
           ) : (
             <View className=" p-8 rounded-2xl items-center">
               <Ionicons name="fitness-outline" size={48} color="#cbd5e1" />

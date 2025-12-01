@@ -1,10 +1,10 @@
 import { BottomFixedContent } from '@/modules/core/components/bottom-fixed-content';
 import { ScreenHeader } from '@/modules/core/components/screen-header';
+import { ProgressionRuleInfoModal } from '@/modules/progression-rule/containers/progression-rule-info-modal';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ProgressionRuleInfoModal } from './progression-rule-info-modal';
 
 import { Button } from '@/modules/core/components/button';
 import { Dropdown } from '@/modules/core/components/dropdown';
@@ -20,28 +20,25 @@ const progressionPriorityOptions = [
 
 export default function RuleDetailsModal() {
   const params = useLocalSearchParams();
-  const muscleGroup = (params.muscleGroup as string) || 'Chest';
-  const initialReps = (params.reps as string) || '1';
-  const initialMinReps = (params.minReps as string) || '8';
-  const initialMaxReps = (params.maxReps as string) || '12';
+  const ruleId = (params.ruleId as string) || null;
+  const isNewRule = ruleId === null;
   const keyboardHeight = useKeyboardHeight();
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
-  const [repsToAdd, setRepsToAdd] = useState(initialReps);
-  const [minReps, setMinReps] = useState(initialMinReps);
-  const [maxReps, setMaxReps] = useState(initialMaxReps);
+  const [repsToAddPerWeek, setRepsToAdd] = useState(0);
+  const [minReps, setMinReps] = useState(0);
+  const [maxReps, setMaxReps] = useState(0);
   const [weightIncrement, setWeightIncrement] = useState('2.5');
-  const [selectedPriority, setSelectedPriority] = useState('Increase reps first');
+  const [priority, setPriority] = useState('Increase reps first');
 
   const handleSave = () => {
     // Handle save logic here
     console.log({
-      muscleGroup,
-      repsToAdd,
+      repsToAddPerWeek,
       minReps,
       maxReps,
       weightIncrement,
-      selectedPriority,
+      priority,
     });
     router.back();
   };
@@ -59,7 +56,7 @@ export default function RuleDetailsModal() {
       >
         {/* Header */}
         <ScreenHeader
-          title="Progression Rule"
+          title={isNewRule ? 'New Progression Rule' : 'Progression Rule'}
           subtitle="Configure how your strength progresses over time"
           rightAction={
             <Pressable
@@ -118,8 +115,8 @@ export default function RuleDetailsModal() {
             <View className="gap-6 pt-4 border-t border-slate-100">
               <Input
                 label="Reps to add per week"
-                value={repsToAdd}
-                onChangeText={setRepsToAdd}
+                value={repsToAddPerWeek.toString()}
+                onChangeText={text => setRepsToAdd(Number(text))}
                 keyboardType="numeric"
                 placeholder="1"
                 helperText="Number of repetitions to add each week"
@@ -130,8 +127,8 @@ export default function RuleDetailsModal() {
                   <View className="flex-1">
                     <Input
                       label="Min Reps"
-                      value={minReps}
-                      onChangeText={setMinReps}
+                      value={minReps.toString()}
+                      onChangeText={text => setMinReps(Number(text))}
                       keyboardType="numeric"
                       placeholder="8"
                     />
@@ -139,8 +136,8 @@ export default function RuleDetailsModal() {
                   <View className="flex-1">
                     <Input
                       label="Max Reps"
-                      value={maxReps}
-                      onChangeText={setMaxReps}
+                      value={maxReps.toString()}
+                      onChangeText={text => setMaxReps(Number(text))}
                       keyboardType="numeric"
                       placeholder="12"
                     />
@@ -192,9 +189,9 @@ export default function RuleDetailsModal() {
                 <Dropdown
                   label="Progression Priority"
                   options={progressionPriorityOptions}
-                  value={selectedPriority}
+                  value={priority}
                   placeholder="Select priority"
-                  onSelect={setSelectedPriority}
+                  onSelect={value => setPriority(value)}
                 />
               </View>
             </View>

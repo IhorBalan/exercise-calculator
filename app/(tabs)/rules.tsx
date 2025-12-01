@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { ProgressionRuleInfoModal } from '@/app/progression-rule-info-modal';
 import { MuscleGroupRuleCard } from '@/modules/muscle-group/components/muscle-group-rule-card';
+import { ProgressionRuleInfoModal } from '@/modules/progression-rule/containers/progression-rule-info-modal';
 
 // Muscle group progression rules data
 const muscleGroupRules = [
