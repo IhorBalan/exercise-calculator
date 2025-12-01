@@ -8,6 +8,7 @@ import { getTrainingVolume } from '@/modules/volume/utils/volume.utils';
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -180,7 +181,9 @@ export const getTrainings = async ({
   );
   const snapshot = await getDocs(q);
 
-  return snapshot.docs.map((docSnapshot: any) => docSnapshot.data() as Training);
+  return snapshot.docs.map(
+    (docSnapshot: any) => ({ ...docSnapshot.data(), id: docSnapshot.id }) as Training
+  );
 };
 
 export const getAllTrainings = async (): Promise<Training[]> => {
@@ -263,4 +266,17 @@ export const getIsTrainingRecord = async (trainingId: string): Promise<boolean> 
   return (
     getTrainingVolume(training) > Math.max(...trainings.map((t: Training) => getTrainingVolume(t)))
   );
+};
+
+export const deleteTraining = async (trainingId: string): Promise<boolean> => {
+  const user = getUser();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const firestore = getFirestore();
+  const trainingRef = doc(firestore, COLLECTIONS.TRAININGS, trainingId);
+  await deleteDoc(trainingRef);
+  return true;
 };
