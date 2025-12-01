@@ -1,5 +1,6 @@
 import { Button } from '@/modules/core/components/button';
 import { Counter } from '@/modules/core/components/counter';
+import { DateTimePickerComponent } from '@/modules/core/components/date-time-picker';
 import { Dropdown, type DropdownOption } from '@/modules/core/components/dropdown';
 import { Input } from '@/modules/core/components/input';
 import { useExercisesListQuery } from '@/modules/exercise/hooks/use-exercises-list-query';
@@ -10,9 +11,9 @@ import {
 import { getIsTrainingRecord } from '@/modules/training/api/training.api';
 import { RecordCelebrationModal } from '@/modules/training/components/record-celebration-modal';
 import { useTrainingCreateMutation } from '@/modules/training/hooks/use-training-create-mutation';
-import { TRAINING_LIST_QUERY_KEY } from '@/modules/training/hooks/use-training-list-query';
 import { TRAINING_HISTORY_OF_EXERCISE_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-exercise-query';
 import { TRAINING_HISTORY_OF_MUSCLE_GROUP_QUERY_KEY } from '@/modules/training/hooks/use-training-history-of-muscle-group-query';
+import { TRAINING_LIST_QUERY_KEY } from '@/modules/training/hooks/use-training-list-query';
 import { TRAINING_RECORDS_QUERY_KEY } from '@/modules/training/hooks/use-training-records-query';
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 import { WEEKLY_VOLUME_QUERY_KEY } from '@/modules/volume/hooks/use-weekly-volume-query';
@@ -30,6 +31,8 @@ import { z } from 'zod';
 const addTrainingSchema = z.object({
   muscleGroupId: z.string().min(1, 'Muscle group is required'),
   exerciseId: z.string().min(1, 'Exercise is required'),
+  date: z.date(),
+  time: z.date(),
   sessions: z
     .array(
       z.object({
@@ -62,6 +65,10 @@ export default function AddTrainingScreen() {
   const trainingCreateMutation = useTrainingCreateMutation();
   const { data: userProfile } = useUserProfileQuery();
 
+  const now = new Date();
+  const defaultDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const defaultTime = new Date(2000, 0, 1, now.getHours(), now.getMinutes());
+
   const {
     control,
     handleSubmit,
@@ -74,6 +81,8 @@ export default function AddTrainingScreen() {
     defaultValues: {
       muscleGroupId: frozenMuscleGroupId || '',
       exerciseId: frozenExerciseId || '',
+      date: defaultDate,
+      time: defaultTime,
       sessions: [{ weight: '0', reps: 10 }],
     },
     mode: 'onChange',
@@ -170,6 +179,13 @@ export default function AddTrainingScreen() {
   };
 
   const onSubmit = async (data: FormData) => {
+    // Combine date and time into a single Date object
+    const combinedDate = new Date(data.date);
+    combinedDate.setHours(data.time.getHours());
+    combinedDate.setMinutes(data.time.getMinutes());
+    combinedDate.setSeconds(0);
+    combinedDate.setMilliseconds(0);
+
     trainingCreateMutation.mutate(
       {
         muscleGroupId: data.muscleGroupId,
@@ -179,7 +195,7 @@ export default function AddTrainingScreen() {
           weight: parseFloat(session.weight),
           reps: session.reps,
         })),
-        date: new Date().toISOString(),
+        date: combinedDate.toISOString(),
       },
       {
         onSuccess: async response => {
@@ -271,6 +287,40 @@ export default function AddTrainingScreen() {
                 {errors.exerciseId.message}
               </Text>
             )}
+
+            <View className="flex-row gap-4">
+              <View className="flex-1">
+                <Controller
+                  control={control}
+                  name="date"
+                  render={({ field: { onChange, value } }) => (
+                    <DateTimePickerComponent
+                      label="Date"
+                      value={value}
+                      onChange={onChange}
+                      mode="date"
+                      error={errors.date?.message}
+                      maximumDate={new Date()}
+                    />
+                  )}
+                />
+              </View>
+              <View className="flex-1">
+                <Controller
+                  control={control}
+                  name="time"
+                  render={({ field: { onChange, value } }) => (
+                    <DateTimePickerComponent
+                      label="Time"
+                      value={value}
+                      onChange={onChange}
+                      mode="time"
+                      error={errors.time?.message}
+                    />
+                  )}
+                />
+              </View>
+            </View>
 
             <Counter
               label="Sessions"
