@@ -21,11 +21,11 @@ export const ColumnChart = ({ data }: ColumnChartProps) => {
           <View key={index} className="flex-1 items-center gap-2">
             <View className="flex-1 justify-end items-center w-full">
               <View
-                className="w-full bg-blue-500 rounded-lg"
+                className="w-full bg-primary rounded-lg"
                 style={{ height: `${heightPercent}%` }}
               />
             </View>
-            <Text className="text-slate-400 text-xs">{item.label}</Text>
+            <Text className="text-body text-xs">{item.label}</Text>
           </View>
         );
       })}

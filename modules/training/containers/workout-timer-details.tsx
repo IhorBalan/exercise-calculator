@@ -43,7 +43,7 @@ export const WorkoutTimerDetails = ({
 
   return (
     <View className="flex-1 px-4 gap-8">
-      <Text className="text-slate-800 text-base font-regular">
+      <Text className="text-accent text-base font-regular">
         Select the muscle group and exercise you want to train.
       </Text>
       <Dropdown
@@ -71,7 +71,7 @@ export const WorkoutTimerDetails = ({
       >
         Start Workout
       </Button>
-      <Text className="text-slate-500 text-center text-sm tracking-tight">
+      <Text className="text-body text-center text-sm tracking-tight">
         Read more about Workout Timer here.
       </Text>
     </View>

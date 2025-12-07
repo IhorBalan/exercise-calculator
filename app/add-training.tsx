@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, Pressable, ScrollView, Text, View } from 'react-native';
@@ -55,12 +56,16 @@ const addTrainingSchema = z.object({
 type FormData = z.infer<typeof addTrainingSchema>;
 
 export default function AddTrainingScreen() {
+  const { colorScheme } = useColorScheme();
   const params = useLocalSearchParams();
   const navigation = useNavigation();
   const frozenMuscleGroupId = (params.muscleGroupId as string) || undefined;
   const frozenExerciseId = (params.exerciseId as string) || undefined;
 
   const queryClient = useQueryClient();
+
+  // Theme-aware colors
+  const closeIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#1E293B';
   const { data: muscleGroupList } = useMuscleGroupListQuery();
   const trainingCreateMutation = useTrainingCreateMutation();
   const { data: userProfile } = useUserProfileQuery();
@@ -235,14 +240,14 @@ export default function AddTrainingScreen() {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-white" edges={['top', 'bottom']}>
-        <View className="px-4 pt-4 pb-4 flex-row items-center justify-between border-slate-100">
-          <Text className="text-slate-900 text-lg font-semibold tracking-tight">New Training</Text>
+      <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+        <View className="px-4 pt-4 pb-4 flex-row items-center justify-between border-divider">
+          <Text className="text-accent text-lg font-semibold tracking-tight">New Training</Text>
           <Pressable
             onPress={handleClose}
             className="w-10 h-10 items-center justify-center active:opacity-80"
           >
-            <Ionicons name="close" size={24} color="#1e293b" />
+            <Ionicons name="close" size={24} color={closeIconColor} />
           </Pressable>
         </View>
 
@@ -334,10 +339,10 @@ export default function AddTrainingScreen() {
               {fields.map((field, index) => (
                 <View
                   key={field.id}
-                  className="gap-4 shadow-sm border border-slate-100 bg-white p-4 rounded-xl"
+                  className="gap-4 shadow-sm border border-divider bg-background p-4 rounded-xl"
                 >
                   <View className="flex-row items-center justify-between">
-                    <Text className="text-blue-600 text-sm font-medium tracking-tight">
+                    <Text className="text-primary text-sm font-medium tracking-tight">
                       Session {index + 1}
                     </Text>
                   </View>

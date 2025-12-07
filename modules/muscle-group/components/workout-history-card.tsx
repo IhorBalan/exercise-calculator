@@ -99,16 +99,14 @@ function SwipeableTrainingItem({ training }: SwipeableTrainingItemProps) {
       <GestureDetector gesture={panGesture}>
         <Animated.View
           style={animatedCardStyle}
-          className="bg-slate-50 p-3 gap-2 border border-slate-100 rounded-xl"
+          className="bg-slate-50 dark:bg-slate-800 p-3 gap-2 border border-divider rounded-xl"
         >
           <View className="flex-row items-start justify-between">
             <View className="flex-1 gap-1">
-              <Text className="text-slate-900 text-base tracking-tight">
-                {training.exercise.name}
-              </Text>
-              <Text className="text-slate-500 text-sm tracking-tight">{description}</Text>
+              <Text className="text-accent text-base tracking-tight">{training.exercise.name}</Text>
+              <Text className="text-body text-sm tracking-tight">{description}</Text>
             </View>
-            <Text className="text-slate-600 text-base tracking-tight">
+            <Text className="text-accent text-base tracking-tight">
               {getTrainingVolume(training)} kg
             </Text>
           </View>
@@ -120,13 +118,11 @@ function SwipeableTrainingItem({ training }: SwipeableTrainingItemProps) {
 
 export function WorkoutHistoryCard({ date, trainingCount, trainings }: WorkoutHistoryCardProps) {
   return (
-    <View className="bg-white p-4 rounded-3xl shadow-sm gap-6">
+    <View className="bg-background p-4 rounded-3xl shadow-sm gap-6">
       <View className="flex-row items-center justify-between">
-        <Text className="text-slate-900 text-base tracking-tight">
-          {format(date, 'MMM d, yyyy')}
-        </Text>
-        <View className="bg-blue-100 px-2 py-1 rounded-lg">
-          <Text className="text-blue-500 text-xs font-medium">{trainingCount} trainings</Text>
+        <Text className="text-accent text-base tracking-tight">{format(date, 'MMM d, yyyy')}</Text>
+        <View className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-lg">
+          <Text className="text-primary text-xs font-medium">{trainingCount} trainings</Text>
         </View>
       </View>
 

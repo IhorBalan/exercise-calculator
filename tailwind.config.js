@@ -17,6 +17,7 @@ module.exports = {
           DEFAULT: 'rgb(var(--color-background) / <alpha-value>)',
           page: 'rgb(var(--color-page-background) / <alpha-value>)',
           modal: 'rgb(var(--color-modal-background) / <alpha-value>)',
+          button: 'rgb(var(--color-button-background) / <alpha-value>)',
         },
         body: 'rgb(var(--color-text-body) / <alpha-value>)',
         accent: 'rgb(var(--color-text-accent) / <alpha-value>)',

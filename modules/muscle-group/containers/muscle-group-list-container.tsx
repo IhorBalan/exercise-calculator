@@ -8,10 +8,10 @@ export function MuscleGroupListContainer() {
 
   return (
     <View className="px-4 mt-6">
-      <Text className="text-slate-900 text-base tracking-tight mb-4">Muscle Groups</Text>
+      <Text className="text-accent text-base tracking-tight mb-4">Muscle Groups</Text>
 
       {isLoading ? (
-        <Text className="text-slate-500 text-sm">Loading muscle groups...</Text>
+        <Text className="text-body text-sm">Loading muscle groups...</Text>
       ) : (
         <View className="gap-4">
           {muscleGroups.map(group => (

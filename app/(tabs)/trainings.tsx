@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { endOfDay, isSameDay, startOfDay } from 'date-fns';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const getWeekDays = () => {
@@ -26,10 +27,14 @@ const getWeekDays = () => {
 };
 
 export default function TrainingsScreen() {
+  const { colorScheme } = useColorScheme();
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [isAddOptionsModalOpen, setIsAddOptionsModalOpen] = useState(false);
 
   const weekDays = useMemo(() => getWeekDays(), []);
+
+  // Theme-aware icon color for empty state
+  const emptyIconColor = colorScheme === 'dark' ? '#64748B' : '#CBD5E1';
   console.log('selectedDate', selectedDate);
   // api
   const { data: trainings = [] } = useTrainingListQuery({
@@ -38,19 +43,19 @@ export default function TrainingsScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background-page" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-4 pt-8 pb-6 gap-1">
-          <Text className="text-slate-900 text-xl font-medium tracking-tight">Trainings</Text>
-          <Text className="text-slate-600 text-base tracking-tight">
+          <Text className="text-accent text-xl font-medium tracking-tight">Trainings</Text>
+          <Text className="text-body text-base tracking-tight">
             Your workout history and progress
           </Text>
         </View>
 
         {/* Calendar - 7 Days Vertical */}
         <View className="px-4 mb-6">
-          <View className="bg-white rounded-2xl shadow-sm p-4">
+          <View className="bg-background rounded-2xl shadow-sm p-4">
             <View className="gap-2 flex-row">
               {weekDays.map(day => {
                 const isSelected = isSameDay(new Date(selectedDate), day.date);
@@ -60,18 +65,18 @@ export default function TrainingsScreen() {
                     key={day.dateString}
                     onPress={() => setSelectedDate(day.dateString)}
                     className={`flex-row flex-1 items-center shadow-sm justify-between py-3 rounded-xl ${
-                      isSelected ? 'bg-blue-500 shadow-lg' : 'bg-transparent'
+                      isSelected ? 'bg-primary shadow-lg' : 'bg-transparent'
                     } active:opacity-80`}
                   >
                     <View className="flex-row items-center gap-3 flex-1">
                       <View className="w-12 items-center">
                         <Text
-                          className={`text-xs font-medium tracking-tight ${isSelected ? 'text-white' : 'text-neutral-500'}`}
+                          className={`text-xs font-medium tracking-tight ${isSelected ? 'text-white' : 'text-body'}`}
                         >
                           {day.dayName}
                         </Text>
                         <Text
-                          className={`text-lg font-semibold tracking-tight ${isSelected ? 'text-white' : 'text-slate-900'}`}
+                          className={`text-lg font-semibold tracking-tight ${isSelected ? 'text-white' : 'text-accent'}`}
                         >
                           {day.dayNumber}
                         </Text>
@@ -92,11 +97,11 @@ export default function TrainingsScreen() {
               .map((training, index) => <TrainingCard key={index} training={training} />)
           ) : (
             <View className=" p-8 rounded-2xl items-center">
-              <Ionicons name="fitness-outline" size={48} color="#cbd5e1" />
-              <Text className="text-slate-500 text-base font-medium tracking-tight mt-4">
+              <Ionicons name="fitness-outline" size={48} color={emptyIconColor} />
+              <Text className="text-body text-base font-medium tracking-tight mt-4">
                 No trainings on this day
               </Text>
-              <Text className="text-slate-400 text-sm tracking-tight mt-1">
+              <Text className="text-body opacity-70 text-sm tracking-tight mt-1">
                 Start tracking your workouts to see them here
               </Text>
             </View>
@@ -105,7 +110,7 @@ export default function TrainingsScreen() {
       </ScrollView>
       <Pressable
         onPress={() => setIsAddOptionsModalOpen(true)}
-        className="absolute bottom-10 right-4 w-16 h-16 bg-blue-500 rounded-full shadow-xl items-center justify-center active:opacity-80"
+        className="absolute bottom-10 right-4 w-16 h-16 bg-primary rounded-full shadow-xl items-center justify-center active:opacity-80"
       >
         <Ionicons name="add" size={24} color="white" />
       </Pressable>

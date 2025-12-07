@@ -51,19 +51,19 @@ export default function HomeScreen() {
   }));
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background-page" edges={['top']}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-4 pt-8 pb-6 gap-1">
           <Animated.Text
             style={titleAnimatedStyle}
-            className="text-slate-900 text-xl font-medium tracking-tight"
+            className="text-accent text-xl font-medium tracking-tight"
           >
             Welcome, {userProfile?.firstName}
           </Animated.Text>
           <Animated.Text
             style={subtitleAnimatedStyle}
-            className="text-slate-600 text-base tracking-tight"
+            className="text-body text-base tracking-tight"
           >
             Here&apos;s your weekly progress
           </Animated.Text>
@@ -83,7 +83,7 @@ export default function HomeScreen() {
       <Animated.View style={contentAnimatedStyle}>
         <Pressable
           onPress={() => setIsAddWorkoutOpen(true)}
-          className="absolute bottom-10 right-4 w-16 h-16 bg-blue-500 rounded-full shadow-xl items-center justify-center active:opacity-80"
+          className="absolute bottom-10 right-4 w-16 h-16 bg-primary rounded-full shadow-xl items-center justify-center active:opacity-80"
         >
           <Ionicons name="add" size={24} color="white" />
         </Pressable>

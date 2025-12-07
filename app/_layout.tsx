@@ -58,7 +58,7 @@ function RootLayoutNav() {
   if (isLoading) {
     return (
       <SafeAreaView
-        className="flex-1 items-center justify-center bg-blue-50"
+        className={`flex-1 items-center justify-center ${colorScheme === 'dark' ? 'bg-blue-950' : 'bg-blue-50'}`}
         edges={['top', 'bottom']}
       >
         <ActivityIndicator size="large" color="#3B82F6" />
@@ -68,7 +68,11 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ contentStyle: { backgroundColor: '#F0F6FE' } }}>
+      <Stack
+        screenOptions={{
+          contentStyle: { backgroundColor: colorScheme === 'dark' ? '#0f172a' : '#eff6ff' },
+        }}
+      >
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

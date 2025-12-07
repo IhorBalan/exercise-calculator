@@ -4,6 +4,7 @@ import { ProgressionRuleInfoModal } from '@/modules/progression-rule/containers/
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/modules/core/components/button';
@@ -19,6 +20,7 @@ const progressionPriorityOptions = [
 ];
 
 export default function RuleDetailsModal() {
+  const { colorScheme } = useColorScheme();
   const params = useLocalSearchParams();
   const ruleId = (params.ruleId as string) || null;
   const isNewRule = ruleId === null;
@@ -30,6 +32,10 @@ export default function RuleDetailsModal() {
   const [maxReps, setMaxReps] = useState(0);
   const [weightIncrement, setWeightIncrement] = useState('2.5');
   const [priority, setPriority] = useState('Increase reps first');
+
+  // Theme-aware colors
+  const infoIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#000000';
+  const cancelIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#0f172a';
 
   const handleSave = () => {
     // Handle save logic here
@@ -48,7 +54,7 @@ export default function RuleDetailsModal() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-background-page" edges={['top']}>
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
@@ -61,9 +67,9 @@ export default function RuleDetailsModal() {
           rightAction={
             <Pressable
               onPress={() => setIsInfoModalOpen(true)}
-              className="w-10 h-10 items-center justify-center bg-white rounded-xl shadow-sm active:opacity-80"
+              className="w-10 h-10 items-center justify-center bg-background rounded-xl shadow-sm active:opacity-80"
             >
-              <Ionicons name="information-circle-outline" size={18} color="#000000" />
+              <Ionicons name="information-circle-outline" size={18} color={infoIconColor} />
             </Pressable>
           }
         />
@@ -71,10 +77,10 @@ export default function RuleDetailsModal() {
         {/* Form Fields */}
         <View className="px-4 gap-5">
           {/* Exercise Selection */}
-          <View className="gap-4 p-5 bg-white rounded-2xl shadow-sm border border-slate-100">
+          <View className="gap-4 p-5 bg-background rounded-2xl shadow-sm border border-divider">
             <View className="flex-row items-center gap-2 mb-1">
               <Ionicons name="body" size={18} color="#3b82f6" />
-              <Text className="text-slate-900 text-base font-semibold tracking-tight">
+              <Text className="text-accent text-base font-semibold tracking-tight">
                 Exercise Selection
               </Text>
             </View>
@@ -95,24 +101,24 @@ export default function RuleDetailsModal() {
           </View>
 
           {/* Reps Progression Card */}
-          <View className="gap-6 p-5 bg-white rounded-2xl shadow-sm border border-slate-100">
+          <View className="gap-6 p-5 bg-background rounded-2xl shadow-sm border border-divider">
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
-                <View className="w-9 h-9 rounded-xl bg-green-100 items-center justify-center">
+                <View className="w-9 h-9 rounded-xl bg-green-100 dark:bg-green-900 items-center justify-center">
                   <Ionicons name="repeat" size={18} color="#16a34a" />
                 </View>
                 <View>
-                  <Text className="text-slate-900 text-base font-semibold tracking-tight">
+                  <Text className="text-accent text-base font-semibold tracking-tight">
                     Reps Progression
                   </Text>
-                  <Text className="text-slate-500 text-xs tracking-tight mt-0.5">
+                  <Text className="text-body text-xs tracking-tight mt-0.5">
                     Weekly repetition increases
                   </Text>
                 </View>
               </View>
             </View>
 
-            <View className="gap-6 pt-4 border-t border-slate-100">
+            <View className="gap-6 pt-4 border-t border-divider">
               <Input
                 label="Reps to add per week"
                 value={repsToAddPerWeek.toString()}
@@ -144,10 +150,10 @@ export default function RuleDetailsModal() {
                   </View>
                 </View>
 
-                <View className="p-3 bg-green-50 rounded-xl border border-green-100">
+                <View className="p-3 bg-green-50 dark:bg-green-900 rounded-xl border border-green-100 dark:border-green-800">
                   <View className="flex-row items-start gap-2">
                     <Ionicons name="checkmark-circle" size={16} color="#16a34a" />
-                    <Text className="flex-1 text-green-700 text-xs leading-4 tracking-tight">
+                    <Text className="flex-1 text-green-700 dark:text-green-300 text-xs leading-4 tracking-tight">
                       When you reach {maxReps || '12'} repetitions, increase weight and drop back to{' '}
                       {minReps || '8'} repetitions
                     </Text>
@@ -158,24 +164,22 @@ export default function RuleDetailsModal() {
           </View>
 
           {/* Weight Progression Card */}
-          <View className="gap-6 p-5 bg-white rounded-2xl shadow-sm border border-slate-100">
+          <View className="gap-6 p-5 bg-background rounded-2xl shadow-sm border border-divider">
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
-                <View className="w-9 h-9 rounded-xl bg-purple-100 items-center justify-center">
+                <View className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900 items-center justify-center">
                   <Ionicons name="barbell" size={18} color="#9333ea" />
                 </View>
                 <View>
-                  <Text className="text-slate-900 text-base font-semibold tracking-tight">
+                  <Text className="text-accent text-base font-semibold tracking-tight">
                     Weight Progression
                   </Text>
-                  <Text className="text-slate-500 text-xs tracking-tight mt-0.5">
-                    Weight increases
-                  </Text>
+                  <Text className="text-body text-xs tracking-tight mt-0.5">Weight increases</Text>
                 </View>
               </View>
             </View>
 
-            <View className="gap-6 pt-4 border-t border-slate-100">
+            <View className="gap-6 pt-4 border-t border-divider">
               <Input
                 label="Weight increment (kg)"
                 value={weightIncrement}
@@ -206,7 +210,7 @@ export default function RuleDetailsModal() {
           className="flex-1"
           size="md"
           onPress={handleCancel}
-          startAdornment={<Ionicons name="close" size={16} color="#0f172a" />}
+          startAdornment={<Ionicons name="close" size={16} color={cancelIconColor} />}
         >
           Cancel
         </Button>

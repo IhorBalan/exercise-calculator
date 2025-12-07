@@ -28,9 +28,9 @@ export function Button({
     'rounded-xl flex-row items-center justify-center active:opacity-80 disabled:opacity-50';
 
   const variantClasses = {
-    primary: 'bg-blue-500',
-    secondary: 'bg-white shadow-sm',
-    outline: 'bg-white border border-black/10',
+    primary: 'bg-primary',
+    secondary: 'bg-background shadow-sm',
+    outline: 'bg-background border border-divider',
   };
 
   const sizeClasses = {
@@ -47,8 +47,8 @@ export function Button({
 
   const textColorClasses = {
     primary: 'text-white',
-    secondary: 'text-neutral-950',
-    outline: 'text-neutral-950',
+    secondary: 'text-accent',
+    outline: 'text-accent',
   };
 
   return (

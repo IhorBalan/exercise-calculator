@@ -9,6 +9,7 @@ import { cssInterop } from 'nativewind';
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ThemeWrapper } from '../containers/theme-wrapper';
 
 export interface BottomModalProps extends BottomSheetModalProps {
   children: ReactNode;
@@ -106,35 +107,40 @@ export function BottomModal({
       android_keyboardInputMode="adjustResize"
       {...props}
     >
-      {enableScrollableContent ? (
-        <BottomSheetScrollView
-          style={styles.scrollContent}
-          contentContainerStyle={[styles.scrollContentContainer, { paddingBottom: insets.bottom }]}
-          keyboardShouldPersistTaps="handled"
-        >
-          {/* Header */}
-          {title && (
-            <View className="flex-row items-center justify-center pt-6 pb-4 relative">
-              <Text className="text-neutral-950 text-lg font-semibold tracking-tight">{title}</Text>
-            </View>
-          )}
+      <ThemeWrapper>
+        {enableScrollableContent ? (
+          <BottomSheetScrollView
+            style={styles.scrollContent}
+            contentContainerStyle={[
+              styles.scrollContentContainer,
+              { paddingBottom: insets.bottom },
+            ]}
+            keyboardShouldPersistTaps="handled"
+          >
+            {/* Header */}
+            {title && (
+              <View className="flex-row items-center justify-center pt-6 pb-4 relative">
+                <Text className="text-accent text-lg font-semibold tracking-tight">{title}</Text>
+              </View>
+            )}
 
-          {/* Content */}
-          {children}
-        </BottomSheetScrollView>
-      ) : (
-        <BottomSheetView style={[styles.content, { paddingBottom: insets.bottom }]}>
-          {/* Header */}
-          {title && (
-            <View className="flex-row items-center justify-center pt-6 pb-4 relative">
-              <Text className="text-neutral-950 text-lg font-semibold tracking-tight">{title}</Text>
-            </View>
-          )}
+            {/* Content */}
+            {children}
+          </BottomSheetScrollView>
+        ) : (
+          <BottomSheetView style={[styles.content, { paddingBottom: insets.bottom }]}>
+            {/* Header */}
+            {title && (
+              <View className="flex-row items-center justify-center pt-6 pb-4 relative">
+                <Text className="text-accent text-lg font-semibold tracking-tight">{title}</Text>
+              </View>
+            )}
 
-          {/* Content */}
-          {children}
-        </BottomSheetView>
-      )}
+            {/* Content */}
+            {children}
+          </BottomSheetView>
+        )}
+      </ThemeWrapper>
     </BottomSheetModal>
   );
 }

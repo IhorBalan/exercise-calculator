@@ -40,9 +40,7 @@ export function ThemeChangeModal({ isOpen, onClose }: ThemeChangeModalProps) {
   return (
     <BottomModal isOpen={isOpen} onClose={onClose} title="Choose Theme" enableDynamicSizing={true}>
       <View className="pb-4">
-        <Text className="text-slate-600 text-sm tracking-tight mb-4">
-          Select your preferred theme
-        </Text>
+        <Text className="text-body text-sm tracking-tight mb-4">Select your preferred theme</Text>
 
         {/* Theme Options */}
         <View className="gap-2">
@@ -50,16 +48,16 @@ export function ThemeChangeModal({ isOpen, onClose }: ThemeChangeModalProps) {
             <Pressable
               key={option.mode}
               onPress={() => handleThemeSelect(option.mode)}
-              className="flex-row items-center p-4 rounded-2xl bg-slate-50 active:bg-slate-100"
+              className="flex-row items-center p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 active:bg-slate-100 dark:active:bg-slate-700"
             >
-              <View className="w-12 h-12 bg-blue-50 rounded-full items-center justify-center">
+              <View className="w-12 h-12 bg-blue-50 dark:bg-blue-900 rounded-full items-center justify-center">
                 <Ionicons name={option.icon as any} size={24} color="#3b82f6" />
               </View>
               <View className="flex-1 ml-4">
-                <Text className="text-slate-900 text-base font-medium tracking-tight">
+                <Text className="text-accent text-base font-medium tracking-tight">
                   {option.label}
                 </Text>
-                <Text className="text-slate-500 text-sm tracking-tight">{option.description}</Text>
+                <Text className="text-body text-sm tracking-tight">{option.description}</Text>
               </View>
               {themeMode === option.mode && (
                 <Ionicons name="checkmark-circle" size={24} color="#3b82f6" />

@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 export interface DropdownOption {
@@ -27,6 +28,7 @@ export function Dropdown({
   disabled = false,
   className = '',
 }: DropdownProps) {
+  const { colorScheme } = useColorScheme();
   const [isOpen, setIsOpen] = useState(false);
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(-10);
@@ -34,6 +36,9 @@ export function Dropdown({
   const selectedOption = options.find(option => option.value === value);
   const displayText = selectedOption?.label || placeholder;
   const hasValue = !!value;
+
+  // Theme-aware colors
+  const iconColor = colorScheme === 'dark' ? '#9CA3AF' : '#717182';
 
   useEffect(() => {
     if (isOpen && !disabled) {
@@ -57,20 +62,20 @@ export function Dropdown({
 
   return (
     <View className={`gap-2 relative ${className}`}>
-      <Text className="text-neutral-950 text-sm font-medium tracking-tight">{label}</Text>
+      <Text className="text-accent text-sm font-medium tracking-tight">{label}</Text>
       <Pressable
         onPress={() => !disabled && setIsOpen(!isOpen)}
-        className={`bg-gray-100 rounded-2xl h-14 px-4 flex-row items-center justify-between ${
+        className={`bg-gray-100 dark:bg-gray-800 rounded-2xl h-14 px-4 flex-row items-center justify-between ${
           disabled ? 'opacity-50' : ''
         }`}
         disabled={disabled}
       >
         <Text
-          className={`text-base tracking-tight ${hasValue ? 'text-neutral-950' : 'text-gray-500'}`}
+          className={`text-base tracking-tight ${hasValue ? 'text-accent' : 'text-body opacity-70'}`}
         >
           {displayText}
         </Text>
-        <Ionicons name="chevron-down" size={16} color="#717182" />
+        <Ionicons name="chevron-down" size={16} color={iconColor} />
       </Pressable>
 
       <Animated.View
@@ -85,16 +90,16 @@ export function Dropdown({
             marginTop: 4,
           },
         ]}
-        className="bg-white rounded-xl shadow-md"
+        className="bg-background rounded-xl shadow-md"
         pointerEvents={isOpen && !disabled ? 'auto' : 'none'}
       >
         {options.map(option => (
           <Pressable
             key={option.value}
             onPress={() => handleSelect(option.value)}
-            className={`px-4 justify-center h-12 active:bg-gray-50`}
+            className={`px-4 justify-center h-12 active:opacity-80`}
           >
-            <Text className="text-neutral-950 text-base tracking-tight">{option.label}</Text>
+            <Text className="text-accent text-base tracking-tight">{option.label}</Text>
           </Pressable>
         ))}
       </Animated.View>

@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 
 import { Button } from '@/modules/core/components/button';
 import { Input } from '@/modules/core/components/input';
@@ -8,6 +9,7 @@ import { AuthPageLayout } from '@/modules/auth/components/auth-page-layout';
 import { useAuth } from '@/modules/auth/context/auth-context';
 
 export default function SignUpScreen() {
+  const { colorScheme } = useColorScheme();
   const { createUserWithEmailAndPassword } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -15,6 +17,9 @@ export default function SignUpScreen() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  // Theme-aware colors
+  const iconColor = colorScheme === 'dark' ? '#9CA3AF' : '#717182';
 
   const validateEmail = (emailValue: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -92,7 +97,7 @@ export default function SignUpScreen() {
           autoComplete="email"
           variant="light"
           error={emailError}
-          leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
+          leftElement={<Ionicons name="mail-outline" size={20} color={iconColor} />}
           containerClassName="mb-2"
         />
 
@@ -112,13 +117,13 @@ export default function SignUpScreen() {
           autoComplete="new-password"
           variant="light"
           error={passwordError}
-          leftElement={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
+          leftElement={<Ionicons name="lock-closed-outline" size={20} color={iconColor} />}
           rightElement={
             <Pressable onPress={() => setShowPassword(!showPassword)}>
               <Ionicons
                 name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                 size={20}
-                color="#9CA3AF"
+                color={iconColor}
               />
             </Pressable>
           }

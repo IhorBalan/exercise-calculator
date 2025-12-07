@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { z } from 'zod';
 
@@ -63,9 +64,14 @@ const editProfileSchema = z.object({
 type FormData = z.infer<typeof editProfileSchema>;
 
 export default function EditProfileScreen() {
+  const { colorScheme } = useColorScheme();
   // const { user } = useAuth();
   const userProfileQuery = useUserProfileQuery();
   const updateUserProfileMutation = useUserProfileUpdateMutation();
+
+  // Theme-aware colors
+  const backIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#000000';
+  const inputIconColor = colorScheme === 'dark' ? '#D1D5DB' : '#9CA3AF';
 
   const {
     control,
@@ -132,7 +138,7 @@ export default function EditProfileScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 relative bg-blue-50" edges={['top']}>
+    <SafeAreaView className="flex-1 relative bg-background-page" edges={['top']}>
       <ScrollView
         contentContainerClassName="px-4"
         keyboardShouldPersistTaps="handled"
@@ -142,13 +148,13 @@ export default function EditProfileScreen() {
         <View className="flex-row items-center pt-8 pb-4 justify-between">
           <Pressable
             onPress={() => router.back()}
-            className="w-9 h-9 rounded-xl bg-white items-center shadow-sm justify-center mb-4 active:opacity-80"
+            className="w-9 h-9 rounded-xl bg-background items-center shadow-sm justify-center mb-4 active:opacity-80"
           >
-            <Ionicons name="arrow-back" size={16} color="#000000" />
+            <Ionicons name="arrow-back" size={16} color={backIconColor} />
           </Pressable>
 
           <View className="flex-row items-center gap-3 mb-3">
-            <Text className="text-slate-900 text-base tracking-tight">Edit Profile</Text>
+            <Text className="text-accent text-base tracking-tight">Edit Profile</Text>
           </View>
           <View className="w-10" />
         </View>
@@ -157,17 +163,15 @@ export default function EditProfileScreen() {
         <View className="" style={{ paddingBottom: 120 }}>
           {/* Avatar Section */}
           <View className="items-center mb-6">
-            <View className="w-24 h-24 bg-blue-500 rounded-full border-4 border-blue-100 items-center justify-center mb-4">
+            <View className="w-24 h-24 bg-primary rounded-full border-4 border-primary/20 items-center justify-center mb-4">
               {userProfileQuery.data?.image ? (
                 <Text className="text-white text-2xl font-normal">IMG</Text>
               ) : (
                 <Text className="text-white text-3xl font-normal">{getUserInitials()}</Text>
               )}
             </View>
-            <Pressable className="px-4 py-2 bg-slate-50 rounded-xl active:opacity-70">
-              <Text className="text-slate-700 text-sm font-medium tracking-tight">
-                Change Photo
-              </Text>
+            <Pressable className="px-4 py-2 bg-background rounded-xl active:opacity-70 border border-divider">
+              <Text className="text-body text-sm font-medium tracking-tight">Change Photo</Text>
             </Pressable>
           </View>
 
@@ -186,7 +190,7 @@ export default function EditProfileScreen() {
                   placeholder="Enter your first name"
                   autoCapitalize="words"
                   error={errors.firstName?.message}
-                  leftElement={<Ionicons name="person-outline" size={20} color="#9CA3AF" />}
+                  leftElement={<Ionicons name="person-outline" size={20} color={inputIconColor} />}
                 />
               )}
             />
@@ -203,7 +207,7 @@ export default function EditProfileScreen() {
                   placeholder="Enter your last name"
                   autoCapitalize="words"
                   error={errors.lastName?.message}
-                  leftElement={<Ionicons name="person-outline" size={20} color="#9CA3AF" />}
+                  leftElement={<Ionicons name="person-outline" size={20} color={inputIconColor} />}
                 />
               )}
             />
@@ -214,7 +218,7 @@ export default function EditProfileScreen() {
               value={userProfileQuery.data?.email || getUser()?.email || ''}
               editable={false}
               placeholder="Email address"
-              leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
+              leftElement={<Ionicons name="mail-outline" size={20} color={inputIconColor} />}
               helperText="Email cannot be changed"
             />
 
@@ -231,7 +235,7 @@ export default function EditProfileScreen() {
                   placeholder="Enter weight (kg)"
                   keyboardType="decimal-pad"
                   error={errors.weight?.message}
-                  leftElement={<Ionicons name="scale-outline" size={20} color="#9CA3AF" />}
+                  leftElement={<Ionicons name="scale-outline" size={20} color={inputIconColor} />}
                 />
               )}
             />
@@ -249,7 +253,7 @@ export default function EditProfileScreen() {
                   placeholder="Enter height (cm)"
                   keyboardType="decimal-pad"
                   error={errors.height?.message}
-                  leftElement={<Ionicons name="resize-outline" size={20} color="#9CA3AF" />}
+                  leftElement={<Ionicons name="resize-outline" size={20} color={inputIconColor} />}
                 />
               )}
             />
@@ -267,7 +271,9 @@ export default function EditProfileScreen() {
                   placeholder="YYYY-MM-DD"
                   keyboardType="default"
                   error={errors.birthday?.message}
-                  leftElement={<Ionicons name="calendar-outline" size={20} color="#9CA3AF" />}
+                  leftElement={
+                    <Ionicons name="calendar-outline" size={20} color={inputIconColor} />
+                  }
                   helperText="Format: YYYY-MM-DD"
                 />
               )}

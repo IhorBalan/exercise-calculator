@@ -35,15 +35,17 @@ export function MuscleGroupRuleCard({ name, emoji, color, rules }: MuscleGroupRu
           },
         })
       }
-      className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between active:opacity-80"
+      className="bg-background p-4 rounded-2xl shadow-sm flex-row items-center justify-between active:opacity-80"
     >
       {/* Left side - Icon and rules */}
       <View className="flex-row items-center gap-3 flex-1">
-        <View className={`w-12 h-12 ${color} rounded-xl items-center justify-center`}>
+        <View
+          className={`w-12 h-12 ${color} dark:bg-gray-800 rounded-xl items-center justify-center`}
+        >
           <Text className="text-xl">{emoji}</Text>
         </View>
         <View className="flex-1 gap-1">
-          <Text className="text-slate-900 text-base tracking-tight">{name}</Text>
+          <Text className="text-accent text-base tracking-tight">{name}</Text>
           <View className="flex-row flex-wrap gap-2">
             {rules.map((rule, ruleIndex) => (
               <View key={ruleIndex} className={`${rule.color} px-2 py-0.5 rounded-lg`}>

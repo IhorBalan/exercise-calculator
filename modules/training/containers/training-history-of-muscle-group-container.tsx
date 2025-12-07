@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { ActivityIndicator, Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 
 import { Exercise } from '@/modules/exercise/types/exercise.types';
 import { WorkoutHistoryCard } from '@/modules/muscle-group/components/workout-history-card';
@@ -18,7 +19,11 @@ export function WorkoutHistoryContainer({
   muscleGroupId,
   className = 'px-4 mb-24',
 }: WorkoutHistoryContainerProps) {
+  const { colorScheme } = useColorScheme();
   const { data: trainings = [], isLoading } = useTrainingHistoryOfMuscleGroupQuery(muscleGroupId);
+
+  // Theme-aware colors
+  const spinnerColor = colorScheme === 'dark' ? '#60A5FA' : '#3B82F6';
 
   const trainingHistory = useMemo(
     () =>
@@ -41,12 +46,12 @@ export function WorkoutHistoryContainer({
     <View className={className}>
       <View className="flex-row items-center gap-2 mb-4">
         <Ionicons name="time-outline" size={20} color="#d946ef" />
-        <Text className="text-slate-900 text-base tracking-tight">Training History</Text>
+        <Text className="text-accent text-base tracking-tight">Training History</Text>
       </View>
 
       {isLoading ? (
-        <View className="bg-white p-8 rounded-3xl shadow-sm items-center justify-center">
-          <ActivityIndicator size={24} color="#3B82F6" />
+        <View className="bg-background p-8 rounded-3xl shadow-sm items-center justify-center">
+          <ActivityIndicator size={24} color={spinnerColor} />
         </View>
       ) : trainings.length === 0 ? (
         <WorkoutHistoryEmptyState />

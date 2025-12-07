@@ -22,18 +22,16 @@ export function PersonalRecordCard({ record }: PersonalRecordCardProps) {
     return `${sessionsCount} sessions • ${totalReps} reps • ${avgWeight} kg avg `;
   }, [record]);
   return (
-    <View className="bg-white p-4 rounded-2xl shadow-sm flex-row items-center justify-between">
+    <View className="bg-background p-4 rounded-2xl shadow-sm flex-row items-center justify-between">
       <View className="flex-1 gap-1">
-        <Text className="text-slate-900 text-base tracking-tight">{record.exercise?.name}</Text>
-        <Text className="text-slate-500 text-sm tracking-tight">
+        <Text className="text-accent text-base tracking-tight">{record.exercise?.name}</Text>
+        <Text className="text-body text-sm tracking-tight">
           {format(record.date, 'MMM d, yyyy')}
         </Text>
       </View>
       <View className="items-end gap-0.5">
-        <Text className="text-slate-900 text-base tracking-tight">
-          {getTrainingVolume(record)} kg
-        </Text>
-        <Text className="text-slate-500 text-sm tracking-tight">{description}</Text>
+        <Text className="text-accent text-base tracking-tight">{getTrainingVolume(record)} kg</Text>
+        <Text className="text-body text-sm tracking-tight">{description}</Text>
       </View>
     </View>
   );

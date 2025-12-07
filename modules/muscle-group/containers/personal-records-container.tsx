@@ -15,18 +15,18 @@ export function PersonalRecordsContainer({ muscleGroupId }: PersonalRecordsConta
     <View className="px-4">
       <View className="flex-row items-center gap-2 mb-4">
         <Ionicons name="trophy-outline" size={20} color="#fb923c" />
-        <Text className="text-slate-900 text-base tracking-tight">Personal Records</Text>
+        <Text className="text-accent text-base tracking-tight">Personal Records</Text>
       </View>
 
       {trainingRecords.length === 0 ? (
-        <View className="bg-white p-6 rounded-3xl shadow-sm items-center justify-center">
-          <View className="w-16 h-16 bg-orange-100 rounded-full items-center justify-center mb-4">
+        <View className="bg-background p-6 rounded-3xl shadow-sm items-center justify-center">
+          <View className="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full items-center justify-center mb-4">
             <Ionicons name="trophy-outline" size={32} color="#f97316" />
           </View>
-          <Text className="text-slate-900 text-base font-medium tracking-tight mb-1">
+          <Text className="text-accent text-base font-medium tracking-tight mb-1">
             No personal records yet
           </Text>
-          <Text className="text-slate-500 text-sm max-w-[250px] text-center tracking-tight">
+          <Text className="text-body text-sm max-w-[250px] text-center tracking-tight">
             Log workouts to track your personal bests
           </Text>
         </View>

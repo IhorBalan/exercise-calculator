@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useCallback, useMemo, useState } from 'react';
 import { Platform, Pressable, Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 import { BottomModal } from './bottom-modal';
 import { Button } from './button';
 
@@ -28,8 +29,13 @@ export function DateTimePickerComponent({
   minimumDate,
   maximumDate,
 }: DateTimePickerProps) {
+  const { colorScheme } = useColorScheme();
   const [showPicker, setShowPicker] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+
+  // Theme-aware colors
+  const iconColor = colorScheme === 'dark' ? '#9CA3AF' : '#717182';
+  const pickerTextColor = colorScheme === 'dark' ? '#F8FAFC' : '#000000';
 
   const formattedDate = useMemo(() => {
     if (mode === 'date') {
@@ -100,19 +106,19 @@ export function DateTimePickerComponent({
 
   return (
     <View className={`gap-2 ${className}`}>
-      <Text className="text-neutral-950 text-sm font-medium tracking-tight">{label}</Text>
+      <Text className="text-accent text-sm font-medium tracking-tight">{label}</Text>
       <Pressable
         onPress={handleOpen}
-        className={`bg-gray-100 rounded-2xl h-14 px-4 flex-row items-center justify-between ${
+        className={`bg-gray-100 dark:bg-gray-800 rounded-2xl h-14 px-4 flex-row items-center justify-between ${
           disabled ? 'opacity-50' : ''
         } ${error ? 'border border-red-400' : ''}`}
         disabled={disabled}
       >
         <View className="flex-row items-center gap-3 flex-1">
-          <Ionicons name={iconName} size={20} color="#717182" />
-          <Text className="text-base tracking-tight text-neutral-950">{formattedDate}</Text>
+          <Ionicons name={iconName} size={20} color={iconColor} />
+          <Text className="text-base tracking-tight text-accent">{formattedDate}</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#717182" />
+        <Ionicons name="chevron-forward" size={16} color={iconColor} />
       </Pressable>
       {error && <Text className="text-red-500 text-sm tracking-tight">{error}</Text>}
       {Platform.OS === 'android' && showPicker && (
@@ -141,7 +147,7 @@ export function DateTimePickerComponent({
                 onChange={handleChange}
                 minimumDate={minimumDate}
                 maximumDate={maximumDate}
-                textColor="#000"
+                textColor={pickerTextColor}
               />
             </View>
             {actionButtons}

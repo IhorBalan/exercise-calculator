@@ -5,24 +5,43 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const rules = [
-  { label: '+1 reps/week', color: 'bg-green-50', textColor: 'text-green-700' },
-  { label: 'Max 12 reps', color: 'bg-blue-50', textColor: 'text-blue-700' },
-  { label: '+2.5 kg', color: 'bg-purple-50', textColor: 'text-purple-700' },
+  {
+    label: '+1 reps/week',
+    color: 'bg-green-50 dark:bg-green-900',
+    textColor: 'text-green-700 dark:text-green-300',
+  },
+  {
+    label: 'Max 12 reps',
+    color: 'bg-blue-50 dark:bg-blue-900',
+    textColor: 'text-blue-700 dark:text-blue-300',
+  },
+  {
+    label: '+2.5 kg',
+    color: 'bg-purple-50 dark:bg-purple-900',
+    textColor: 'text-purple-700 dark:text-purple-300',
+  },
 ];
 
 export default function ExerciseDetailsScreen() {
+  const { colorScheme } = useColorScheme();
   const params = useLocalSearchParams();
   const exerciseId = (params.id as string) || '';
   const { data: exercise } = useExerciseByIdQuery(exerciseId);
   const insets = useSafeAreaInsets();
+
+  // Theme-aware colors
+  const backIconColor = colorScheme === 'dark' ? '#000000' : '#000000'; // Keep black for visibility on image
+  const editIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#000000';
   if (!exercise) {
     return null;
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={[]}>
+    <SafeAreaView className="flex-1 bg-background-page" edges={[]}>
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="relative" style={{ height: 300 + insets.top }}>
           <Image
@@ -40,9 +59,9 @@ export default function ExerciseDetailsScreen() {
             <View className="flex-row items-center justify-between">
               <Pressable
                 onPress={() => router.back()}
-                className="w-9 h-9 rounded-xl bg-white/90 backdrop-blur-sm items-center shadow-sm justify-center active:opacity-80"
+                className="w-9 h-9 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm items-center shadow-sm justify-center active:opacity-80"
               >
-                <Ionicons name="arrow-back" size={16} color="#000000" />
+                <Ionicons name="arrow-back" size={16} color={backIconColor} />
               </Pressable>
               <View className="flex-1 items-center">
                 {/* <Text className="text-white text-base font-semibold tracking-tight drop-shadow-lg">
@@ -55,58 +74,58 @@ export default function ExerciseDetailsScreen() {
         </View>
 
         <View
-          className="pb-14 gap-6 bg-white relative"
+          className="pb-14 gap-6 bg-background relative"
           style={{
             minHeight: Dimensions.get('window').height - 300 - insets.top,
             paddingBottom: insets.bottom,
           }}
         >
-          <View className="absolute -top-[20px] left-0 w-full h-[20px] bg-white rounded-t-3xl"></View>
+          <View className="absolute -top-[20px] left-0 w-full h-[20px] bg-background rounded-t-3xl"></View>
           <View className="">
             <View className="px-6">
-              <Text className="text-slate-900 text-xl font-medium tracking-tight mb-2">
+              <Text className="text-accent text-xl font-medium tracking-tight mb-2">
                 {exercise.name}
               </Text>
-              <Text className="text-slate-600 text-sm tracking-tight leading-5">
+              <Text className="text-body text-sm tracking-tight leading-5">
                 {exercise.description}
               </Text>
             </View>
           </View>
           <View className="px-6">
-            <Text className="text-slate-900 text-base font-medium tracking-tight mb-2">
+            <Text className="text-accent text-base font-medium tracking-tight mb-2">
               Your progress
             </Text>
             <View className="flex-row gap-3 mt-4">
               <View className="flex-1">
-                <Text className="text-slate-500 text-xs tracking-tight mb-1">Total Volume</Text>
-                <Text className="text-slate-800 text-lg font-semibold tracking-tight">1000 kg</Text>
+                <Text className="text-body text-xs tracking-tight mb-1">Total Volume</Text>
+                <Text className="text-accent text-lg font-semibold tracking-tight">1000 kg</Text>
               </View>
-              <View className="w-px h-full bg-slate-200" />
+              <View className="w-px h-full bg-divider" />
               <View className="flex-1">
-                <Text className="text-slate-500 text-xs tracking-tight mb-1">Best Weight</Text>
-                <Text className="text-slate-800 text-lg font-semibold tracking-tight">100kg</Text>
+                <Text className="text-body text-xs tracking-tight mb-1">Best Weight</Text>
+                <Text className="text-accent text-lg font-semibold tracking-tight">100kg</Text>
               </View>
-              <View className="w-px h-full bg-slate-200" />
+              <View className="w-px h-full bg-divider" />
               <View className="flex-1">
-                <Text className="text-slate-500 text-xs tracking-tight mb-1">Sessions</Text>
-                <Text className="text-slate-800 text-lg font-semibold tracking-tight">
+                <Text className="text-body text-xs tracking-tight mb-1">Sessions</Text>
+                <Text className="text-accent text-lg font-semibold tracking-tight">
                   10 sessions
                 </Text>
               </View>
             </View>
           </View>
 
-          <View className="h-px bg-slate-100 w-full" />
+          <View className="h-px bg-divider w-full" />
 
           <View className="px-6">
             <View className="flex-row items-center justify-between mb-6">
-              <Text className="text-slate-900 text-base font-medium tracking-tight">
+              <Text className="text-accent text-base font-medium tracking-tight">
                 Progression Rules
               </Text>
               <Button
                 variant="secondary"
                 size="sm"
-                startAdornment={<Ionicons name="pencil" size={12} color="black" />}
+                startAdornment={<Ionicons name="pencil" size={12} color={editIconColor} />}
                 onPress={() => {}}
               >
                 Edit Rules
@@ -122,7 +141,7 @@ export default function ExerciseDetailsScreen() {
               ))}
             </View>
           </View>
-          <View className="h-px bg-slate-100 w-full" />
+          <View className="h-px bg-divider w-full" />
           <View className="px-6 pb-24">
             <TrainingHistoryOfExerciseContainer exerciseId={exerciseId} />
           </View>

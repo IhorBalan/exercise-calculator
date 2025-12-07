@@ -11,15 +11,34 @@ import { useUserGlobalStatsQuery } from '@/modules/user/hooks/use-use-global-sta
 import { useUserProfileQuery } from '@/modules/user/hooks/use-user-profile-query';
 
 const settingsOptions = [
-  { icon: 'person-outline', label: 'Edit Profile', color: 'bg-blue-50', iconColor: '#3b82f6' },
-  { icon: 'trophy-outline', label: 'Fitness Goals', color: 'bg-purple-50', iconColor: '#a855f7' },
+  {
+    icon: 'person-outline',
+    label: 'Edit Profile',
+    color: 'bg-blue-50',
+    darkColor: 'bg-gray-800',
+    iconColor: '#3b82f6',
+  },
+  {
+    icon: 'trophy-outline',
+    label: 'Fitness Goals',
+    color: 'bg-purple-50',
+    darkColor: 'bg-gray-800',
+    iconColor: '#a855f7',
+  },
   {
     icon: 'color-palette-outline',
     label: 'Theme',
     color: 'bg-amber-50',
+    darkColor: 'bg-gray-800',
     iconColor: '#f59e0b',
   },
-  { icon: 'settings-outline', label: 'Preferences', color: 'bg-slate-50', iconColor: '#64748b' },
+  {
+    icon: 'settings-outline',
+    label: 'Preferences',
+    color: 'bg-slate-50',
+    darkColor: 'bg-gray-800',
+    iconColor: '#64748b',
+  },
 ];
 
 export default function ProfileScreen() {
@@ -156,7 +175,7 @@ export default function ProfileScreen() {
               >
                 <View className="flex-row items-center gap-3">
                   <View
-                    className={`w-10 h-10 ${option.color} rounded-xl items-center justify-center`}
+                    className={`w-10 h-10 ${option.color} dark:${option.darkColor} rounded-xl items-center justify-center`}
                   >
                     <Ionicons name={option.icon as any} size={20} color={option.iconColor} />
                   </View>
@@ -178,7 +197,7 @@ export default function ProfileScreen() {
           <Pressable
             onPress={handleSignOut}
             disabled={isLoggingOut}
-            className="bg-white border border-red-100 rounded-2xl h-14 flex-row items-center justify-center gap-2 active:opacity-80 disabled:opacity-50"
+            className="bg-background-button border border-red-100 dark:border-red-900 rounded-2xl h-14 flex-row items-center justify-center gap-2 active:opacity-80 disabled:opacity-50"
           >
             <Ionicons name="log-out-outline" size={16} color="#e7000b" />
             <Text className="text-red-600 text-sm font-medium tracking-tight">

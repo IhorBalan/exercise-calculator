@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
+import { useColorScheme } from 'nativewind';
 
 import { Button } from '@/modules/core/components/button';
 import { Input } from '@/modules/core/components/input';
@@ -9,6 +10,7 @@ import { AuthPageLayout } from '@/modules/auth/components/auth-page-layout';
 import { useSignInWithEmailAndPassword } from '@/modules/auth/hooks/use-sign-in-with-email-and-password';
 
 export default function LoginScreen() {
+  const { colorScheme } = useColorScheme();
   const signInWithEmailAndPasswordMutation = useSignInWithEmailAndPassword();
   const { showToast } = useToast();
   const [email, setEmail] = useState('');
@@ -16,6 +18,9 @@ export default function LoginScreen() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  // Theme-aware icon color
+  const iconColor = colorScheme === 'dark' ? '#D1D5DB' : '#9CA3AF';
 
   const validateEmail = (emailValue: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -124,7 +129,7 @@ export default function LoginScreen() {
           autoComplete="email"
           variant="light"
           error={emailError}
-          leftElement={<Ionicons name="mail-outline" size={20} color="#9CA3AF" />}
+          leftElement={<Ionicons name="mail-outline" size={20} color={iconColor} />}
           containerClassName="mb-2"
         />
 
@@ -144,13 +149,13 @@ export default function LoginScreen() {
           autoComplete="password"
           variant="light"
           error={passwordError}
-          leftElement={<Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" />}
+          leftElement={<Ionicons name="lock-closed-outline" size={20} color={iconColor} />}
           rightElement={
             <Pressable onPress={() => setShowPassword(!showPassword)}>
               <Ionicons
                 name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                 size={20}
-                color="#9CA3AF"
+                color={iconColor}
               />
             </Pressable>
           }

@@ -11,6 +11,7 @@ import { queryClient } from '@/store';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useColorScheme } from 'nativewind';
 import { useMemo } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -35,6 +36,7 @@ const motivationalMessages = [
 ];
 
 export default function WorkoutTimerSummaryScreen() {
+  const { colorScheme } = useColorScheme();
   const params = useLocalSearchParams();
   const navigation = useNavigation();
   const trainingId = params.trainingId as string;
@@ -89,40 +91,40 @@ export default function WorkoutTimerSummaryScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-50" edges={['top', 'bottom']}>
-      <StatusBar style="dark" />
+    <SafeAreaView className="flex-1 bg-background-page" edges={['top', 'bottom']}>
+      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       <ScrollView className="" showsVerticalScrollIndicator={false}>
         <View className="px-4 pt-20 pb-6">
           {/* Header */}
           <View className="items-center justify-center mb-8">
-            <View className="w-24 h-24 bg-blue-500 rounded-full items-center justify-center mb-6">
+            <View className="w-24 h-24 bg-primary rounded-full items-center justify-center mb-6">
               <Ionicons name="checkmark-circle-outline" size={48} color="white" />
             </View>
-            <Text className="text-slate-800 text-xl font-medium tracking-tight text-center mb-4">
+            <Text className="text-accent text-xl font-medium tracking-tight text-center mb-4">
               {randomMessage.subtitle}
             </Text>
-            <Text className="text-slate-500 text-base font-regular tracking-tight text-center px-4">
+            <Text className="text-body text-base font-regular tracking-tight text-center px-4">
               {randomMessage.message}
             </Text>
           </View>
 
           {/* Summary Stats */}
-          <View className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <View className="bg-background rounded-2xl shadow-sm p-6 mb-6">
             <View className="gap-4">
               {stats.map((stat, index) => (
                 <View
                   key={index}
-                  className="flex-row items-center justify-between pb-4 border-b border-slate-100"
+                  className="flex-row items-center justify-between pb-4 border-b border-divider"
                 >
                   <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 bg-blue-50 rounded-xl items-center justify-center">
+                    <View className="w-10 h-10 bg-blue-50 dark:bg-blue-900 rounded-xl items-center justify-center">
                       <Ionicons name={stat.icon as any} size={20} color="#3b82f6" />
                     </View>
-                    <Text className="text-slate-600 text-base font-regular tracking-tight">
+                    <Text className="text-body text-base font-regular tracking-tight">
                       {stat.label}
                     </Text>
                   </View>
-                  <Text className="text-slate-900 text-lg font-medium tracking-tight">
+                  <Text className="text-accent text-lg font-medium tracking-tight">
                     {stat.value}
                   </Text>
                 </View>
