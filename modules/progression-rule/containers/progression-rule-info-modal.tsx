@@ -95,16 +95,12 @@ export function ProgressionRuleInfoModal({ isOpen, onClose }: ProgressionRuleInf
           </View>
           <View className="gap-4">
             <Text className="text-body text-base font-medium leading-6 tracking-tight">
-              <Text className="font-semibold text-accent">Sets increment:</Text> This determines the
-              number of sets to add when progressing.
-            </Text>
-            <Text className="text-body text-base font-medium leading-6 tracking-tight">
               <Text className="font-semibold text-accent">Min Sets:</Text> This determines the
               minimum number of sets you should aim for. The rule algorithm will determine the
               number of sets to do but not less than this number.
             </Text>
             <Text className="text-body text-base font-medium leading-6 tracking-tight">
-              <Text className="font-semibold text-accent">Max Weight:</Text> This determines the
+              <Text className="font-semibold text-accent">Max Sets:</Text> This determines the
               maximum number of sets you should aim for. The rule algorithm will determine the
               number of sets to do but not more than this number.
             </Text>
