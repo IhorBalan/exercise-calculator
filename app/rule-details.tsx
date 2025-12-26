@@ -1,23 +1,17 @@
-import { BottomFixedContent } from '@/modules/core/components/bottom-fixed-content';
 import { ScreenHeader } from '@/modules/core/components/screen-header';
+import { ExerciseSelect } from '@/modules/progression-rule/components/exercise-select';
+import { RepsProgressionForm } from '@/modules/progression-rule/components/reps-progression-form';
 import { ProgressionRuleInfoModal } from '@/modules/progression-rule/containers/progression-rule-info-modal';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { useColorScheme } from 'nativewind';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/modules/core/components/button';
-import { Dropdown } from '@/modules/core/components/dropdown';
 import { Input } from '@/modules/core/components/input';
 import { useKeyboardHeight } from '@/modules/core/hooks/use-keyboard-height';
 import { Ionicons } from '@expo/vector-icons';
-
-const progressionPriorityOptions = [
-  { label: 'Increase reps first', value: 'Increase reps first' },
-  { label: 'Increase weight first', value: 'Increase weight first' },
-  { label: 'Balanced approach', value: 'Balanced approach' },
-];
 
 export default function RuleDetailsModal() {
   const { colorScheme } = useColorScheme();
@@ -27,29 +21,44 @@ export default function RuleDetailsModal() {
   const keyboardHeight = useKeyboardHeight();
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 
-  const [repsToAddPerWeek, setRepsToAdd] = useState(0);
+  const [muscleGroupId, setMuscleGroupId] = useState('');
+  const [exerciseId, setExerciseId] = useState('');
+  const [repsIncrement, setRepsIncrement] = useState(0);
   const [minReps, setMinReps] = useState(0);
   const [maxReps, setMaxReps] = useState(0);
+  const [minSets, setMinSets] = useState(0);
+  const [maxSets, setMaxSets] = useState(0);
   const [weightIncrement, setWeightIncrement] = useState('2.5');
-  const [priority, setPriority] = useState('Increase reps first');
+  const [minWeight, setMinWeight] = useState('0');
+  const [maxWeight, setMaxWeight] = useState('0');
 
   // Theme-aware colors
   const infoIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#000000';
-  const cancelIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#0f172a';
 
   const handleSave = () => {
     // Handle save logic here
-    console.log({
-      repsToAddPerWeek,
-      minReps,
-      maxReps,
-      weightIncrement,
-      priority,
-    });
-    router.back();
-  };
-
-  const handleCancel = () => {
+    const progressionRule = {
+      id: ruleId || '',
+      muscleGroupId,
+      exerciseId,
+      repsRule: {
+        min: minReps,
+        max: maxReps,
+        increment: repsIncrement,
+      },
+      weightRule: {
+        increment: parseFloat(weightIncrement) || 0,
+        min: parseFloat(minWeight) || 0,
+        max: parseFloat(maxWeight) || 0,
+      },
+      setsRule: {
+        min: minSets,
+        max: maxSets,
+      },
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    console.log(progressionRule);
     router.back();
   };
 
@@ -58,7 +67,7 @@ export default function RuleDetailsModal() {
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: keyboardHeight + 120 }}
+        contentContainerStyle={{ paddingBottom: keyboardHeight + 60 }}
       >
         {/* Header */}
         <ScreenHeader
@@ -77,89 +86,56 @@ export default function RuleDetailsModal() {
         {/* Form Fields */}
         <View className="px-4 gap-5">
           {/* Exercise Selection */}
-          <View className="gap-4 p-5 bg-background rounded-2xl shadow-sm border border-divider">
-            <View className="flex-row items-center gap-2 mb-1">
-              <Ionicons name="body" size={18} color="#3b82f6" />
-              <Text className="text-accent text-base font-semibold tracking-tight">
-                Exercise Selection
-              </Text>
-            </View>
-            <View className="gap-6 pt-2">
-              <Dropdown
-                label="Muscle Group"
-                options={[]}
-                placeholder="Select muscle group"
-                onSelect={() => {}}
-              />
-              <Dropdown
-                label="Exercise"
-                options={[]}
-                placeholder="Select exercise"
-                onSelect={() => {}}
-              />
-            </View>
-          </View>
+          <ExerciseSelect
+            onMuscleGroupSelect={setMuscleGroupId}
+            onExerciseSelect={setExerciseId}
+            selectedMuscleGroupId={muscleGroupId}
+            selectedExerciseId={exerciseId}
+          />
 
           {/* Reps Progression Card */}
+          <RepsProgressionForm
+            increment={repsIncrement}
+            min={minReps}
+            max={maxReps}
+            onIncrementChange={setRepsIncrement}
+            onMinChange={setMinReps}
+            onMaxChange={setMaxReps}
+          />
+
+          {/* Sets Progression Card */}
           <View className="gap-6 p-5 bg-background rounded-2xl shadow-sm border border-divider">
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
-                <View className="w-9 h-9 rounded-xl bg-green-100 dark:bg-green-900 items-center justify-center">
-                  <Ionicons name="repeat" size={18} color="#16a34a" />
+                <View className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900 items-center justify-center">
+                  <Ionicons name="layers" size={18} color="#2563eb" />
                 </View>
                 <View>
                   <Text className="text-accent text-base font-semibold tracking-tight">
-                    Reps Progression
+                    Sets Progression
                   </Text>
-                  <Text className="text-body text-xs tracking-tight mt-0.5">
-                    Weekly repetition increases
-                  </Text>
+                  <Text className="text-body text-xs tracking-tight mt-0.5">Set ranges</Text>
                 </View>
               </View>
             </View>
 
             <View className="gap-6 pt-4 border-t border-divider">
               <Input
-                label="Reps to add per week"
-                value={repsToAddPerWeek.toString()}
-                onChangeText={text => setRepsToAdd(Number(text))}
+                label="Min Sets"
+                value={minSets.toString()}
+                onChangeText={text => setMinSets(Number(text) || 0)}
                 keyboardType="numeric"
-                placeholder="1"
-                helperText="Number of repetitions to add each week"
+                placeholder="3"
+                helperText="Minimum number of sets"
               />
-
-              <View className="gap-4">
-                <View className="flex-row gap-3">
-                  <View className="flex-1">
-                    <Input
-                      label="Min Reps"
-                      value={minReps.toString()}
-                      onChangeText={text => setMinReps(Number(text))}
-                      keyboardType="numeric"
-                      placeholder="8"
-                    />
-                  </View>
-                  <View className="flex-1">
-                    <Input
-                      label="Max Reps"
-                      value={maxReps.toString()}
-                      onChangeText={text => setMaxReps(Number(text))}
-                      keyboardType="numeric"
-                      placeholder="12"
-                    />
-                  </View>
-                </View>
-
-                <View className="p-3 bg-green-50 dark:bg-green-900 rounded-xl border border-green-100 dark:border-green-800">
-                  <View className="flex-row items-start gap-2">
-                    <Ionicons name="checkmark-circle" size={16} color="#16a34a" />
-                    <Text className="flex-1 text-green-700 dark:text-green-300 text-xs leading-4 tracking-tight">
-                      When you reach {maxReps || '12'} repetitions, increase weight and drop back to{' '}
-                      {minReps || '8'} repetitions
-                    </Text>
-                  </View>
-                </View>
-              </View>
+              <Input
+                label="Max Sets"
+                value={maxSets.toString()}
+                onChangeText={text => setMaxSets(Number(text) || 0)}
+                keyboardType="numeric"
+                placeholder="5"
+                helperText="Maximum number of sets"
+              />
             </View>
           </View>
 
@@ -188,42 +164,35 @@ export default function RuleDetailsModal() {
                 placeholder="2.5"
                 helperText="Amount of weight to add when progressing"
               />
-
-              <View className="gap-2">
-                <Dropdown
-                  label="Progression Priority"
-                  options={progressionPriorityOptions}
-                  value={priority}
-                  placeholder="Select priority"
-                  onSelect={value => setPriority(value)}
-                />
-              </View>
+              <Input
+                label="Min Weight (kg)"
+                value={minWeight}
+                onChangeText={setMinWeight}
+                keyboardType="decimal-pad"
+                placeholder="10"
+                helperText="Minimum weight to use"
+              />
+              <Input
+                label="Max Weight (kg)"
+                value={maxWeight}
+                onChangeText={setMaxWeight}
+                keyboardType="decimal-pad"
+                placeholder="100"
+                helperText="Maximum weight to use"
+              />
             </View>
           </View>
+          <Button
+            variant="primary"
+            size="md"
+            onPress={handleSave}
+            startAdornment={<Ionicons name="checkmark" size={16} color="white" />}
+            className="mt-4"
+          >
+            Save Rule
+          </Button>
         </View>
       </ScrollView>
-
-      {/* Fixed Bottom Buttons */}
-      <BottomFixedContent className="flex-row gap-3">
-        <Button
-          variant="outline"
-          className="flex-1"
-          size="md"
-          onPress={handleCancel}
-          startAdornment={<Ionicons name="close" size={16} color={cancelIconColor} />}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="primary"
-          className="flex-1"
-          size="md"
-          onPress={handleSave}
-          startAdornment={<Ionicons name="checkmark" size={16} color="white" />}
-        >
-          Save Rule
-        </Button>
-      </BottomFixedContent>
 
       {/* Info Modal */}
       <ProgressionRuleInfoModal

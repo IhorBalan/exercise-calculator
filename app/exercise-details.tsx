@@ -1,11 +1,10 @@
-import { Button } from '@/modules/core/components/button';
 import { useExerciseByIdQuery } from '@/modules/exercise/hooks/use-exercise-by-id-query';
 import { TrainingHistoryOfExerciseContainer } from '@/modules/training/containers/training-history-of-exercise-container';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
 import { useColorScheme } from 'nativewind';
+import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const rules = [
@@ -122,14 +121,6 @@ export default function ExerciseDetailsScreen() {
               <Text className="text-accent text-base font-medium tracking-tight">
                 Progression Rules
               </Text>
-              <Button
-                variant="secondary"
-                size="sm"
-                startAdornment={<Ionicons name="pencil" size={12} color={editIconColor} />}
-                onPress={() => {}}
-              >
-                Edit Rules
-              </Button>
             </View>
             <View className="flex-row gap-3">
               {rules.map((rule, index) => (

@@ -6,7 +6,9 @@ import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MuscleGroupRuleCard } from '@/modules/muscle-group/components/muscle-group-rule-card';
+import { ProgressionRuleDetailsModal } from '@/modules/progression-rule/containers/progression-rule-details-modal';
 import { ProgressionRuleInfoModal } from '@/modules/progression-rule/containers/progression-rule-info-modal';
+import { router } from 'expo-router';
 
 // Muscle group progression rules data
 const muscleGroupRules = [
@@ -40,6 +42,7 @@ export default function RulesScreen() {
   const [restDays, setRestDays] = useState(true);
   const [autoSuggest, setAutoSuggest] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [isProgressionRuleDetailsModalOpen, setIsProgressionRuleDetailsModalOpen] = useState(false);
 
   // Theme-aware colors
   const infoIconColor = colorScheme === 'dark' ? '#60A5FA' : '#3B82F6';
@@ -87,7 +90,7 @@ export default function RulesScreen() {
               variant="primary"
               size="sm"
               startAdornment={<Ionicons name="add" size={16} color="white" />}
-              onPress={() => {}}
+              onPress={() => router.push('/rule-details')}
             >
               Add Rule
             </Button>
@@ -101,6 +104,7 @@ export default function RulesScreen() {
                 emoji={group.emoji}
                 color={group.color}
                 rules={group.rules}
+                onPress={() => setIsProgressionRuleDetailsModalOpen(true)}
               />
             ))}
           </View>
@@ -175,6 +179,10 @@ export default function RulesScreen() {
       <ProgressionRuleInfoModal
         isOpen={isInfoModalOpen}
         onClose={() => setIsInfoModalOpen(false)}
+      />
+      <ProgressionRuleDetailsModal
+        isOpen={isProgressionRuleDetailsModalOpen}
+        onClose={() => setIsProgressionRuleDetailsModalOpen(false)}
       />
     </SafeAreaView>
   );

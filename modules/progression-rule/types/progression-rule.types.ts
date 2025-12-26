@@ -1,12 +1,18 @@
 type RepsRule = {
+  increment: number;
   min: number;
   max: number;
-  addPerWeek: number;
 };
 
 type WeightRule = {
   increment: number;
-  priority: 'INCREASE_REPS_FIRST';
+  min: number;
+  max: number;
+};
+
+type SetsRule = {
+  min: number;
+  max: number;
 };
 
 export type ProgressionRule = {
@@ -15,6 +21,7 @@ export type ProgressionRule = {
   exerciseId: string;
   repsRule: RepsRule;
   weightRule: WeightRule;
+  setsRule: SetsRule;
   createdAt: number;
   updatedAt: number;
 };

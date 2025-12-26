@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
 export interface MuscleGroupRule {
@@ -13,28 +12,19 @@ export interface MuscleGroupRuleCardProps {
   emoji: string;
   color: string;
   rules: MuscleGroupRule[];
+  onPress: () => void;
 }
 
-export function MuscleGroupRuleCard({ name, emoji, color, rules }: MuscleGroupRuleCardProps) {
-  // Parse rule data from labels
-  const repsPerWeek = rules[0]?.label.match(/\+(\d+)/)?.[1] || '1';
-  const maxReps = rules[1]?.label.match(/\d+/)?.[0] || '12';
-  const weightIncrement = rules[2]?.label.match(/[\d.]+/)?.[0] || '2.5';
-
+export function MuscleGroupRuleCard({
+  name,
+  emoji,
+  color,
+  rules,
+  onPress,
+}: MuscleGroupRuleCardProps) {
   return (
     <Pressable
-      onPress={() =>
-        router.push({
-          pathname: '/rule-details',
-          params: {
-            muscleGroup: name,
-            reps: repsPerWeek,
-            minReps: '8',
-            maxReps: maxReps,
-            weightIncrement: weightIncrement,
-          },
-        })
-      }
+      onPress={onPress}
       className="bg-background p-4 rounded-2xl shadow-sm flex-row items-center justify-between active:opacity-80"
     >
       {/* Left side - Icon and rules */}
