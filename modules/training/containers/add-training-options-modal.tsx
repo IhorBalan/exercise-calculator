@@ -17,7 +17,7 @@ export const AddTrainingOptionsModal = ({ isOpen, onClose }: AddTrainingOptionsM
             onClose();
             router.push('/workout-process');
           }}
-          className="bg-background p-4 rounded-2xl flex-row items-center justify-between active:opacity-80 border-b"
+          className="bg-background p-4 rounded-2xl flex-row items-center justify-between active:opacity-80"
         >
           <View className="flex-row items-center gap-3">
             <View className="w-10 h-10 bg-blue-50 dark:bg-blue-900 rounded-xl items-center justify-center">
