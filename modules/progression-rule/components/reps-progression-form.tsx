@@ -28,7 +28,7 @@ export function RepsProgressionForm({
   onMinChange,
   onMaxChange,
 }: RepsProgressionFormProps) {
-  const { control, watch } = useForm<z.infer<typeof repsProgressionFormSchema>>({
+  const { control } = useForm<z.infer<typeof repsProgressionFormSchema>>({
     resolver: zodResolver(repsProgressionFormSchema),
     defaultValues: {
       increment,
@@ -41,9 +41,6 @@ export function RepsProgressionForm({
       max,
     },
   });
-
-  const watchedMin = watch('min');
-  const watchedMax = watch('max');
 
   return (
     <View className="gap-6 p-5 bg-background rounded-2xl shadow-sm border border-divider">

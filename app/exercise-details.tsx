@@ -34,7 +34,6 @@ export default function ExerciseDetailsScreen() {
 
   // Theme-aware colors
   const backIconColor = colorScheme === 'dark' ? '#000000' : '#000000'; // Keep black for visibility on image
-  const editIconColor = colorScheme === 'dark' ? '#F8FAFC' : '#000000';
   if (!exercise) {
     return null;
   }
