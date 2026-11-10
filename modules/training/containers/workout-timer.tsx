@@ -124,13 +124,6 @@ export const WorkoutTimer = ({ muscleGroupId, exerciseId }: WorkoutTimerProps) =
   const lastCompletedSession = completedSessions[completedSessions.length - 1];
   const trainingCreateMutation = useTrainingCreateMutation();
 
-  const totalDuration = useMemo(() => {
-    return completedSessions.reduce(
-      (sum, session) => sum + session.duration / millisecondsInSecond,
-      0
-    );
-  }, [completedSessions]);
-
   const breakTime = useMemo(() => {
     if (!lastCompletedSession) return 0;
     return format(

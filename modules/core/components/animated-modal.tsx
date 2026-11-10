@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,

@@ -23,7 +23,7 @@ export const TrainingCard = ({ training }: TrainingCardProps) => {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
   const { mutate: deleteTrainingMutation, isPending: isDeleting } = useTrainingDeleteMutation();
-  console.log(training);
+
   const handleActionSelect = (actionId: string) => {
     if (actionId === 'delete') {
       deleteTrainingMutation(training.id, {

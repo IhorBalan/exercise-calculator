@@ -60,9 +60,6 @@ export default function LoginScreen() {
     signInWithEmailAndPasswordMutation.mutate(
       { email, password },
       {
-        onSuccess: () => {
-          console.log('success');
-        },
         onError: (error: any) => {
           console.error('Email login error:', error);
 

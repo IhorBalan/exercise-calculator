@@ -35,7 +35,6 @@ export default function TrainingsScreen() {
 
   // Theme-aware icon color for empty state
   const emptyIconColor = colorScheme === 'dark' ? '#64748B' : '#CBD5E1';
-  console.log('selectedDate', selectedDate);
   // api
   const { data: trainings = [] } = useTrainingListQuery({
     startDate: startOfDay(selectedDate).toISOString(),
